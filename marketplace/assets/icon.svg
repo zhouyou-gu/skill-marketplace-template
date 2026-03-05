@@ -1,12 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Skill Marketplace Icon">
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
   <defs>
-    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0%" stop-color="#1f6f62"/>
-      <stop offset="100%" stop-color="#d8b372"/>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0969da"/>
+      <stop offset="1" stop-color="#3fb8ff"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="28" fill="#f3f0e9"/>
-  <rect x="16" y="16" width="96" height="96" rx="22" fill="url(#g)"/>
-  <path d="M36 54h56M36 74h38" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
-  <circle cx="88" cy="74" r="10" fill="#ffffff"/>
+  <g>
+    <rect x="183.518" y="89.714" width="112" height="112" rx="23" fill="url(#brand)" style="stroke-width: 1;"/>
+    <g transform="matrix(1, 0, 0, 1, 0, 5.250008)">
+      <g transform="matrix(1.166667, 0, 0, 1.166667, 183.51799, 84.666977)">
+        <path d="M 18 37.826 L 78 37.826 M 18 57.826 L 60 57.826" stroke="#ffffff" stroke-width="10" stroke-linecap="round"/>
+      </g>
+    </g>
+    <circle cx="253.518" cy="157.347" r="10.5" fill="#ffffff" style="stroke-width: 1.167;"/>
+  </g>
 </svg>

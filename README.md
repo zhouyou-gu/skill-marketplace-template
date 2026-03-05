@@ -30,7 +30,7 @@ This template is intentionally opinionated:
 
 ## Who This Is For
 
-1. **Maintainers**: run and moderate a skills marketplace.
+1. **Maintainers**: run and moderate a skill marketplace.
 2. **Contributors**: submit new skills using a consistent format.
 3. **Agent/tool builders**: discover skills from `registry/index.json`.
 
@@ -126,6 +126,7 @@ Edit [`config/marketplace.json`](config/marketplace.json):
 
 ```bash
 python3 scripts/validate_skills.py
+python3 scripts/verify_install_targets.py
 python3 scripts/build_registry.py
 python3 scripts/build_search_index.py
 ```
@@ -162,6 +163,7 @@ Then run:
 
 ```bash
 python3 scripts/validate_skills.py
+python3 scripts/verify_install_targets.py
 python3 scripts/build_registry.py
 python3 scripts/build_search_index.py
 git diff -- registry/index.json registry/search.json
@@ -292,9 +294,10 @@ On `pull_request` and `push` to `main`:
 
 1. Install Python dependencies (`pyyaml`, `jsonschema`)
 2. Run validation script
-3. Build `registry/index.json`
-4. Build `registry/search.json`
-5. Fail if generated files are not committed
+3. Verify `install.pip` and `install.npm` targets resolve in real registries
+4. Build `registry/index.json`
+5. Build `registry/search.json`
+6. Fail if generated files are not committed
 
 On `push` to `main`:
 

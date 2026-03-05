@@ -46,6 +46,9 @@ jobs:
       - name: Validate schemas and skill metadata
         run: python scripts/validate_skills.py
 
+      - name: Verify install targets are resolvable
+        run: python scripts/verify_install_targets.py
+
       - name: Build registry
         run: python scripts/build_registry.py
 
