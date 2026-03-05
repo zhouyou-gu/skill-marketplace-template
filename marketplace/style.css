@@ -82,6 +82,33 @@ body::before {
   margin-right: auto;
 }
 
+.hero-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 14px;
+}
+
+.hero-brand-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  flex-shrink: 0;
+}
+
+.hero-brand-text {
+  font-size: 0.84rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-1);
+}
+
 .eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -835,6 +862,10 @@ mark {
     margin-bottom: 28px;
   }
 
+  .hero-brand {
+    margin-bottom: 12px;
+  }
+
   #marketplace-title {
     white-space: normal;
   }
@@ -1007,6 +1038,20 @@ mark {
 
 /* Small mobile breakpoint */
 @media (max-width: 480px) {
+  .hero-brand {
+    gap: 8px;
+    padding: 5px 10px 5px 7px;
+  }
+
+  .hero-brand-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .hero-brand-text {
+    font-size: 0.76rem;
+  }
+
   h1 {
     font-size: 2rem;
   }
