@@ -549,6 +549,38 @@ function detectMarketplaceRepoUrl() {
   return `https://github.com/${owner}/${repo}`;
 }
 
+function repoUrlFromGitHubPagesUrl(urlString) {
+  if (typeof urlString !== "string" || !urlString.trim()) {
+    return "";
+  }
+
+  try {
+    const parsed = new URL(urlString);
+    const host = parsed.hostname.toLowerCase();
+    if (!host.endsWith(".github.io")) {
+      return "";
+    }
+
+    const owner = host.replace(".github.io", "");
+    const repo = parsed.pathname.split("/").filter(Boolean)[0] || "";
+    if (!owner || !repo || owner.includes("<") || repo.includes("<")) {
+      return "";
+    }
+
+    return `https://github.com/${owner}/${repo}`;
+  } catch (_error) {
+    return "";
+  }
+}
+
+function resolveMarketplaceRepoUrl() {
+  return (
+    detectMarketplaceRepoUrl() ||
+    repoUrlFromGitHubPagesUrl(state.config?.url || "") ||
+    repoUrlFromGitHubPagesUrl(state.registry?.marketplace?.url || "")
+  );
+}
+
 function updateHeroStats() {
   const skills = state.registry.skills || [];
   const categories = new Set();
@@ -600,15 +632,20 @@ function formatStarCount(count) {
 }
 
 function configureCtas() {
-  const repoUrl = detectMarketplaceRepoUrl();
+  const repoUrl = resolveMarketplaceRepoUrl();
   elements.footerRepoLink.href = TEMPLATE_REPO_URL;
   elements.footerRepoLink.hidden = false;
 
   if (repoUrl) {
     elements.ctaAddSkill.href = `${repoUrl}/tree/main/skills`;
     elements.ctaStarRepo.href = repoUrl;
-    elements.ctaAddSkill.hidden = false;
-    elements.ctaStarRepo.hidden = false;
+    elements.ctaAddSkill.removeAttribute("aria-disabled");
+    elements.ctaStarRepo.removeAttribute("aria-disabled");
+    elements.ctaAddSkill.removeAttribute("tabindex");
+    elements.ctaStarRepo.removeAttribute("tabindex");
+    elements.ctaAddSkill.classList.remove("is-disabled");
+    elements.ctaStarRepo.classList.remove("is-disabled");
+    elements.ctaStarRepo.classList.add("is-live");
     
     // Fetch and display star count
     fetchGitHubStars(repoUrl).then(stars => {
@@ -617,8 +654,15 @@ function configureCtas() {
       }
     });
   } else {
-    elements.ctaAddSkill.hidden = true;
-    elements.ctaStarRepo.hidden = true;
+    elements.ctaAddSkill.href = "#";
+    elements.ctaStarRepo.href = "#";
+    elements.ctaAddSkill.setAttribute("aria-disabled", "true");
+    elements.ctaStarRepo.setAttribute("aria-disabled", "true");
+    elements.ctaAddSkill.setAttribute("tabindex", "-1");
+    elements.ctaStarRepo.setAttribute("tabindex", "-1");
+    elements.ctaAddSkill.classList.add("is-disabled");
+    elements.ctaStarRepo.classList.add("is-disabled");
+    elements.ctaStarRepo.classList.remove("is-live");
   }
 
   const registryUrl = new URL(PATHS.registry, window.location.href).href;
