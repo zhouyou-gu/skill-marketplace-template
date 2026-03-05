@@ -151,6 +151,8 @@ Open:
 
 ## Add a New Skill (Step-by-Step)
 
+Prefer a focused guide for this folder? See [`skills/README.md`](skills/README.md).
+
 Create:
 
 ```text
@@ -337,8 +339,8 @@ On `push` to `main`:
 
 When in doubt, remember this chain:
 
-1. `skills/` is source truth.
-2. `scripts/` turns source truth into registry files.
+1. `skills/` is the source of truth.
+2. `scripts/` turns the source of truth into registry files.
 3. `registry/` is what UI/agents consume.
 4. `marketplace/` is only a viewer over registry data.
 
@@ -363,7 +365,7 @@ If something looks wrong in UI, first check skill metadata and regenerate regist
    - Fix: create file and keep path relative to skill folder.
 
 5. **CI fails while generating registry/search**
-   - Error: build scripts fail in CI due invalid skill metadata, schema, or tool paths.
+   - Error: build scripts fail in CI due to invalid skill metadata, schema, or tool paths.
    - Fix: run validation/build scripts locally, fix the reported issue, and push again.
 
 ## Contribution Guidelines
