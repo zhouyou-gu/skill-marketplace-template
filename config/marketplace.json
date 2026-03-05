@@ -1,6 +1,8 @@
 {
-  "title": "AI Skills Marketplace",
+  "title": "AI Skills Marketplace Template",
   "description": "Reusable agent skills",
+  "author": "Zhouyou Gu",
+  "license": "MIT",
   "url": "https://<user>.github.io/<repo>",
   "theme": "dark",
   "categories": [

@@ -1,8 +1,10 @@
 {
   "version": "1.0.0",
   "marketplace": {
-    "title": "AI Skills Marketplace",
+    "title": "AI Skills Marketplace Template",
     "description": "Reusable agent skills",
+    "author": "Zhouyou Gu",
+    "license": "MIT",
     "url": "https://<user>.github.io/<repo>",
     "theme": "dark",
     "categories": [
@@ -24,7 +26,7 @@
         "api"
       ],
       "difficulty": "beginner",
-      "repo": "https://github.com/example/api-testing-skill",
+      "repo": "https://github.com/zhouyou-gu/skill-marketplace-template/tree/main/skills/api-testing",
       "path": "skills/api-testing",
       "install": {
         "pip": "apitesting-skill"
@@ -50,7 +52,7 @@
         "automation"
       ],
       "difficulty": "intermediate",
-      "repo": "https://github.com/example/web-scraping-skill",
+      "repo": "https://github.com/zhouyou-gu/skill-marketplace-template/tree/main/skills/web-scraping",
       "path": "skills/web-scraping",
       "install": {
         "pip": "webscraper",

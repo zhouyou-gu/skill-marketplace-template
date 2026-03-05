@@ -26,6 +26,8 @@ const elements = {
   heroStats: document.getElementById("hero-stats"),
   ctaAddSkill: document.getElementById("cta-add-skill"),
   ctaStarRepo: document.getElementById("cta-star-repo"),
+  starCount: document.getElementById("star-count"),
+  footerRepoLink: document.getElementById("footer-repo-link"),
   searchInput: document.getElementById("search-input"),
   sortSelect: document.getElementById("sort-select"),
   categoryChips: document.getElementById("category-chips"),
@@ -412,15 +414,12 @@ function renderSkillCard(skill, queryTerms) {
 function updateSummary(totalCount, visibleCount, hasQuery) {
   const queryLabel = normalize(state.query);
 
-  let summary = `${visibleCount} of ${totalCount} skills`;
+  let summary = `Showing ${visibleCount} of ${totalCount} ${totalCount === 1 ? 'skill' : 'skills'}`;
   if (queryLabel) {
-    summary += ` match \"${state.query.trim()}\"`;
+    summary += ` matching \"${state.query.trim()}\"`;
   }
   if (state.category !== "all") {
     summary += ` in ${state.category}`;
-  }
-  if (hasQuery && state.categorySort === "relevance") {
-    summary += " · sorted by relevance";
   }
 
   elements.summary.textContent = summary;
@@ -438,10 +437,23 @@ function updateEmptyState(hasQuery) {
     return;
   }
 
+  const emptyTitle = elements.emptyMessage;
+  const emptyHint = elements.emptyPanel.querySelector('.empty-hint');
+
   if (hasQuery || state.category !== "all") {
-    elements.emptyMessage.textContent = "No skills match these filters yet. Try a shorter query or reset filters.";
+    if (emptyTitle) {
+      emptyTitle.textContent = "No matching skills found";
+    }
+    if (emptyHint) {
+      emptyHint.textContent = "Try adjusting your search or filters";
+    }
   } else {
-    elements.emptyMessage.textContent = "No skills published yet. Be the first contributor.";
+    if (emptyTitle) {
+      emptyTitle.textContent = "No skills available yet";
+    }
+    if (emptyHint) {
+      emptyHint.textContent = "Be the first to add a skill";
+    }
   }
 }
 
@@ -474,7 +486,42 @@ function updateHeroStats() {
     (skill.tags || []).forEach((tag) => tags.add(tag));
   });
 
-  elements.heroStats.textContent = `${skills.length} skills · ${categories.size} categories · ${tags.size} unique tags`;
+  const parts = [];
+  parts.push(`${skills.length} ${skills.length === 1 ? 'skill' : 'skills'}`);
+  if (categories.size > 0) {
+    parts.push(`${categories.size} ${categories.size === 1 ? 'category' : 'categories'}`);
+  }
+  if (tags.size > 0) {
+    parts.push(`${tags.size} ${tags.size === 1 ? 'tag' : 'tags'}`);
+  }
+
+  elements.heroStats.textContent = parts.join(' • ');
+}
+
+async function fetchGitHubStars(repoUrl) {
+  try {
+    // Extract owner and repo from URL
+    const match = repoUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
+    if (!match) return null;
+    
+    const [, owner, repo] = match;
+    const apiUrl = `https://api.github.com/repos/${owner}/${repo}`;
+    
+    const response = await fetch(apiUrl);
+    if (!response.ok) return null;
+    
+    const data = await response.json();
+    return data.stargazers_count;
+  } catch (error) {
+    return null;
+  }
+}
+
+function formatStarCount(count) {
+  if (count >= 1000) {
+    return (count / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+  }
+  return count.toString();
 }
 
 function configureCtas() {
@@ -483,11 +530,21 @@ function configureCtas() {
   if (repoUrl) {
     elements.ctaAddSkill.href = `${repoUrl}/tree/main/skills`;
     elements.ctaStarRepo.href = repoUrl;
+    elements.footerRepoLink.href = repoUrl;
     elements.ctaAddSkill.hidden = false;
     elements.ctaStarRepo.hidden = false;
+    elements.footerRepoLink.hidden = false;
+    
+    // Fetch and display star count
+    fetchGitHubStars(repoUrl).then(stars => {
+      if (stars !== null && elements.starCount) {
+        elements.starCount.textContent = formatStarCount(stars);
+      }
+    });
   } else {
     elements.ctaAddSkill.hidden = true;
     elements.ctaStarRepo.hidden = true;
+    elements.footerRepoLink.hidden = true;
   }
 
   const registryUrl = new URL(PATHS.registry, window.location.href).href;
@@ -496,6 +553,8 @@ function configureCtas() {
 
 async function copyRegistryUrlToClipboard() {
   const text = elements.registryUrl.textContent;
+  const btn = elements.copyRegistry;
+  const originalText = btn.innerHTML;
 
   try {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -503,21 +562,34 @@ async function copyRegistryUrlToClipboard() {
     } else {
       const temp = document.createElement("textarea");
       temp.value = text;
+      temp.style.position = "fixed";
+      temp.style.opacity = "0";
       document.body.appendChild(temp);
       temp.select();
       document.execCommand("copy");
       temp.remove();
     }
 
-    elements.copyStatus.textContent = "Copied";
+    elements.copyStatus.textContent = "✓ Copied";
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3 8l3.5 3.5L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg> Copied!`;
+    btn.style.pointerEvents = "none";
+    
+    window.clearTimeout(copyStatusTimer);
+    copyStatusTimer = window.setTimeout(() => {
+      elements.copyStatus.textContent = "";
+      btn.innerHTML = originalText;
+      btn.style.pointerEvents = "";
+    }, 2000);
   } catch (_error) {
-    elements.copyStatus.textContent = "Copy failed";
+    elements.copyStatus.textContent = "⚠ Copy failed";
+    
+    window.clearTimeout(copyStatusTimer);
+    copyStatusTimer = window.setTimeout(() => {
+      elements.copyStatus.textContent = "";
+    }, 2000);
   }
-
-  window.clearTimeout(copyStatusTimer);
-  copyStatusTimer = window.setTimeout(() => {
-    elements.copyStatus.textContent = "";
-  }, 1800);
 }
 
 function renderSkills() {
@@ -578,7 +650,7 @@ function wireEvents() {
     window.clearTimeout(searchDebounceTimer);
     searchDebounceTimer = window.setTimeout(() => {
       renderSkills();
-    }, 120);
+    }, 200);
   });
 
   elements.searchInput.addEventListener("search", (event) => {
@@ -611,10 +683,16 @@ function wireEvents() {
       return;
     }
 
-    if (event.key === "Escape" && isTypingTarget(document.activeElement) && normalize(state.query)) {
-      state.query = "";
-      elements.searchInput.value = "";
-      renderSkills();
+    if (event.key === "Escape") {
+      if (isTypingTarget(document.activeElement)) {
+        if (normalize(state.query)) {
+          state.query = "";
+          elements.searchInput.value = "";
+          renderSkills();
+        } else {
+          document.activeElement.blur();
+        }
+      }
     }
   });
 }
@@ -671,7 +749,7 @@ async function bootstrap() {
     setLoading(false);
   } catch (error) {
     setLoading(false);
-    showError(error instanceof Error ? error.message : "Unknown error while loading marketplace.");
+    showError(error instanceof Error ? error.message : "Failed to load marketplace");
   }
 }
 

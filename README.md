@@ -2,6 +2,9 @@
 
 GitHub-native, fork-friendly template for publishing reusable AI agent skills.
 
+**Author:** Zhouyou Gu  
+**License:** MIT
+
 **Status:** Bootstrap phase. This repository currently documents the target design; scaffold files and automation are planned to follow this specification.
 
 ## Current State vs Target State
@@ -149,6 +152,7 @@ Constraints:
 - `tags` must be non-empty, lowercase, and unique.
 - `difficulty` enum: `beginner | intermediate | advanced`.
 - `repo` must be HTTPS.
+  - **Note:** If using example URLs like `https://github.com/example/...`, the build script will automatically replace them with URLs pointing to your actual repository (auto-detected from git). This ensures skill links always point to the correct location.
 - `install` must contain at least one of `pip` or `npm` (both allowed).
 - `agent.protocol` must be `mcp`.
 - `agent.tool_schema` points to `tool.json` (relative path).
@@ -164,7 +168,7 @@ tags:
   - python
   - scraping
 difficulty: intermediate
-repo: https://github.com/example/web-scraping-skill
+repo: https://github.com/example/web-scraping-skill  # Will be auto-replaced with actual repo
 install:
   pip: webscraper
 agent:
@@ -243,7 +247,7 @@ Shape:
       "category": "data",
       "tags": ["python", "scraping"],
       "difficulty": "intermediate",
-      "repo": "https://github.com/example/web-scraping-skill",
+      "repo": "https://github.com/<user>/<repo>/tree/main/skills/web-scraping",
       "path": "skills/web-scraping",
       "install": { "pip": "webscraper" },
       "agent": {
@@ -396,4 +400,6 @@ Policy:
 
 ## License
 
-Add your chosen license in `LICENSE` (for example MIT, Apache-2.0, or proprietary internal).
+MIT License - See [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2026 Zhouyou Gu

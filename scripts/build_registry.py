@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -35,12 +36,55 @@ def dump_json(path: Path, payload: Any) -> None:
         fh.write("\n")
 
 
+def get_git_remote_url() -> str | None:
+    """Get the git remote URL for the current repository."""
+    try:
+        result = subprocess.run(
+            ["git", "config", "--get", "remote.origin.url"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=5,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            url = result.stdout.strip()
+            # Convert SSH to HTTPS format
+            if url.startswith("git@github.com:"):
+                url = url.replace("git@github.com:", "https://github.com/")
+            # Remove .git suffix
+            if url.endswith(".git"):
+                url = url[:-4]
+            return url
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        pass
+    return None
+
+
 def resolve_marketplace_url(config: dict[str, Any]) -> str:
     """Resolve marketplace URL deterministically from config."""
     url = config.get("url")
     if isinstance(url, str) and url.startswith("https://"):
         return url
     return "https://<user>.github.io/<repo>"
+
+
+def resolve_skill_repo_url(skill_id: str, skill_data: dict[str, Any]) -> str:
+    """Resolve skill repository URL, auto-detecting from git if using example URL."""
+    repo_url = skill_data.get("repo", "")
+    
+    # If it's not an example URL, use it as-is
+    if not repo_url.startswith("https://github.com/example/"):
+        return repo_url
+    
+    # Try to auto-detect from git
+    git_url = get_git_remote_url()
+    if git_url and git_url.startswith("https://github.com/"):
+        # Point to the skill directory in the actual repository
+        return f"{git_url}/tree/main/skills/{skill_id}"
+    
+    # Fallback to the original example URL if git detection fails
+    return repo_url
 
 
 def validate_output(registry: dict[str, Any]) -> None:
@@ -106,7 +150,7 @@ def build_skill_entry(skill_dir: Path) -> dict[str, Any]:
         "category": skill_data["category"],
         "tags": skill_data["tags"],
         "difficulty": skill_data["difficulty"],
-        "repo": skill_data["repo"],
+        "repo": resolve_skill_repo_url(skill_id, skill_data),
         "path": f"skills/{skill_id}",
         "install": install_payload,
         "agent": {
@@ -138,6 +182,8 @@ def main() -> int:
         "marketplace": {
             "title": config["title"],
             "description": config["description"],
+            "author": config.get("author"),
+            "license": config.get("license"),
             "url": resolve_marketplace_url(config),
             "theme": config["theme"],
             "categories": config["categories"],

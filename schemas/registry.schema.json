@@ -32,6 +32,12 @@
           "type": "string",
           "minLength": 1
         },
+        "author": {
+          "type": ["string", "null"]
+        },
+        "license": {
+          "type": ["string", "null"]
+        },
         "url": {
           "type": "string",
           "format": "uri",
