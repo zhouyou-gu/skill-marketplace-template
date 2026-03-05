@@ -18,17 +18,42 @@
         <p class="eyebrow">GitHub-native</p>
         <h1 id="marketplace-title">Skill Marketplace</h1>
         <p id="marketplace-description">Discover reusable agent skills.</p>
+        <p class="hero-subcopy">Fork this marketplace, publish reusable skills, and help agents get better out of the box.</p>
+        <div class="hero-actions">
+          <a id="cta-add-skill" class="btn btn-primary" href="#" target="_blank" rel="noreferrer">Add your first skill</a>
+          <a id="cta-star-repo" class="btn btn-secondary" href="#" target="_blank" rel="noreferrer">Star this repo</a>
+          <a class="btn btn-ghost-link" href="#quickstart">Use registry</a>
+        </div>
+        <p id="hero-stats" class="hero-stats">Loading stats...</p>
       </header>
+
+      <section class="proof-grid" aria-label="why this marketplace">
+        <article class="proof-card">
+          <h2>Fast to Fork</h2>
+          <p>Launch your own curated skill catalog with static hosting and no backend.</p>
+        </article>
+        <article class="proof-card">
+          <h2>Strict by Default</h2>
+          <p>Schema validation keeps metadata clean so contributors ship reliable skills.</p>
+        </article>
+        <article class="proof-card">
+          <h2>Agent-Friendly</h2>
+          <p>Registry and MCP-style tool schemas make discovery and integration predictable.</p>
+        </article>
+      </section>
 
       <section class="controls" aria-label="search and filters">
         <label class="control search" for="search-input">
           <span>Search</span>
-          <input id="search-input" type="search" placeholder="Find skills by name, tags, or description">
+          <input id="search-input" type="search" placeholder="Find skills by name, tags, or description" autocomplete="off" spellcheck="false">
+          <small class="hint">Shortcuts: <kbd>/</kbd> focus search, <kbd>Esc</kbd> clear query</small>
         </label>
 
         <label class="control sort" for="sort-select">
-          <span>Category sort</span>
+          <span>Sort results</span>
+          <small class="hint">Relevance is best for text search.</small>
           <select id="sort-select">
+            <option value="relevance">Relevance</option>
             <option value="config">Config order</option>
             <option value="alpha">Alphabetical</option>
           </select>
@@ -36,9 +61,26 @@
       </section>
 
       <section id="category-chips" class="chips" aria-label="categories"></section>
+      <section class="status-row" aria-live="polite">
+        <p id="results-summary" class="results-summary">Loading skills...</p>
+        <button id="clear-filters" class="ghost-btn" type="button">Clear filters</button>
+      </section>
 
+      <section id="quickstart" class="quickstart" aria-label="registry quickstart">
+        <p class="quickstart-title">New here? Start in 30 seconds</p>
+        <div class="registry-row">
+          <code id="registry-url" class="registry-url">Loading registry URL...</code>
+          <button id="copy-registry" class="ghost-btn" type="button">Copy registry URL</button>
+          <span id="copy-status" class="copy-status" aria-live="polite"></span>
+        </div>
+      </section>
+
+      <section id="loading-panel" class="panel loading">Loading marketplace data...</section>
       <section id="error-panel" class="panel error" hidden></section>
-      <section id="empty-panel" class="panel empty" hidden>No skills match your filters.</section>
+      <section id="empty-panel" class="panel empty" hidden>
+        <p id="empty-message">No skills match your filters.</p>
+        <button id="empty-reset" class="ghost-btn" type="button">Reset filters</button>
+      </section>
 
       <section id="skills-grid" class="skills-grid" aria-live="polite"></section>
     </main>
