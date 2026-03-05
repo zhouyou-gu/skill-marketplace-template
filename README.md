@@ -1,6 +1,6 @@
 # Skill Marketplace Template
 
-Fork-friendly, GitHub-native template for building a marketplace of reusable AI agent skills.
+Fork-friendly, GitHub-native template for building a marketplace of reusable agent skills.
 
 **Author:** Zhouyou Gu  
 **License:** MIT
