@@ -1,0 +1,15 @@
+id: api-testing
+name: API Testing
+description: Validate HTTP APIs with reusable request and assertion flows
+category: devtools
+tags:
+  - python
+  - testing
+  - api
+difficulty: beginner
+repo: https://github.com/example/api-testing-skill
+install:
+  pip: apitesting-skill
+agent:
+  protocol: mcp
+  tool_schema: tool.json

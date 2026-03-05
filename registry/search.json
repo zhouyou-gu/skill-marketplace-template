@@ -1,0 +1,38 @@
+[
+  {
+    "id": "api-testing",
+    "category": "devtools",
+    "tokens": [
+      "api",
+      "testing",
+      "validate",
+      "http",
+      "apis",
+      "with",
+      "reusable",
+      "request",
+      "and",
+      "assertion",
+      "flows",
+      "devtools",
+      "python"
+    ],
+    "text": "api testing validate http apis with reusable request and assertion flows devtools python testing api"
+  },
+  {
+    "id": "web-scraping",
+    "category": "data",
+    "tokens": [
+      "web",
+      "scraping",
+      "extract",
+      "structured",
+      "data",
+      "from",
+      "webpages",
+      "python",
+      "automation"
+    ],
+    "text": "web scraping extract structured data from webpages data python scraping automation"
+  }
+]

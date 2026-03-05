@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Skill Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="bg-shape bg-shape-a"></div>
+    <div class="bg-shape bg-shape-b"></div>
+
+    <main class="shell">
+      <header class="hero">
+        <p class="eyebrow">GitHub-native</p>
+        <h1 id="marketplace-title">Skill Marketplace</h1>
+        <p id="marketplace-description">Discover reusable agent skills.</p>
+      </header>
+
+      <section class="controls" aria-label="search and filters">
+        <label class="control search" for="search-input">
+          <span>Search</span>
+          <input id="search-input" type="search" placeholder="Find skills by name, tags, or description">
+        </label>
+
+        <label class="control sort" for="sort-select">
+          <span>Category sort</span>
+          <select id="sort-select">
+            <option value="config">Config order</option>
+            <option value="alpha">Alphabetical</option>
+          </select>
+        </label>
+      </section>
+
+      <section id="category-chips" class="chips" aria-label="categories"></section>
+
+      <section id="error-panel" class="panel error" hidden></section>
+      <section id="empty-panel" class="panel empty" hidden>No skills match your filters.</section>
+
+      <section id="skills-grid" class="skills-grid" aria-live="polite"></section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

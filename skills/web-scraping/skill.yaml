@@ -1,0 +1,16 @@
+id: web-scraping
+name: Web Scraping
+description: Extract structured data from webpages
+category: data
+tags:
+  - python
+  - scraping
+  - automation
+difficulty: intermediate
+repo: https://github.com/example/web-scraping-skill
+install:
+  pip: webscraper
+  npm: "@skills/web-scraping"
+agent:
+  protocol: mcp
+  tool_schema: tool.json

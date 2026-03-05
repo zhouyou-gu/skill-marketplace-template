@@ -1,0 +1,38 @@
+{
+  "name": "api_test_run",
+  "title": "API Test Runner",
+  "description": "Execute a parameterized HTTP test case against an endpoint",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "method": {
+        "type": "string",
+        "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"]
+      },
+      "expected_status": {
+        "type": "integer",
+        "minimum": 100,
+        "maximum": 599
+      }
+    },
+    "required": ["url", "method", "expected_status"],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "passed": {
+        "type": "boolean"
+      },
+      "actual_status": {
+        "type": "integer"
+      }
+    },
+    "required": ["passed", "actual_status"],
+    "additionalProperties": false
+  }
+}

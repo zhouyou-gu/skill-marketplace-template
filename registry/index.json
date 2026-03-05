@@ -1,0 +1,70 @@
+{
+  "version": "1.0.0",
+  "marketplace": {
+    "title": "AI Skills Marketplace",
+    "description": "Reusable agent skills",
+    "url": "https://<user>.github.io/<repo>",
+    "theme": "dark",
+    "categories": [
+      "data",
+      "automation",
+      "ai",
+      "devtools"
+    ]
+  },
+  "skills": [
+    {
+      "id": "api-testing",
+      "name": "API Testing",
+      "description": "Validate HTTP APIs with reusable request and assertion flows",
+      "category": "devtools",
+      "tags": [
+        "python",
+        "testing",
+        "api"
+      ],
+      "difficulty": "beginner",
+      "repo": "https://github.com/example/api-testing-skill",
+      "path": "skills/api-testing",
+      "install": {
+        "pip": "apitesting-skill"
+      },
+      "agent": {
+        "protocol": "mcp",
+        "tool_schema": "skills/api-testing/tool.json"
+      },
+      "tool": {
+        "name": "api_test_run",
+        "title": "API Test Runner",
+        "description": "Execute a parameterized HTTP test case against an endpoint"
+      }
+    },
+    {
+      "id": "web-scraping",
+      "name": "Web Scraping",
+      "description": "Extract structured data from webpages",
+      "category": "data",
+      "tags": [
+        "python",
+        "scraping",
+        "automation"
+      ],
+      "difficulty": "intermediate",
+      "repo": "https://github.com/example/web-scraping-skill",
+      "path": "skills/web-scraping",
+      "install": {
+        "pip": "webscraper",
+        "npm": "@skills/web-scraping"
+      },
+      "agent": {
+        "protocol": "mcp",
+        "tool_schema": "skills/web-scraping/tool.json"
+      },
+      "tool": {
+        "name": "web_scrape",
+        "title": "Website Scraper",
+        "description": "Extract structured data from a webpage"
+      }
+    }
+  ]
+}
