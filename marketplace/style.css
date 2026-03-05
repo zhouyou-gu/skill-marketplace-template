@@ -458,6 +458,11 @@ select:focus,
   line-height: 1.5;
 }
 
+.quickstart-description-alt {
+  display: block;
+  margin-top: 2px;
+}
+
 .registry-row {
   display: flex;
   flex-wrap: wrap;
