@@ -36,13 +36,14 @@ This template is intentionally opinionated:
 
 ## What You Get
 
-1. Skill metadata schema (`skill.yaml`)
-2. Tool contract schema (`tool.json`)
-3. Validation scripts (strict checks)
-4. Generated registry (`registry/index.json`)
-5. Generated search index (`registry/search.json`)
-6. Searchable marketplace UI (`marketplace/`)
-7. GitHub Actions pipeline for validate/build/deploy
+1. Codex skill runtime instructions (`SKILL.md`) per skill
+2. Skill metadata schema (`skill.yaml`)
+3. Tool contract schema (`tool.json`)
+4. Validation scripts (strict checks)
+5. Generated registry (`registry/index.json`)
+6. Generated search index (`registry/search.json`)
+7. Searchable marketplace UI (`marketplace/`)
+8. GitHub Actions pipeline for validate/build/deploy
 
 ## High-Level Architecture
 
@@ -86,6 +87,7 @@ install metadata and tool invocation contract
 skill-marketplace-template/
 ├─ skills/                        # Source of truth skill folders
 │  └─ <skill-id>/
+│     ├─ SKILL.md                 # Codex installer-compatible skill instructions
 │     ├─ skill.yaml               # Skill metadata
 │     ├─ tool.json                # Tool input/output contract
 │     ├─ README.md                # Human docs for the skill
@@ -153,6 +155,7 @@ Create:
 
 ```text
 skills/my-skill/
+├─ SKILL.md
 ├─ skill.yaml
 ├─ tool.json
 ├─ README.md
@@ -171,6 +174,33 @@ python3 scripts/build_search_index.py
 Commit and open PR.
 
 ## Skill Contract for Contributors
+
+### `SKILL.md` (what Codex installer loads)
+
+Required:
+
+- YAML frontmatter delimited by `---`
+- `name` and `description` keys in frontmatter
+- Skill body with task instructions
+
+Key rules:
+
+1. `name` must match folder name and `skill.yaml:id`.
+2. `description` should clearly state what the skill does and when to use it.
+3. Keep only frontmatter keys `name` and `description` for compatibility.
+
+Example:
+
+```markdown
+---
+name: web-scraping
+description: Extract structured data from webpages. Use for URL scraping and HTML parsing tasks.
+---
+
+# Web Scraping
+
+Use this skill to fetch webpages, parse content, and return structured data.
+```
 
 ### `skill.yaml` (what maintainers and agents read)
 
@@ -316,26 +346,30 @@ If something looks wrong in UI, first check skill metadata and regenerate regist
 
 ## Common Errors and Fixes
 
-1. **`id` mismatch**
+1. **`SKILL.md` not found**
+   - Error: Codex install fails with missing `SKILL.md`.
+   - Fix: add `SKILL.md` in each `skills/<id>/` folder with valid frontmatter.
+
+2. **`id` mismatch**
    - Error: skill `id` does not match folder name.
    - Fix: make folder name and `skill.yaml:id` identical.
 
-2. **Invalid category**
+3. **Invalid category**
    - Error: category not in configured category list.
    - Fix: either update `config/marketplace.json` or choose an allowed category.
 
-3. **Missing tool schema**
+4. **Missing tool schema**
    - Error: `agent.tool_schema` path missing or invalid.
    - Fix: create file and keep path relative to skill folder.
 
-4. **CI fails while generating registry/search**
+5. **CI fails while generating registry/search**
    - Error: build scripts fail in CI due invalid skill metadata, schema, or tool paths.
    - Fix: run validation/build scripts locally, fix the reported issue, and push again.
 
 ## Contribution Guidelines
 
 1. Keep PRs small and focused (prefer one skill per PR).
-2. Include `README.md` for each skill so humans can understand usage.
+2. Include both `SKILL.md` and `README.md` for each skill.
 3. Run validation/build scripts locally before pushing.
 4. Do not add arbitrary install command fields; use `pip` and/or `npm` only.
 

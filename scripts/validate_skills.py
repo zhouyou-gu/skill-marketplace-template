@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -15,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS_DIR = ROOT / "schemas"
 SKILLS_DIR = ROOT / "skills"
 CONFIG_PATH = ROOT / "config" / "marketplace.json"
+SKILL_FRONTMATTER_RE = re.compile(r"\A---\s*\n(.*?)\n---\s*(?:\n|$)", re.DOTALL)
 
 
 def load_json(path: Path) -> Any:
@@ -30,6 +32,52 @@ def load_yaml(path: Path) -> Any:
 def make_validator(schema_name: str) -> Draft202012Validator:
     schema = load_json(SCHEMAS_DIR / schema_name)
     return Draft202012Validator(schema, format_checker=FormatChecker())
+
+
+def validate_codex_skill_file(path: Path, skill_id: str | None, errors: list[str]) -> None:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except Exception as exc:  # pragma: no cover - defensive parsing path
+        errors.append(f"{path.relative_to(ROOT)}: unable to read file ({exc})")
+        return
+
+    match = SKILL_FRONTMATTER_RE.match(text)
+    if match is None:
+        errors.append(
+            f"{path.relative_to(ROOT)}:<frontmatter>: missing YAML frontmatter delimited by '---'"
+        )
+        return
+
+    try:
+        frontmatter = yaml.safe_load(match.group(1))
+    except Exception as exc:
+        errors.append(f"{path.relative_to(ROOT)}:<frontmatter>: invalid YAML ({exc})")
+        return
+
+    if not isinstance(frontmatter, dict):
+        errors.append(f"{path.relative_to(ROOT)}:<frontmatter>: expected mapping object")
+        return
+
+    allowed_keys = {"name", "description"}
+    extra_keys = sorted(set(frontmatter.keys()) - allowed_keys)
+    if extra_keys:
+        errors.append(
+            f"{path.relative_to(ROOT)}:<frontmatter>: unsupported field(s): {', '.join(extra_keys)}"
+        )
+
+    name = frontmatter.get("name")
+    if not isinstance(name, str) or not name.strip():
+        errors.append(f"{path.relative_to(ROOT)}:<frontmatter>.name: required non-empty string")
+    elif skill_id is not None and name != skill_id:
+        errors.append(
+            f"{path.relative_to(ROOT)}:<frontmatter>.name: '{name}' must match skill id '{skill_id}'"
+        )
+
+    description = frontmatter.get("description")
+    if not isinstance(description, str) or not description.strip():
+        errors.append(
+            f"{path.relative_to(ROOT)}:<frontmatter>.description: required non-empty string"
+        )
 
 
 def collect_schema_errors(
@@ -81,9 +129,13 @@ def main() -> int:
     for skill_dir in skill_dirs:
         skill_yaml_path = skill_dir / "skill.yaml"
         readme_path = skill_dir / "README.md"
+        skill_md_path = skill_dir / "SKILL.md"
 
         if not readme_path.exists():
             errors.append(f"{readme_path.relative_to(ROOT)}: missing required file")
+
+        if not skill_md_path.exists():
+            errors.append(f"{skill_md_path.relative_to(ROOT)}: missing required file")
 
         if not skill_yaml_path.exists():
             errors.append(f"{skill_yaml_path.relative_to(ROOT)}: missing required file")
@@ -116,6 +168,13 @@ def main() -> int:
                 )
             else:
                 seen_skill_ids[skill_id] = skill_yaml_path
+
+        if skill_md_path.exists():
+            validate_codex_skill_file(
+                skill_md_path,
+                skill_id if isinstance(skill_id, str) else None,
+                errors,
+            )
 
         category = skill_data.get("category")
         if isinstance(category, str) and allowed_categories and category not in allowed_categories:
