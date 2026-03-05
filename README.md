@@ -1,139 +1,179 @@
 # Skill Marketplace Template
 
-GitHub-native, fork-friendly template for publishing reusable AI agent skills.
+Fork-friendly, GitHub-native template for building a marketplace of reusable AI agent skills.
 
 **Author:** Zhouyou Gu  
 **License:** MIT
 
-**Status:** Bootstrap phase. This repository currently documents the target design; scaffold files and automation are planned to follow this specification.
+## Why This Project Exists
 
-## Current State vs Target State
+Most teams can build one good skill, but struggle to share, review, and reuse skills across contributors.
 
-- Current state: repository initialized, documentation-first.
-- Target state (v1): Registry + UI + CI are implemented and deployable on GitHub Pages.
-- Target state (v1.1): CLI installer compatibility is added.
+This project exists to solve that by giving you a simple, repeatable system:
 
-## What This Template Is
+1. Keep skills in a clear folder structure.
+2. Validate skill quality automatically in CI.
+3. Generate machine-readable registry files for agents.
+4. Publish a searchable static UI on GitHub Pages.
 
-This template gives maintainers a repeatable way to run a skill marketplace on top of GitHub:
+In short: this template turns random skill files into a real, maintainable ecosystem.
 
-- Fork or generate a new marketplace repository.
-- Accept skill contributions through pull requests.
-- Validate skill metadata and tool schemas in CI.
-- Publish a machine-readable registry and a searchable static UI on GitHub Pages.
+## Project Intention (Plain English)
 
-Primary audience order:
+This template is intentionally opinionated:
 
-1. Fork maintainers
-2. Skill contributors
-3. End users
+1. **GitHub-first workflow**: contributors use pull requests, not ad-hoc uploads.
+2. **Schema-first quality**: bad metadata is blocked early.
+3. **Static hosting simplicity**: no backend required for discovery UI.
+4. **Agent compatibility**: skills expose MCP-style tool contracts.
+5. **Forkability**: anyone can create their own marketplace with minimal edits.
 
-v1 scope is intentionally narrow: `Registry + UI + CI`.
+## Who This Is For
 
-## Core Capabilities
+1. **Maintainers**: run and moderate a skills marketplace.
+2. **Contributors**: submit new skills using a consistent format.
+3. **Agent/tool builders**: discover skills from `registry/index.json`.
 
-1. Skill metadata contract (`skill.yaml`)
-2. MCP-compatible tool contract (`tool.json`)
-3. Generated marketplace registry (`registry/index.json`)
-4. Generated client-side search index (`registry/search.json`)
-5. GitHub Pages marketplace UI (`marketplace/`)
-6. Planned CLI compatibility (v1.1)
+## What You Get
 
-## Architecture
+1. Skill metadata schema (`skill.yaml`)
+2. Tool contract schema (`tool.json`)
+3. Validation scripts (strict checks)
+4. Generated registry (`registry/index.json`)
+5. Generated search index (`registry/search.json`)
+6. Searchable marketplace UI (`marketplace/`)
+7. GitHub Actions pipeline for validate/build/deploy
 
-High-level flow:
+## High-Level Architecture
 
 ```text
 Contributor
    |
    v
-Add skill folder
+Add skill folder (skills/<id>/...)
    |
    v
 Pull Request
    |
    v
 CI pipeline
-   |-- validate schema
-   |-- generate registry
-   `-- generate search index
+   |-- validate metadata and tool schema
+   |-- build registry/index.json
+   `-- build registry/search.json
    |
    v
-GitHub Pages marketplace
-   |
-   v
-Agents discover and install skills
+GitHub Pages UI + agent-readable registry
 ```
 
 Agent discovery flow:
 
 ```text
-agent
-  |
-  v
+Agent/Client
+   |
+   v
 registry/index.json
-  |
-  v
-skill metadata + tool schema reference
-  |
-  v
-install metadata and/or tool invocation contract
+   |
+   v
+skill metadata + tool schema path
+   |
+   v
+install metadata and tool invocation contract
 ```
 
-## Repository Structure (Target)
+## Repository Tour
 
 ```text
 skill-marketplace-template/
-├─ skills/
+├─ skills/                        # Source of truth skill folders
 │  └─ <skill-id>/
-│     ├─ skill.yaml
-│     ├─ tool.json
-│     ├─ README.md
-│     └─ examples/
-├─ schemas/
-│  ├─ skill.schema.json
-│  ├─ tool.schema.json
-│  ├─ config.schema.json
-│  ├─ registry.schema.json
-│  └─ search.schema.json
-├─ registry/
-│  ├─ index.json
-│  └─ search.json
-├─ marketplace/
-│  ├─ index.html
-│  ├─ app.js
-│  └─ style.css
-├─ config/
-│  └─ marketplace.json
-├─ scripts/
-│  ├─ validate_skills.py
-│  ├─ build_registry.py
-│  └─ build_search_index.py
-├─ .github/workflows/
-│  └─ build.yml
+│     ├─ skill.yaml               # Skill metadata
+│     ├─ tool.json                # Tool input/output contract
+│     ├─ README.md                # Human docs for the skill
+│     └─ examples/                # Usage examples (recommended)
+├─ schemas/                       # JSON Schemas used for strict validation
+├─ config/marketplace.json        # Marketplace branding + category policy
+├─ scripts/                       # Validation and generation scripts
+├─ registry/index.json            # Generated machine registry (committed)
+├─ registry/search.json           # Generated search index (committed)
+├─ marketplace/                   # Static frontend for GitHub Pages
+├─ .github/workflows/build.yml    # CI/CD pipeline
+├─ index.html                     # Root redirect to marketplace/
 └─ README.md
 ```
 
-Generated artifacts in `registry/*.json` are committed to git (not deploy-only artifacts).
+Important rule: `registry/*.json` is generated but still committed to git.
 
-## Skill Authoring Contract
+## Quick Start (Maintainer)
 
-Each skill lives under:
+### 1) Prerequisites
 
-```text
-skills/<skill-id>/
+- Python 3.11+
+- Git
+- A GitHub repository (template/fork)
+
+### 2) Configure your marketplace
+
+Edit [`config/marketplace.json`](config/marketplace.json):
+
+- `title`: marketplace name
+- `description`: one-line value proposition
+- `author`: maintainer/owner name
+- `license`: license label
+- `url`: GitHub Pages URL
+- `categories`: allowed category list (controlled vocabulary)
+
+### 3) Validate and build artifacts
+
+```bash
+python3 scripts/validate_skills.py
+python3 scripts/build_registry.py
+python3 scripts/build_search_index.py
 ```
 
-Required files:
+### 4) Preview locally
 
-1. `skill.yaml`
-2. `tool.json`
-3. `README.md`
-4. `examples/` (recommended, optional for v1 acceptance unless maintainers require it)
+```bash
+python3 -m http.server 8000
+```
 
-### `skill.yaml` (required fields and constraints)
+Open:
 
-Required top-level keys:
+- `http://localhost:8000/` (redirects to marketplace)
+- `http://localhost:8000/marketplace/`
+
+### 5) Push and deploy
+
+- Push to `main`
+- GitHub Actions validates and deploys Pages
+
+## Add a New Skill (Step-by-Step)
+
+Create:
+
+```text
+skills/my-skill/
+├─ skill.yaml
+├─ tool.json
+├─ README.md
+└─ examples/
+```
+
+Then run:
+
+```bash
+python3 scripts/validate_skills.py
+python3 scripts/build_registry.py
+python3 scripts/build_search_index.py
+git diff -- registry/index.json registry/search.json
+```
+
+Commit and open PR.
+
+## Skill Contract for Contributors
+
+### `skill.yaml` (what maintainers and agents read)
+
+Required fields:
 
 - `id`
 - `name`
@@ -145,17 +185,15 @@ Required top-level keys:
 - `install`
 - `agent`
 
-Constraints:
+Key rules:
 
-- `id` format: lowercase kebab-case (`^[a-z0-9]+(?:-[a-z0-9]+)*$`) and must match folder name.
-- `category` must be one of `config/marketplace.json.categories`.
-- `tags` must be non-empty, lowercase, and unique.
-- `difficulty` enum: `beginner | intermediate | advanced`.
-- `repo` must be HTTPS.
-  - **Note:** If using example URLs like `https://github.com/example/...`, the build script will automatically replace them with URLs pointing to your actual repository (auto-detected from git). This ensures skill links always point to the correct location.
-- `install` must contain at least one of `pip` or `npm` (both allowed).
-- `agent.protocol` must be `mcp`.
-- `agent.tool_schema` points to `tool.json` (relative path).
+1. `id` must be lowercase kebab-case and match folder name.
+2. `category` must exist in `config/marketplace.json.categories`.
+3. `tags` must be unique, lowercase, and non-empty.
+4. `difficulty` must be `beginner|intermediate|advanced`.
+5. `install` must include at least one of `pip` or `npm`.
+6. `agent.protocol` must be `mcp`.
+7. `agent.tool_schema` usually points to `tool.json`.
 
 Example:
 
@@ -168,7 +206,7 @@ tags:
   - python
   - scraping
 difficulty: intermediate
-repo: https://github.com/example/web-scraping-skill  # Will be auto-replaced with actual repo
+repo: https://github.com/example/web-scraping-skill
 install:
   pip: webscraper
 agent:
@@ -176,9 +214,11 @@ agent:
   tool_schema: tool.json
 ```
 
-### `tool.json` (required fields and constraints)
+Note: if `repo` uses `https://github.com/example/...`, `build_registry.py` can auto-map it to your actual repo path when possible.
 
-Required keys:
+### `tool.json` (how agents understand invocation)
+
+Required fields:
 
 - `name`
 - `title`
@@ -188,12 +228,6 @@ Required keys:
 Optional:
 
 - `outputSchema`
-
-Constraints:
-
-- `name` format: `^[a-zA-Z][a-zA-Z0-9_]*$`
-- `inputSchema` and `outputSchema` are JSON Schema object roots.
-- Unknown top-level fields should be rejected by strict validation.
 
 Example:
 
@@ -218,150 +252,93 @@ Example:
 }
 ```
 
-## Registry and Search Contracts
+## Generated Contracts
 
-### `registry/index.json` (rich registry)
-
-Purpose:
-
-- Primary machine-discovery document for agents and future CLI.
-- Single read to retrieve display metadata + install metadata + tool summary.
-
-Shape:
-
-```json
-{
-  "version": "1.0.0",
-  "marketplace": {
-    "title": "AI Skills Marketplace",
-    "description": "Reusable agent skills",
-    "url": "https://<user>.github.io/<repo>",
-    "theme": "dark",
-    "categories": ["data", "automation", "ai", "devtools"]
-  },
-  "skills": [
-    {
-      "id": "web-scraping",
-      "name": "Web Scraping",
-      "description": "Extract structured data from webpages",
-      "category": "data",
-      "tags": ["python", "scraping"],
-      "difficulty": "intermediate",
-      "repo": "https://github.com/<user>/<repo>/tree/main/skills/web-scraping",
-      "path": "skills/web-scraping",
-      "install": { "pip": "webscraper" },
-      "agent": {
-        "protocol": "mcp",
-        "tool_schema": "skills/web-scraping/tool.json"
-      },
-      "tool": {
-        "name": "web_scrape",
-        "title": "Website Scraper",
-        "description": "Extract structured data from a webpage"
-      }
-    }
-  ]
-}
-```
-
-### `registry/search.json` (search index)
+### `registry/index.json`
 
 Purpose:
 
-- Fast client-side filtering without server infrastructure.
+- Canonical machine-readable marketplace registry.
+- Contains marketplace metadata and rich skill entries.
 
-Shape:
+Includes (per skill):
 
-```json
-[
-  {
-    "id": "web-scraping",
-    "category": "data",
-    "tokens": ["web", "scraping", "python", "automation", "data"],
-    "text": "web scraping extract structured data python automation"
-  }
-]
-```
+- identity + description
+- category + tags + difficulty
+- install metadata
+- resolved repo URL
+- tool summary (`name/title/description`)
 
-Generation guarantees:
+### `registry/search.json`
 
-1. Deterministic output
-2. Sorted by `id`
-3. Derived from validated source metadata only
+Purpose:
 
-## Configuration
+- Pre-tokenized client-side search index for the static UI.
 
-`config/marketplace.json` controls branding and category policy.
+Includes (per skill):
 
-Required fields:
+- `id`
+- `category`
+- token list
+- normalized text blob
 
-- `title`
-- `description`
-- `theme`
-- `categories`
+Both generated files are deterministic and sorted by `id`.
 
-Optional fields:
+## CI/CD Behavior
 
-- `url` (HTTPS marketplace URL; defaults to `https://<user>.github.io/<repo>` when omitted)
+Workflow: [`.github/workflows/build.yml`](.github/workflows/build.yml)
 
-Rules:
+On `pull_request` and `push` to `main`:
 
-- `categories` is a controlled list (authoritative).
-- Category display order in UI follows this list by default.
-- Alternative alphabetical category sort is supported in UI.
+1. Install Python dependencies (`pyyaml`, `jsonschema`)
+2. Run validation script
+3. Build `registry/index.json`
+4. Build `registry/search.json`
+5. Fail if generated files are not committed
 
-Example:
+On `push` to `main`:
 
-```json
-{
-  "title": "AI Skills Marketplace",
-  "description": "Reusable agent skills",
-  "url": "https://<user>.github.io/<repo>",
-  "theme": "dark",
-  "categories": ["data", "automation", "ai", "devtools"]
-}
-```
+- Deploy GitHub Pages artifact
 
-## CI/CD Workflow
+## Junior-Friendly Mental Model
 
-Planned workflow in `.github/workflows/build.yml`:
+When in doubt, remember this chain:
 
-1. Run on `pull_request` and `push` to `main`
-2. Validate all skill and config contracts
-3. Generate `registry/index.json`
-4. Generate `registry/search.json`
-5. Fail if generated artifacts differ from committed files (drift check)
-6. Deploy GitHub Pages on `main`
+1. `skills/` is source truth.
+2. `scripts/` turns source truth into registry files.
+3. `registry/` is what UI/agents consume.
+4. `marketplace/` is only a viewer over registry data.
 
-Planned command interface:
+If something looks wrong in UI, first check skill metadata and regenerate registry files.
 
-```bash
-python scripts/validate_skills.py
-python scripts/build_registry.py
-python scripts/build_search_index.py
-git diff --exit-code registry/index.json registry/search.json
-```
+## Common Errors and Fixes
 
-## Quickstart (Maintainer)
+1. **`id` mismatch**
+   - Error: skill `id` does not match folder name.
+   - Fix: make folder name and `skill.yaml:id` identical.
 
-1. Create a repo from this template (or fork it).
-2. Update `config/marketplace.json` branding and categories.
-3. Add your first skill folder with `skill.yaml` and `tool.json`.
-4. Run planned validation/build commands locally.
-5. Open PR, merge to `main`, verify GitHub Pages deployment.
+2. **Invalid category**
+   - Error: category not in configured category list.
+   - Fix: either update `config/marketplace.json` or choose an allowed category.
 
-Minimal first skill:
+3. **Missing tool schema**
+   - Error: `agent.tool_schema` path missing or invalid.
+   - Fix: create file and keep path relative to skill folder.
 
-```text
-skills/web-scraping/
-├─ skill.yaml
-├─ tool.json
-└─ README.md
-```
+4. **CI says registry is stale**
+   - Error: generated `registry/*.json` differs from committed files.
+   - Fix: rerun build scripts and commit the updated JSON.
 
-## Usage (Agent/CLI Compatibility)
+## Contribution Guidelines
 
-Planned compatibility target for v1.1:
+1. Keep PRs small and focused (prefer one skill per PR).
+2. Include `README.md` for each skill so humans can understand usage.
+3. Run validation/build scripts locally before pushing.
+4. Do not add arbitrary install command fields; use `pip` and/or `npm` only.
+
+## CLI Compatibility (Planned)
+
+Planned command style:
 
 ```bash
 skill marketplace add https://<user>.github.io/<repo>/registry/index.json
@@ -369,37 +346,19 @@ skill search scraping
 skill install web-scraping
 ```
 
-Notes:
+Current status:
 
-- v1 documents install metadata contracts.
-- v1.1 implements CLI installer behavior against the registry.
-
-## Contribution Guidelines
-
-PR expectations:
-
-1. Keep one skill per PR when possible.
-2. Include complete metadata and documentation.
-3. Keep categories within configured allowed list.
-4. Ensure generated registry/search artifacts are updated.
-
-Policy:
-
-- Schema compliance is required for merge.
-- Install metadata supports `pip` and `npm` only in v1.
-- Arbitrary install command fields are not allowed in v1.
+- Registry format is ready for CLI consumers.
+- Full installer behavior remains a future extension.
 
 ## Roadmap
 
-1. v1: Registry + UI + CI
+1. v1: registry + UI + CI (current template direction)
 2. v1.1: CLI installer integration
-3. Future:
-   - trust tiers and security policy checks
-   - improved relevance ranking in search
-   - optional curation workflows
+3. Future: trust tiers, stronger security policy checks, richer search ranking
 
 ## License
 
-MIT License - See [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE).
 
 Copyright (c) 2026 Zhouyou Gu
