@@ -4,6 +4,8 @@ const PATHS = {
   search: "../registry/search.json"
 };
 
+const TEMPLATE_REPO_URL = "https://github.com/zhouyou-gu/skill-marketplace-template";
+
 const DEFAULTS = {
   query: "",
   category: "all",
@@ -526,14 +528,14 @@ function formatStarCount(count) {
 
 function configureCtas() {
   const repoUrl = detectMarketplaceRepoUrl();
+  elements.footerRepoLink.href = TEMPLATE_REPO_URL;
+  elements.footerRepoLink.hidden = false;
 
   if (repoUrl) {
     elements.ctaAddSkill.href = `${repoUrl}/tree/main/skills`;
     elements.ctaStarRepo.href = repoUrl;
-    elements.footerRepoLink.href = repoUrl;
     elements.ctaAddSkill.hidden = false;
     elements.ctaStarRepo.hidden = false;
-    elements.footerRepoLink.hidden = false;
     
     // Fetch and display star count
     fetchGitHubStars(repoUrl).then(stars => {
@@ -544,7 +546,6 @@ function configureCtas() {
   } else {
     elements.ctaAddSkill.hidden = true;
     elements.ctaStarRepo.hidden = true;
-    elements.footerRepoLink.hidden = true;
   }
 
   const registryUrl = new URL(PATHS.registry, window.location.href).href;
