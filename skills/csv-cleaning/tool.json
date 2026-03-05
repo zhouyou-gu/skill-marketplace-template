@@ -1,0 +1,57 @@
+{
+  "name": "csv_clean",
+  "title": "CSV Cleaner",
+  "description": "Clean a CSV file by trimming text, removing duplicates, and filling missing values",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "csv_path": {
+        "type": "string",
+        "minLength": 1
+      },
+      "output_path": {
+        "type": "string",
+        "minLength": 1
+      },
+      "drop_duplicates": {
+        "type": "boolean",
+        "default": true
+      },
+      "trim_whitespace": {
+        "type": "boolean",
+        "default": true
+      },
+      "fill_missing": {
+        "type": "object",
+        "description": "Column to replacement value mapping",
+        "additionalProperties": {
+          "type": ["string", "number", "boolean", "null"]
+        }
+      }
+    },
+    "required": ["csv_path"],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "cleaned_path": {
+        "type": "string"
+      },
+      "rows_before": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "rows_after": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "columns_cleaned": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "required": ["cleaned_path", "rows_before", "rows_after", "columns_cleaned"],
+    "additionalProperties": false
+  }
+}

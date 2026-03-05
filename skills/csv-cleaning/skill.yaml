@@ -1,0 +1,15 @@
+id: csv-cleaning
+name: CSV Cleaning
+description: Clean and normalize CSV datasets with configurable rules for trimming, deduplication, and missing-value handling
+category: data
+tags:
+  - python
+  - data-cleaning
+  - csv
+difficulty: beginner
+repo: https://github.com/example/csv-cleaning-skill
+install:
+  pip: pandas
+agent:
+  protocol: mcp
+  tool_schema: tool.json
