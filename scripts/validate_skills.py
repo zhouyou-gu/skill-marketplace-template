@@ -132,7 +132,7 @@ def main() -> int:
         skill_md_path = skill_dir / "SKILL.md"
 
         if not readme_path.exists():
-            errors.append(f"{readme_path.relative_to(ROOT)}: missing required file")
+            warnings.append(f"{readme_path.relative_to(ROOT)}: missing optional file")
 
         if not skill_md_path.exists():
             errors.append(f"{skill_md_path.relative_to(ROOT)}: missing required file")

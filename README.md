@@ -90,7 +90,7 @@ skill-marketplace-template/
 │     ├─ SKILL.md                 # Codex installer-compatible skill instructions
 │     ├─ skill.yaml               # Skill metadata
 │     ├─ tool.json                # Tool input/output contract
-│     ├─ README.md                # Human docs for the skill
+│     ├─ README.md                # Human docs for the skill (recommended)
 │     └─ examples/                # Usage examples (recommended)
 ├─ schemas/                       # JSON Schemas used for strict validation
 ├─ config/marketplace.json        # Marketplace branding + category policy
@@ -158,7 +158,7 @@ skills/my-skill/
 ├─ SKILL.md
 ├─ skill.yaml
 ├─ tool.json
-├─ README.md
+├─ README.md (recommended)
 └─ examples/
 ```
 
@@ -369,7 +369,7 @@ If something looks wrong in UI, first check skill metadata and regenerate regist
 ## Contribution Guidelines
 
 1. Keep PRs small and focused (prefer one skill per PR).
-2. Include both `SKILL.md` and `README.md` for each skill.
+2. Include `SKILL.md` for each skill; add `README.md` as recommended human-facing docs.
 3. Run validation/build scripts locally before pushing.
 4. Do not add arbitrary install command fields; use `pip` and/or `npm` only.
 
