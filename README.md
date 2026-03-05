@@ -239,7 +239,7 @@ tags:
 difficulty: intermediate
 repo: https://github.com/example/web-scraping-skill
 install:
-  pip: webscraper
+  pip: beautifulsoup4
 agent:
   protocol: mcp
   tool_schema: tool.json
