@@ -93,15 +93,15 @@ skill-marketplace-template/
 ├─ schemas/                       # JSON Schemas used for strict validation
 ├─ config/marketplace.json        # Marketplace branding + category policy
 ├─ scripts/                       # Validation and generation scripts
-├─ registry/index.json            # Generated machine registry (committed)
-├─ registry/search.json           # Generated search index (committed)
+├─ registry/index.json            # Generated machine registry (local/CI artifact)
+├─ registry/search.json           # Generated search index (local/CI artifact)
 ├─ marketplace/                   # Static frontend for GitHub Pages
 ├─ .github/workflows/build.yml    # CI/CD pipeline
 ├─ index.html                     # Root redirect to marketplace/
 └─ README.md
 ```
 
-Important rule: `registry/*.json` is generated but still committed to git.
+Important rule: `registry/*.json` is generated and not tracked in git.
 
 ## Quick Start (Maintainer)
 
@@ -166,7 +166,6 @@ python3 scripts/validate_skills.py
 python3 scripts/verify_install_targets.py
 python3 scripts/build_registry.py
 python3 scripts/build_search_index.py
-git diff -- registry/index.json registry/search.json
 ```
 
 Commit and open PR.
@@ -297,11 +296,12 @@ On `pull_request` and `push` to `main`:
 3. Verify `install.pip` and `install.npm` targets resolve in real registries
 4. Build `registry/index.json`
 5. Build `registry/search.json`
-6. Fail if generated files are not committed
+6. Fail if validation or generation fails
 
 On `push` to `main`:
 
-- Deploy GitHub Pages artifact
+- Rebuild `registry/index.json` and `registry/search.json`
+- Deploy GitHub Pages artifact (including generated registry files)
 
 ## Junior-Friendly Mental Model
 
@@ -328,9 +328,9 @@ If something looks wrong in UI, first check skill metadata and regenerate regist
    - Error: `agent.tool_schema` path missing or invalid.
    - Fix: create file and keep path relative to skill folder.
 
-4. **CI says registry is stale**
-   - Error: generated `registry/*.json` differs from committed files.
-   - Fix: rerun build scripts and commit the updated JSON.
+4. **CI fails while generating registry/search**
+   - Error: build scripts fail in CI due invalid skill metadata, schema, or tool paths.
+   - Fix: run validation/build scripts locally, fix the reported issue, and push again.
 
 ## Contribution Guidelines
 
