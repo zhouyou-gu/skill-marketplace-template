@@ -1,0 +1,70 @@
+{
+  "name": "json_validate",
+  "title": "JSON Schema Validator",
+  "description": "Validate a JSON document against a JSON Schema and report structured errors",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "json_path": {
+        "type": "string",
+        "minLength": 1
+      },
+      "schema_path": {
+        "type": "string",
+        "minLength": 1
+      },
+      "max_errors": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 200,
+        "default": 20
+      }
+    },
+    "required": [
+      "json_path",
+      "schema_path"
+    ],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "valid": {
+        "type": "boolean"
+      },
+      "error_count": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "errors": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "keyword": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "message",
+            "keyword"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "valid",
+      "error_count",
+      "errors"
+    ],
+    "additionalProperties": false
+  }
+}

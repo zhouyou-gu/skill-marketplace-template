@@ -1,0 +1,15 @@
+id: json-validation
+name: JSON Validation
+description: Validate JSON documents against JSON Schema definitions
+category: devtools
+tags:
+  - python
+  - json
+  - json-schema
+difficulty: beginner
+repo: https://github.com/example/json-validation-skill
+install:
+  pip: jsonschema
+agent:
+  protocol: mcp
+  tool_schema: tool.json
