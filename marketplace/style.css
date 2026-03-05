@@ -1104,6 +1104,18 @@ mark {
     flex-direction: column;
     gap: 8px;
   }
+
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .footer-divider {
+    display: none;
+  }
 }
 
 /* Small mobile breakpoint */
