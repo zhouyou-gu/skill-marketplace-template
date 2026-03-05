@@ -9,8 +9,8 @@ tags:
 difficulty: intermediate
 repo: https://github.com/example/web-scraping-skill
 install:
-  pip: webscraper
-  npm: "@skills/web-scraping"
+  pip: beautifulsoup4
+  npm: cheerio
 agent:
   protocol: mcp
   tool_schema: tool.json

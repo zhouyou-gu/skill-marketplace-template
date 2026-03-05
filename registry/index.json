@@ -29,7 +29,7 @@
       "repo": "https://github.com/zhouyou-gu/skill-marketplace-template/tree/main/skills/api-testing",
       "path": "skills/api-testing",
       "install": {
-        "pip": "apitesting-skill"
+        "pip": "requests"
       },
       "agent": {
         "protocol": "mcp",
@@ -55,8 +55,8 @@
       "repo": "https://github.com/zhouyou-gu/skill-marketplace-template/tree/main/skills/web-scraping",
       "path": "skills/web-scraping",
       "install": {
-        "pip": "webscraper",
-        "npm": "@skills/web-scraping"
+        "pip": "beautifulsoup4",
+        "npm": "cheerio"
       },
       "agent": {
         "protocol": "mcp",

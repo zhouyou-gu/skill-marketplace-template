@@ -9,7 +9,7 @@ tags:
 difficulty: beginner
 repo: https://github.com/example/api-testing-skill
 install:
-  pip: apitesting-skill
+  pip: requests
 agent:
   protocol: mcp
   tool_schema: tool.json
