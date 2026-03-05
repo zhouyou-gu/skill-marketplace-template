@@ -779,6 +779,15 @@ select:focus,
   transition-duration: 80ms;
 }
 
+.card-clickable {
+  cursor: pointer;
+}
+
+.card-clickable:focus-visible {
+  outline: 3px solid rgba(9, 105, 218, 0.4);
+  outline-offset: 2px;
+}
+
 .card h3 {
   margin: 0;
   font-size: 1.12rem;

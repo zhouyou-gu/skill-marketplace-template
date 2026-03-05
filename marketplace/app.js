@@ -378,6 +378,7 @@ function createBadge(text, className, isMatch) {
 function renderSkillCard(skill, queryTerms) {
   const article = document.createElement("article");
   article.className = "card";
+  const folderUrl = resolveSkillFolderUrl(skill);
 
   const title = document.createElement("h3");
   title.appendChild(createHighlightedFragment(skill.name, queryTerms));
@@ -410,7 +411,79 @@ function renderSkillCard(skill, queryTerms) {
   article.appendChild(description);
   article.appendChild(meta);
 
+  if (folderUrl) {
+    article.classList.add("card-clickable");
+    article.tabIndex = 0;
+    article.setAttribute("role", "link");
+    article.setAttribute("aria-label", `Open ${skill.name} folder`);
+
+    const openFolder = () => {
+      window.open(folderUrl, "_blank", "noopener,noreferrer");
+    };
+
+    article.addEventListener("click", (event) => {
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        target.closest("a, button, input, select, textarea, label")
+      ) {
+        return;
+      }
+      openFolder();
+    });
+
+    article.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openFolder();
+      }
+    });
+  }
+
   return article;
+}
+
+function extractGitHubRepoBase(url) {
+  if (typeof url !== "string" || !url.trim()) {
+    return "";
+  }
+
+  const match = url.match(/^https:\/\/github\.com\/([^/]+)\/([^/#?]+)/i);
+  if (!match) {
+    return "";
+  }
+
+  const owner = match[1];
+  const repo = match[2].replace(/\.git$/i, "");
+  if (!owner || !repo) {
+    return "";
+  }
+
+  return `https://github.com/${owner}/${repo}`;
+}
+
+function resolveSkillFolderUrl(skill) {
+  const path = typeof skill.path === "string" ? skill.path.replace(/^\/+/, "") : "";
+  const repoFromPage = detectMarketplaceRepoUrl();
+
+  if (repoFromPage && path) {
+    return `${repoFromPage}/tree/main/${path}`;
+  }
+
+  const skillRepo = typeof skill.repo === "string" ? skill.repo.trim() : "";
+  if (!skillRepo) {
+    return "";
+  }
+  if (skillRepo.includes("/tree/") || !path) {
+    return skillRepo;
+  }
+
+  const repoBase = extractGitHubRepoBase(skillRepo);
+  if (repoBase) {
+    return `${repoBase}/tree/main/${path}`;
+  }
+
+  return skillRepo;
 }
 
 function updateSummary(totalCount, visibleCount, hasQuery) {
