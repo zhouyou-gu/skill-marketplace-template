@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -36,11 +35,11 @@ def dump_json(path: Path, payload: Any) -> None:
         fh.write("\n")
 
 
-def detect_marketplace_url() -> str:
-    repo = os.getenv("GITHUB_REPOSITORY", "")
-    if "/" in repo:
-        owner, name = repo.split("/", 1)
-        return f"https://{owner}.github.io/{name}"
+def resolve_marketplace_url(config: dict[str, Any]) -> str:
+    """Resolve marketplace URL deterministically from config."""
+    url = config.get("url")
+    if isinstance(url, str) and url.startswith("https://"):
+        return url
     return "https://<user>.github.io/<repo>"
 
 
@@ -139,7 +138,7 @@ def main() -> int:
         "marketplace": {
             "title": config["title"],
             "description": config["description"],
-            "url": detect_marketplace_url(),
+            "url": resolve_marketplace_url(config),
             "theme": config["theme"],
             "categories": config["categories"],
         },

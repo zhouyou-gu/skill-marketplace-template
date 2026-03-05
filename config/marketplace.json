@@ -1,6 +1,7 @@
 {
   "title": "AI Skills Marketplace",
   "description": "Reusable agent skills",
+  "url": "https://<user>.github.io/<repo>",
   "theme": "dark",
   "categories": [
     "data",

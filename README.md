@@ -296,6 +296,10 @@ Required fields:
 - `theme`
 - `categories`
 
+Optional fields:
+
+- `url` (HTTPS marketplace URL; defaults to `https://<user>.github.io/<repo>` when omitted)
+
 Rules:
 
 - `categories` is a controlled list (authoritative).
@@ -308,6 +312,7 @@ Example:
 {
   "title": "AI Skills Marketplace",
   "description": "Reusable agent skills",
+  "url": "https://<user>.github.io/<repo>",
   "theme": "dark",
   "categories": ["data", "automation", "ai", "devtools"]
 }
