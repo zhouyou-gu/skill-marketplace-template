@@ -5,6 +5,9 @@ const PATHS = {
 };
 
 const TEMPLATE_REPO_URL = "https://github.com/zhouyou-gu/skill-marketplace-template";
+const TEMPLATE_LICENSE_URL = "../LICENSE";
+const TEMPLATE_LICENSE_LABEL = "MIT License";
+const TEMPLATE_ATTRIBUTION_LABEL = "View Template on GitHub Created by Zhouyou Gu";
 
 const DEFAULTS = {
   query: "",
@@ -29,6 +32,7 @@ const elements = {
   ctaAddSkill: document.getElementById("cta-add-skill"),
   ctaStarRepo: document.getElementById("cta-star-repo"),
   starCount: document.getElementById("star-count"),
+  footerLicenseLink: document.getElementById("footer-license-link"),
   footerRepoLink: document.getElementById("footer-repo-link"),
   searchInput: document.getElementById("search-input"),
   sortSelect: document.getElementById("sort-select"),
@@ -633,8 +637,7 @@ function formatStarCount(count) {
 
 function configureCtas() {
   const repoUrl = resolveMarketplaceRepoUrl();
-  elements.footerRepoLink.href = TEMPLATE_REPO_URL;
-  elements.footerRepoLink.hidden = false;
+  configureFooterAttribution();
 
   if (repoUrl) {
     elements.ctaAddSkill.href = `${repoUrl}/tree/main/skills`;
@@ -667,6 +670,33 @@ function configureCtas() {
 
   const registryUrl = new URL(PATHS.registry, window.location.href).href;
   elements.registryUrl.textContent = registryUrl;
+}
+
+function configureFooterAttribution() {
+  const footerLinks = [
+    {
+      element: elements.footerLicenseLink,
+      href: TEMPLATE_LICENSE_URL,
+      label: TEMPLATE_LICENSE_LABEL
+    },
+    {
+      element: elements.footerRepoLink,
+      href: TEMPLATE_REPO_URL,
+      label: TEMPLATE_ATTRIBUTION_LABEL
+    }
+  ];
+
+  footerLinks.forEach(({ element, href, label }) => {
+    if (!element) {
+      return;
+    }
+
+    element.href = href;
+    element.textContent = label;
+    element.target = "_blank";
+    element.rel = "noopener noreferrer";
+    element.hidden = false;
+  });
 }
 
 async function copyRegistryUrlToClipboard() {

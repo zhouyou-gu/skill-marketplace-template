@@ -124,6 +124,9 @@ Edit [`config/marketplace.json`](config/marketplace.json):
 - `url`: GitHub Pages URL
 - `categories`: allowed category list (controlled vocabulary)
 
+Footer attribution note:
+The footer license link and template attribution in [`marketplace/app.js`](marketplace/app.js) are intentionally fixed constants, not config-driven branding fields.
+
 ### 3) Validate and build artifacts
 
 ```bash
