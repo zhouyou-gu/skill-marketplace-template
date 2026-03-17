@@ -780,6 +780,10 @@ select:focus,
   padding: 28px 24px;
 }
 
+.panel.empty[hidden] {
+  display: none;
+}
+
 .empty-content {
   display: flex;
   align-items: center;
