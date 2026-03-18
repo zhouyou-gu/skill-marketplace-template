@@ -11,8 +11,7 @@ const TEMPLATE_ATTRIBUTION_LABEL = "View Template on GitHub Created by Zhouyou G
 
 const DEFAULTS = {
   query: "",
-  category: "all",
-  categorySort: "relevance"
+  sort: "relevance"
 };
 
 const state = {
@@ -21,8 +20,7 @@ const state = {
   searchById: new Map(),
   skillDocs: new Map(),
   query: DEFAULTS.query,
-  category: DEFAULTS.category,
-  categorySort: DEFAULTS.categorySort
+  sort: DEFAULTS.sort
 };
 
 const elements = {
@@ -34,9 +32,11 @@ const elements = {
   starCount: document.getElementById("star-count"),
   footerLicenseLink: document.getElementById("footer-license-link"),
   footerRepoLink: document.getElementById("footer-repo-link"),
+  searchContainer: document.getElementById("search-container"),
   searchInput: document.getElementById("search-input"),
+  autocomplete: document.getElementById("autocomplete"),
   sortSelect: document.getElementById("sort-select"),
-  categoryChips: document.getElementById("category-chips"),
+  tagChips: document.getElementById("tag-chips"),
   summary: document.getElementById("results-summary"),
   clearFilters: document.getElementById("clear-filters"),
   registryUrl: document.getElementById("registry-url"),
@@ -52,6 +52,9 @@ const elements = {
 
 let searchDebounceTimer = 0;
 let copyStatusTimer = 0;
+let selectedChipIndex = -1;
+let autocompleteIndex = -1;
+let allTagCounts = [];
 
 function normalize(value) {
   return (value || "").toString().toLowerCase().trim();
@@ -81,6 +84,272 @@ function uniqueTermsFromQuery(query) {
   return uniqueTokens(query, 8);
 }
 
+const FILTER_PATTERN = /(-?)(tag|category):(\S+)/gi;
+
+function parseQueryFilters(query) {
+  const filters = { includeTags: [], excludeTags: [], includeCategories: [], excludeCategories: [] };
+  const textQuery = query.replace(FILTER_PATTERN, (_, neg, type, value) => {
+    const list = neg === "-" ? "exclude" : "include";
+    const key = type === "tag" ? `${list}Tags` : `${list}Categories`;
+    filters[key].push(value.toLowerCase());
+    return "";
+  }).trim();
+  return { filters, textQuery };
+}
+
+function parseQueryTokens(query) {
+  const tokens = [];
+  const textPart = query.replace(FILTER_PATTERN, (raw, neg, type, value) => {
+    tokens.push({ raw: raw.trim(), negate: neg === "-", type: type.toLowerCase(), value: value.toLowerCase() });
+    return "";
+  }).trim();
+  return { tokens, text: textPart };
+}
+
+function buildAllTagCounts() {
+  const counts = new Map();
+  const skills = (state.registry && state.registry.skills) || [];
+  skills.forEach((skill) => {
+    (skill.tags || []).forEach((tag) => {
+      const t = tag.toLowerCase();
+      counts.set(t, (counts.get(t) || 0) + 1);
+    });
+  });
+  allTagCounts = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+}
+
+function renderSearchTokens() {
+  const { tokens, text } = parseQueryTokens(state.query);
+
+  // Remove existing chips
+  const existingChips = elements.searchContainer.querySelectorAll(".token-chip");
+  existingChips.forEach((chip) => chip.remove());
+
+  // Insert chips before the input
+  tokens.forEach((token, index) => {
+    const chip = document.createElement("span");
+    chip.className = "token-chip" + (token.negate ? " is-negated" : "");
+    chip.dataset.index = index;
+
+    const label = document.createElement("span");
+    label.className = "token-label";
+    label.textContent = token.raw;
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "token-remove";
+    removeBtn.setAttribute("aria-label", `Remove ${token.raw}`);
+    removeBtn.textContent = "\u00d7";
+    removeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      removeTokenAtIndex(index);
+    });
+
+    chip.appendChild(label);
+    chip.appendChild(removeBtn);
+    elements.searchInput.before(chip);
+  });
+
+  elements.searchInput.value = text;
+  selectedChipIndex = -1;
+}
+
+function removeTokenAtIndex(index) {
+  const { tokens, text } = parseQueryTokens(state.query);
+  tokens.splice(index, 1);
+  state.query = rebuildQuery(tokens, text);
+  renderSearchTokens();
+  renderSkills();
+  elements.searchInput.focus();
+}
+
+function rebuildQuery(tokens, text) {
+  const parts = tokens.map((t) => t.raw);
+  if (text.trim()) {
+    parts.push(text.trim());
+  }
+  return parts.join(" ");
+}
+
+function rebuildQueryFromUI() {
+  const { tokens } = parseQueryTokens(state.query);
+  const inputText = elements.searchInput.value;
+  state.query = rebuildQuery(tokens, inputText);
+}
+
+function promoteTypedFilters() {
+  const inputText = elements.searchInput.value;
+  // Only promote a filter token when it's followed by a space,
+  // meaning the user has finished typing it and moved on
+  const COMPLETE_FILTER = /(-?)(tag|category):(\S+)\s/gi;
+  if (COMPLETE_FILTER.test(inputText)) {
+    rebuildQueryFromUI();
+    renderSearchTokens();
+    return true;
+  }
+  return false;
+}
+
+function getChips() {
+  return elements.searchContainer.querySelectorAll(".token-chip");
+}
+
+function clearChipSelection() {
+  getChips().forEach((c) => c.classList.remove("is-selected"));
+  selectedChipIndex = -1;
+}
+
+function selectChip(index) {
+  const chips = getChips();
+  if (index < 0 || index >= chips.length) {
+    clearChipSelection();
+    elements.searchInput.focus();
+    return;
+  }
+  clearChipSelection();
+  selectedChipIndex = index;
+  chips[index].classList.add("is-selected");
+  // Keep focus on the container so keydown events still fire
+  elements.searchContainer.focus();
+}
+
+// Autocomplete
+function showAutocomplete(suggestions) {
+  const el = elements.autocomplete;
+  el.innerHTML = "";
+  if (!suggestions.length) {
+    el.hidden = true;
+    autocompleteIndex = -1;
+    return;
+  }
+  suggestions.forEach((s, i) => {
+    const item = document.createElement("div");
+    item.className = "autocomplete-item";
+    item.textContent = s.label;
+    item.dataset.value = s.value;
+    item.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      acceptAutocompleteSuggestion(s.value);
+    });
+    el.appendChild(item);
+  });
+  el.hidden = false;
+  autocompleteIndex = -1;
+}
+
+function hideAutocomplete() {
+  elements.autocomplete.hidden = true;
+  elements.autocomplete.innerHTML = "";
+  autocompleteIndex = -1;
+}
+
+function highlightAutocompleteItem(index) {
+  const items = elements.autocomplete.querySelectorAll(".autocomplete-item");
+  items.forEach((item) => item.classList.remove("is-active"));
+  if (index >= 0 && index < items.length) {
+    autocompleteIndex = index;
+    items[index].classList.add("is-active");
+    items[index].scrollIntoView({ block: "nearest" });
+  } else {
+    autocompleteIndex = -1;
+  }
+}
+
+function acceptAutocompleteSuggestion(value) {
+  const inputText = elements.searchInput.value;
+  const cursor = elements.searchInput.selectionStart || inputText.length;
+
+  // Find the word boundary around the cursor
+  const before = inputText.slice(0, cursor);
+  const after = inputText.slice(cursor);
+  const wordStart = before.search(/\S+$/);
+  const wordEnd = cursor + (after.match(/^\S*/) || [""])[0].length;
+
+  // Replace the word at cursor with nothing (the suggestion becomes a chip)
+  const remaining = (inputText.slice(0, Math.max(0, wordStart)) + inputText.slice(wordEnd)).trim();
+
+  // Get existing chip tokens only (exclude input text from state.query)
+  const chipQuery = state.query.replace(new RegExp(escapeRegex(inputText) + "$"), "").trim();
+  const { tokens } = parseQueryTokens(chipQuery);
+
+  const negate = value.startsWith("-");
+  const withoutNeg = negate ? value.slice(1) : value;
+  const colonIdx = withoutNeg.indexOf(":");
+  const type = withoutNeg.slice(0, colonIdx);
+  const val = withoutNeg.slice(colonIdx + 1);
+  tokens.push({ raw: value, negate, type, value: val });
+
+  elements.searchInput.value = "";
+  state.query = rebuildQuery(tokens, remaining);
+  renderSearchTokens();
+  renderSkills();
+  hideAutocomplete();
+  elements.searchInput.focus();
+}
+
+function updateAutocomplete() {
+  const inputText = elements.searchInput.value;
+  if (!inputText.trim()) {
+    hideAutocomplete();
+    return;
+  }
+
+  const { tokens: existingTokens } = parseQueryTokens(state.query);
+  const existingValues = new Set(existingTokens.map((t) => (t.negate ? "-" : "") + t.type + ":" + t.value));
+
+  // Check if user is typing a tag: or -tag: prefix
+  const prefixMatch = inputText.match(/(-?)(tag|category):(\S*)$/i);
+  let suggestions = [];
+
+  if (prefixMatch) {
+    const neg = prefixMatch[1];
+    const type = prefixMatch[2].toLowerCase();
+    const partial = prefixMatch[3].toLowerCase();
+    suggestions = allTagCounts
+      .filter(([tag]) => tag.startsWith(partial) || tag.includes(partial))
+      .filter(([tag]) => !existingValues.has(`${neg}${type}:${tag}`))
+      .slice(0, 8)
+      .map(([tag, count]) => ({
+        label: `${neg}${type}:${tag} (${count})`,
+        value: `${neg}${type}:${tag}`
+      }));
+  } else {
+    // Free text — suggest tag: completions for matching tags
+    const lastWord = inputText.trim().split(/\s+/).pop().toLowerCase();
+    if (lastWord.length >= 1) {
+      suggestions = allTagCounts
+        .filter(([tag]) => tag.startsWith(lastWord) || tag.includes(lastWord))
+        .filter(([tag]) => !existingValues.has(`tag:${tag}`))
+        .slice(0, 6)
+        .map(([tag, count]) => ({
+          label: `tag:${tag} (${count})`,
+          value: `tag:${tag}`
+        }));
+    }
+  }
+
+  showAutocomplete(suggestions);
+}
+
+function matchesFilters(skill, filters) {
+  const tags = (skill.tags || []).map((t) => t.toLowerCase());
+  const category = (skill.category || "").toLowerCase();
+
+  for (const t of filters.excludeTags) {
+    if (tags.includes(t)) return false;
+  }
+  for (const c of filters.excludeCategories) {
+    if (category === c) return false;
+  }
+  for (const t of filters.includeTags) {
+    if (!tags.includes(t)) return false;
+  }
+  for (const c of filters.includeCategories) {
+    if (category !== c) return false;
+  }
+  return true;
+}
+
 function parseInitialStateFromUrl() {
   const params = new URLSearchParams(window.location.search);
 
@@ -89,28 +358,20 @@ function parseInitialStateFromUrl() {
     state.query = query;
   }
 
-  const category = params.get("c");
-  if (typeof category === "string" && category) {
-    state.category = normalize(category);
-  }
-
-  const categorySort = params.get("s");
-  if (categorySort === "alpha" || categorySort === "config" || categorySort === "relevance") {
-    state.categorySort = categorySort;
+  const sort = params.get("s");
+  if (sort === "alpha" || sort === "relevance") {
+    state.sort = sort;
   }
 }
 
 function syncStateToUrl() {
   const params = new URLSearchParams();
 
-  if (normalize(state.query)) {
+  if (state.query !== DEFAULTS.query) {
     params.set("q", state.query.trim());
   }
-  if (state.category !== DEFAULTS.category) {
-    params.set("c", state.category);
-  }
-  if (state.categorySort !== DEFAULTS.categorySort) {
-    params.set("s", state.categorySort);
+  if (state.sort !== DEFAULTS.sort) {
+    params.set("s", state.sort);
   }
 
   const nextQuery = params.toString();
@@ -119,8 +380,8 @@ function syncStateToUrl() {
 }
 
 function syncControlsFromState() {
-  elements.searchInput.value = state.query;
-  elements.sortSelect.value = state.categorySort;
+  renderSearchTokens();
+  elements.sortSelect.value = state.sort;
 }
 
 function setLoading(isLoading) {
@@ -137,56 +398,38 @@ function clearError() {
   elements.errorPanel.textContent = "";
 }
 
-function updateCategoryChipState() {
-  const chips = elements.categoryChips.querySelectorAll(".chip");
-  chips.forEach((chip) => {
-    chip.setAttribute("aria-pressed", String(chip.dataset.value === state.category));
+function updateTagChips(skills) {
+  const { filters } = parseQueryFilters(state.query);
+  const activeIncludeTags = new Set(filters.includeTags);
+
+  const counts = new Map();
+  skills.forEach((skill) => {
+    (skill.tags || []).forEach((tag) => {
+      const t = tag.toLowerCase();
+      counts.set(t, (counts.get(t) || 0) + 1);
+    });
   });
-}
 
-function buildCategoryButtons() {
-  const categories = state.config.categories || [];
-  const options = ["all", ...categories];
+  const topTags = [...counts.entries()]
+    .filter(([tag]) => !activeIncludeTags.has(tag))
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
 
-  elements.categoryChips.innerHTML = "";
+  elements.tagChips.innerHTML = "";
 
-  options.forEach((value) => {
+  topTags.forEach(([tag, count]) => {
     const button = document.createElement("button");
-    const label = value === "all" ? "All" : value;
-
     button.type = "button";
     button.className = "chip";
-    button.dataset.value = value;
-    button.dataset.label = label;
-    button.textContent = label;
-    button.setAttribute("aria-pressed", String(state.category === value));
+    button.textContent = `${tag} (${count})`;
 
     button.addEventListener("click", () => {
-      state.category = value;
-      updateCategoryChipState();
+      state.query = `${state.query} tag:${tag}`.trim();
+      syncControlsFromState();
       renderSkills();
     });
 
-    elements.categoryChips.appendChild(button);
-  });
-}
-
-function updateCategoryCounts(queryMatchedSkills) {
-  const counts = new Map();
-  queryMatchedSkills.forEach((skill) => {
-    counts.set(skill.category, (counts.get(skill.category) || 0) + 1);
-  });
-
-  const chips = elements.categoryChips.querySelectorAll(".chip");
-  chips.forEach((chip) => {
-    const value = chip.dataset.value;
-    const label = chip.dataset.label || value;
-    const count = value === "all" ? queryMatchedSkills.length : (counts.get(value) || 0);
-
-    chip.textContent = `${label} (${count})`;
-
-    const isSelected = value === state.category;
-    chip.disabled = !isSelected && count === 0;
+    elements.tagChips.appendChild(button);
   });
 }
 
@@ -297,35 +540,14 @@ function scoreSkill(skill, queryTerms, queryPhrase) {
   return score;
 }
 
-function matchesCategory(skill) {
-  return state.category === "all" || skill.category === state.category;
-}
-
-function categoryRank(category) {
-  const categories = state.config.categories || [];
-  const index = categories.indexOf(category);
-  return index === -1 ? Number.MAX_SAFE_INTEGER : index;
-}
-
 function sortSkillEntries(entries, hasQuery) {
   return [...entries].sort((left, right) => {
-    if (state.categorySort === "relevance" && hasQuery) {
+    if (state.sort === "relevance" && hasQuery) {
       const scoreCmp = right.score - left.score;
       if (scoreCmp !== 0) {
         return scoreCmp;
       }
-    } else if (state.categorySort === "alpha") {
-      const categoryCmp = left.skill.category.localeCompare(right.skill.category);
-      if (categoryCmp !== 0) {
-        return categoryCmp;
-      }
-    } else {
-      const rankCmp = categoryRank(left.skill.category) - categoryRank(right.skill.category);
-      if (rankCmp !== 0) {
-        return rankCmp;
-      }
     }
-
     return left.skill.name.localeCompare(right.skill.name);
   });
 }
@@ -394,13 +616,10 @@ function renderSkillCard(skill, queryTerms) {
   const meta = document.createElement("div");
   meta.className = "meta";
 
-  const categoryMatch = queryTerms.some((term) => normalize(skill.category).includes(term));
-
-  meta.appendChild(createBadge(skill.category, "badge-category", categoryMatch));
   meta.appendChild(createBadge(`level: ${skill.difficulty}`, "badge-difficulty", false));
 
   const tags = Array.isArray(skill.tags) ? skill.tags : [];
-  const visibleTags = tags.slice(0, 3);
+  const visibleTags = tags.slice(0, 5);
 
   visibleTags.forEach((tag) => {
     const tagMatch = queryTerms.some((term) => normalize(tag).includes(term));
@@ -468,7 +687,7 @@ function extractGitHubRepoBase(url) {
 
 function resolveSkillFolderUrl(skill) {
   const path = typeof skill.path === "string" ? skill.path.replace(/^\/+/, "") : "";
-  const repoFromPage = detectMarketplaceRepoUrl();
+  const repoFromPage = resolveMarketplaceRepoUrl();
 
   if (repoFromPage && path) {
     return `${repoFromPage}/tree/main/${path}`;
@@ -491,22 +710,13 @@ function resolveSkillFolderUrl(skill) {
 }
 
 function updateSummary(totalCount, visibleCount, hasQuery) {
-  const queryLabel = normalize(state.query);
-
   let summary = `Showing ${visibleCount} of ${totalCount} ${totalCount === 1 ? 'skill' : 'skills'}`;
-  if (queryLabel) {
-    summary += ` matching \"${state.query.trim()}\"`;
-  }
-  if (state.category !== "all") {
-    summary += ` in ${state.category}`;
-  }
 
   elements.summary.textContent = summary;
 
   const filtersActive =
-    normalize(state.query) ||
-    state.category !== DEFAULTS.category ||
-    state.categorySort !== DEFAULTS.categorySort;
+    state.query !== DEFAULTS.query ||
+    state.sort !== DEFAULTS.sort;
 
   elements.clearFilters.disabled = !filtersActive;
 }
@@ -519,7 +729,7 @@ function updateEmptyState(hasQuery) {
   const emptyTitle = elements.emptyMessage;
   const emptyHint = elements.emptyPanel.querySelector('.empty-hint');
 
-  if (hasQuery || state.category !== "all") {
+  if (hasQuery || state.query !== DEFAULTS.query) {
     if (emptyTitle) {
       emptyTitle.textContent = "No matching skills found";
     }
@@ -587,21 +797,14 @@ function resolveMarketplaceRepoUrl() {
 
 function updateHeroStats() {
   const skills = state.registry.skills || [];
-  const categories = new Set();
   const tags = new Set();
 
   skills.forEach((skill) => {
-    if (skill.category) {
-      categories.add(skill.category);
-    }
     (skill.tags || []).forEach((tag) => tags.add(tag));
   });
 
   const parts = [];
   parts.push(`${skills.length} ${skills.length === 1 ? 'skill' : 'skills'}`);
-  if (categories.size > 0) {
-    parts.push(`${categories.size} ${categories.size === 1 ? 'category' : 'categories'}`);
-  }
   if (tags.size > 0) {
     parts.push(`${tags.size} ${tags.size === 1 ? 'tag' : 'tags'}`);
   }
@@ -741,9 +944,11 @@ async function copyRegistryUrlToClipboard() {
 }
 
 function renderSkills() {
-  const source = state.registry.skills || [];
-  const queryTerms = uniqueTermsFromQuery(state.query);
-  const queryPhrase = normalize(state.query);
+  const allSkills = state.registry.skills || [];
+  const { filters, textQuery } = parseQueryFilters(state.query);
+  const source = allSkills.filter((skill) => matchesFilters(skill, filters));
+  const queryTerms = uniqueTermsFromQuery(textQuery);
+  const queryPhrase = normalize(textQuery);
   const hasQuery = queryTerms.length > 0;
 
   const scoredEntries = source.map((skill) => ({
@@ -755,10 +960,9 @@ function renderSkills() {
     ? scoredEntries.filter((entry) => entry.score >= 0)
     : scoredEntries;
 
-  updateCategoryCounts(queryMatchedEntries.map((entry) => entry.skill));
+  const orderedEntries = sortSkillEntries(queryMatchedEntries, hasQuery);
 
-  const categoryFilteredEntries = queryMatchedEntries.filter((entry) => matchesCategory(entry.skill));
-  const orderedEntries = sortSkillEntries(categoryFilteredEntries, hasQuery);
+  updateTagChips(orderedEntries.map((e) => e.skill));
 
   const fragment = document.createDocumentFragment();
   orderedEntries.forEach((entry) => {
@@ -775,10 +979,8 @@ function renderSkills() {
 
 function resetFilters() {
   state.query = DEFAULTS.query;
-  state.category = DEFAULTS.category;
-  state.categorySort = DEFAULTS.categorySort;
+  state.sort = DEFAULTS.sort;
   syncControlsFromState();
-  updateCategoryChipState();
   renderSkills();
 }
 
@@ -792,22 +994,148 @@ function isTypingTarget(target) {
 }
 
 function wireEvents() {
-  elements.searchInput.addEventListener("input", (event) => {
-    state.query = event.target.value;
+  // Click on container focuses input
+  elements.searchContainer.addEventListener("click", (e) => {
+    if (e.target === elements.searchContainer || e.target.classList.contains("token-input-icon")) {
+      elements.searchInput.focus();
+    }
+  });
+
+  elements.searchInput.addEventListener("input", () => {
+    clearChipSelection();
+    rebuildQueryFromUI();
 
     window.clearTimeout(searchDebounceTimer);
     searchDebounceTimer = window.setTimeout(() => {
-      renderSkills();
+      const promoted = promoteTypedFilters();
+      if (!promoted) {
+        renderSkills();
+      }
+      updateAutocomplete();
     }, 200);
   });
 
-  elements.searchInput.addEventListener("search", (event) => {
-    state.query = event.target.value;
-    renderSkills();
+  elements.searchInput.addEventListener("focus", () => {
+    clearChipSelection();
+  });
+
+  elements.searchInput.addEventListener("blur", () => {
+    // Delay to allow click on autocomplete items
+    setTimeout(() => {
+      if (!elements.autocomplete.matches(":hover")) {
+        hideAutocomplete();
+      }
+    }, 150);
+  });
+
+  elements.searchInput.addEventListener("keydown", (event) => {
+    const chips = getChips();
+
+    // Autocomplete navigation
+    if (!elements.autocomplete.hidden) {
+      const items = elements.autocomplete.querySelectorAll(".autocomplete-item");
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        const next = autocompleteIndex + 1;
+        highlightAutocompleteItem(next < items.length ? next : 0);
+        return;
+      }
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        const prev = autocompleteIndex - 1;
+        highlightAutocompleteItem(prev >= 0 ? prev : items.length - 1);
+        return;
+      }
+      if ((event.key === "Enter" || event.key === "Tab") && autocompleteIndex >= 0) {
+        event.preventDefault();
+        const activeItem = items[autocompleteIndex];
+        if (activeItem) {
+          acceptAutocompleteSuggestion(activeItem.dataset.value);
+        }
+        return;
+      }
+      if (event.key === "Escape") {
+        event.preventDefault();
+        hideAutocomplete();
+        return;
+      }
+    }
+
+    // Chip selection via backspace/arrow when cursor at start
+    const cursorAtStart = elements.searchInput.selectionStart === 0 && elements.searchInput.selectionEnd === 0;
+
+    if (event.key === "Backspace" && cursorAtStart && chips.length > 0) {
+      event.preventDefault();
+      if (selectedChipIndex >= 0) {
+        removeTokenAtIndex(selectedChipIndex);
+      } else {
+        selectChip(chips.length - 1);
+      }
+      return;
+    }
+
+    if (event.key === "ArrowLeft" && cursorAtStart && chips.length > 0) {
+      event.preventDefault();
+      if (selectedChipIndex > 0) {
+        selectChip(selectedChipIndex - 1);
+      } else if (selectedChipIndex < 0) {
+        selectChip(chips.length - 1);
+      }
+      return;
+    }
+
+    if (event.key === "ArrowRight" && selectedChipIndex >= 0) {
+      event.preventDefault();
+      if (selectedChipIndex < chips.length - 1) {
+        selectChip(selectedChipIndex + 1);
+      } else {
+        clearChipSelection();
+        elements.searchInput.focus();
+      }
+      return;
+    }
+
+    if (event.key === "Escape" && selectedChipIndex >= 0) {
+      event.preventDefault();
+      clearChipSelection();
+      elements.searchInput.focus();
+      return;
+    }
+  });
+
+  // Global keydown for chip selection when input not focused
+  elements.searchContainer.addEventListener("keydown", (event) => {
+    if (event.target === elements.searchInput) return;
+    const chips = getChips();
+
+    if (event.key === "Backspace" && selectedChipIndex >= 0) {
+      event.preventDefault();
+      removeTokenAtIndex(selectedChipIndex);
+      return;
+    }
+    if (event.key === "ArrowLeft" && selectedChipIndex > 0) {
+      event.preventDefault();
+      selectChip(selectedChipIndex - 1);
+      return;
+    }
+    if (event.key === "ArrowRight" && selectedChipIndex >= 0) {
+      event.preventDefault();
+      if (selectedChipIndex < chips.length - 1) {
+        selectChip(selectedChipIndex + 1);
+      } else {
+        clearChipSelection();
+        elements.searchInput.focus();
+      }
+      return;
+    }
+    if (event.key === "Escape") {
+      clearChipSelection();
+      elements.searchInput.focus();
+    }
   });
 
   elements.sortSelect.addEventListener("change", (event) => {
-    state.categorySort = event.target.value;
+    state.sort = event.target.value;
     renderSkills();
   });
 
@@ -827,18 +1155,31 @@ function wireEvents() {
     if (event.key === "/" && !isTypingTarget(event.target)) {
       event.preventDefault();
       elements.searchInput.focus();
-      elements.searchInput.select();
       return;
     }
 
     if (event.key === "Escape") {
-      if (isTypingTarget(document.activeElement)) {
-        if (normalize(state.query)) {
-          state.query = "";
+      if (!elements.autocomplete.hidden) {
+        hideAutocomplete();
+        return;
+      }
+      if (selectedChipIndex >= 0) {
+        clearChipSelection();
+        elements.searchInput.focus();
+        return;
+      }
+      if (document.activeElement === elements.searchInput) {
+        // Clear text portion only, keep tokens
+        if (elements.searchInput.value.trim()) {
           elements.searchInput.value = "";
+          rebuildQueryFromUI();
+          renderSkills();
+        } else if (state.query.trim()) {
+          state.query = "";
+          renderSearchTokens();
           renderSkills();
         } else {
-          document.activeElement.blur();
+          elements.searchInput.blur();
         }
       }
     }
@@ -866,11 +1207,6 @@ async function loadData() {
   state.registry = registry;
   state.searchById = new Map(search.map((entry) => [entry.id, entry]));
 
-  const allowedCategories = new Set(["all", ...(config.categories || [])]);
-  if (!allowedCategories.has(state.category)) {
-    state.category = "all";
-  }
-
   (registry.skills || []).forEach((skill) => {
     const searchEntry = state.searchById.get(skill.id);
     state.skillDocs.set(skill.id, buildSkillDoc(skill, searchEntry));
@@ -888,8 +1224,8 @@ async function bootstrap() {
     elements.title.textContent = state.config.title;
     elements.description.textContent = state.config.description;
 
+    buildAllTagCounts();
     syncControlsFromState();
-    buildCategoryButtons();
     configureCtas();
     updateHeroStats();
     wireEvents();
