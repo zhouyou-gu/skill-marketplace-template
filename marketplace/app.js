@@ -84,24 +84,24 @@ function uniqueTermsFromQuery(query) {
   return uniqueTokens(query, 8);
 }
 
-const FILTER_PATTERN = /(-?)(tag|category):(\S+)/gi;
+const FILTER_PATTERN = /(^|\s+)(-?)(tag|category):(\S+)/gi;
 
 function parseQueryFilters(query) {
   const filters = { includeTags: [], excludeTags: [], includeCategories: [], excludeCategories: [] };
-  const textQuery = query.replace(FILTER_PATTERN, (_, neg, type, value) => {
+  const textQuery = query.replace(FILTER_PATTERN, (_, boundary, neg, type, value) => {
     const list = neg === "-" ? "exclude" : "include";
     const key = type === "tag" ? `${list}Tags` : `${list}Categories`;
     filters[key].push(value.toLowerCase());
-    return "";
+    return boundary;
   }).trim();
   return { filters, textQuery };
 }
 
 function parseQueryTokens(query) {
   const tokens = [];
-  const textPart = query.replace(FILTER_PATTERN, (raw, neg, type, value) => {
-    tokens.push({ raw: raw.trim(), negate: neg === "-", type: type.toLowerCase(), value: value.toLowerCase() });
-    return "";
+  const textPart = query.replace(FILTER_PATTERN, (raw, boundary, neg, type, value) => {
+    tokens.push({ raw: raw.slice(boundary.length).trim(), negate: neg === "-", type: type.toLowerCase(), value: value.toLowerCase() });
+    return boundary;
   }).trim();
   return { tokens, text: textPart };
 }
