@@ -305,14 +305,32 @@ function updateAutocomplete() {
     const neg = prefixMatch[1];
     const type = prefixMatch[2].toLowerCase();
     const partial = prefixMatch[3].toLowerCase();
-    suggestions = allTagCounts
-      .filter(([tag]) => tag.startsWith(partial) || tag.includes(partial))
-      .filter(([tag]) => !existingValues.has(`${neg}${type}:${tag}`))
-      .slice(0, 8)
-      .map(([tag, count]) => ({
-        label: `${neg}${type}:${tag} (${count})`,
-        value: `${neg}${type}:${tag}`
-      }));
+
+    if (type === "category") {
+      const allCategories = Array.isArray(state.config && state.config.categories)
+        ? state.config.categories
+        : [];
+      suggestions = allCategories
+        .filter((category) => {
+          const normalizedCategory = String(category).toLowerCase();
+          return normalizedCategory.startsWith(partial) || normalizedCategory.includes(partial);
+        })
+        .filter((category) => !existingValues.has(`${neg}${type}:${category}`))
+        .slice(0, 8)
+        .map((category) => ({
+          label: `${neg}${type}:${category}`,
+          value: `${neg}${type}:${category}`
+        }));
+    } else {
+      suggestions = allTagCounts
+        .filter(([tag]) => tag.startsWith(partial) || tag.includes(partial))
+        .filter(([tag]) => !existingValues.has(`${neg}${type}:${tag}`))
+        .slice(0, 8)
+        .map(([tag, count]) => ({
+          label: `${neg}${type}:${tag} (${count})`,
+          value: `${neg}${type}:${tag}`
+        }));
+    }
   } else {
     // Free text — suggest tag: completions for matching tags
     const lastWord = inputText.trim().split(/\s+/).pop().toLowerCase();
