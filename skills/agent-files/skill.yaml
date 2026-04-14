@@ -1,0 +1,16 @@
+id: agent-files
+name: Agent File Scaffold
+description: Scaffold AGENT.md, AGENT_GOAL.md, AGENT_HARNESS.md, and AGENT_PROGRESS.md with strict, non-overlapping functional boundaries for governance, long-term mission, reusable playbook, and live state
+category: devtools
+tags:
+  - agents
+  - scaffolding
+  - documentation
+  - templates
+difficulty: beginner
+repo: https://github.com/example/agent-files-skill
+install:
+  pip: jinja2
+agent:
+  protocol: mcp
+  tool_schema: tool.json

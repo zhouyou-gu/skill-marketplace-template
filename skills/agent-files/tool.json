@@ -1,0 +1,54 @@
+{
+  "name": "agent_files_init",
+  "title": "Agent File Scaffold",
+  "description": "Scaffold AGENT.md, AGENT_GOAL.md, AGENT_HARNESS.md, and AGENT_PROGRESS.md templates into a target directory under a strict four-file contract",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "target_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Directory where the four agent files will be scaffolded"
+      },
+      "mission": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Long-term mission string written into AGENT_GOAL.md. Required so the scaffolded contract is internally consistent on first read; the agent cannot edit AGENT_GOAL.md after scaffold without explicit user instruction"
+      },
+      "objective": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Concrete in-flight objective written into AGENT_PROGRESS.md. If omitted, the scaffolded AGENT_PROGRESS.md omits the Current Objective section entirely rather than leaving a literal placeholder"
+      },
+      "overwrite": {
+        "type": "boolean",
+        "default": false,
+        "description": "If true, existing files in target_dir are replaced; if false, existing files are skipped"
+      }
+    },
+    "required": ["target_dir", "mission"],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "target_dir": {
+        "type": "string"
+      },
+      "files_created": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "files_skipped": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": ["target_dir", "files_created", "files_skipped"],
+    "additionalProperties": false
+  }
+}

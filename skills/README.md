@@ -11,7 +11,7 @@ This folder is the source of truth for all marketplace skills.
    - `tool.json`
 3. Add recommended files:
    - `README.md`
-   - `examples/basic.py`
+   - `examples/` — one or more reference materials such as a runnable script (`basic.py` is the conventional name), templates, sample inputs, or expected outputs
 4. Keep naming consistent:
    - Folder name must match `skill.yaml:id`.
    - `SKILL.md` frontmatter `name` must match `skill.yaml:id`.
@@ -40,7 +40,7 @@ skills/my-skill/
 
 ## Skill Specifications
 
-### `SKILL.md` (Codex installer instructions)
+### `SKILL.md` (agent-facing skill instructions)
 
 Required:
 
@@ -151,7 +151,7 @@ Example:
 ## Common Errors and Fixes
 
 1. **`SKILL.md` not found**
-   - Error: Codex install fails with missing `SKILL.md`.
+   - Error: Skill installation fails with missing `SKILL.md`.
    - Fix: add `SKILL.md` in `skills/<id>/` with valid frontmatter.
 2. **`id` mismatch**
    - Error: skill `id` does not match folder name.
