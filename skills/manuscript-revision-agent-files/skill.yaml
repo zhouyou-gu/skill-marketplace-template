@@ -1,0 +1,17 @@
+id: manuscript-revision-agent-files
+name: Manuscript Revision Agent Files
+description: Scaffold manuscript-revision AGENT files for LaTeX IEEE-style papers, with an optional REVISION_TASK.md sidecar for joint manuscript and response-letter drafting
+category: devtools
+tags:
+  - agents
+  - scaffolding
+  - manuscript
+  - latex
+  - ieee
+difficulty: beginner
+repo: https://github.com/example/manuscript-revision-agent-files-skill
+install:
+  pip: jinja2
+agent:
+  protocol: mcp
+  tool_schema: tool.json
