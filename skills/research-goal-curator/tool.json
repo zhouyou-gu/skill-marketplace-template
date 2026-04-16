@@ -1,0 +1,83 @@
+{
+  "name": "research_goal_curate",
+  "title": "Research Goal Curator",
+  "description": "Curate an existing AGENT_GOAL.md from a research brief and optional chat context",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "target_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Workspace directory expected to contain AGENT_GOAL.md"
+      },
+      "research_brief": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Concise statement of the research intent to preserve and refine"
+      },
+      "chat_context": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Optional chat excerpts or planning notes that clarify wording and user intent"
+      },
+      "dry_run": {
+        "type": "boolean",
+        "default": false,
+        "description": "If true, preview the goal update summary without writing AGENT_GOAL.md"
+      }
+    },
+    "required": [
+      "target_dir",
+      "research_brief"
+    ],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "goal_path": {
+        "type": "string"
+      },
+      "written": {
+        "type": "boolean"
+      },
+      "summary": {
+        "type": "string"
+      },
+      "updated_sections": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "statement",
+            "scope",
+            "non_goals",
+            "success_criteria",
+            "constraints"
+          ]
+        }
+      },
+      "warnings": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "open_questions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "goal_path",
+      "written",
+      "summary",
+      "updated_sections",
+      "warnings",
+      "open_questions"
+    ],
+    "additionalProperties": false
+  }
+}

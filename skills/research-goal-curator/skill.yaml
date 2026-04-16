@@ -1,0 +1,16 @@
+id: research-goal-curator
+name: Research Goal Curator
+description: Curate an existing AGENT_GOAL.md from a research brief and optional chat context
+category: devtools
+tags:
+  - agents
+  - research
+  - goal-curation
+  - planning
+difficulty: intermediate
+repo: https://github.com/zhouyou-gu/skill-marketplace-template
+install:
+  pip: pyyaml
+agent:
+  protocol: mcp
+  tool_schema: tool.json
