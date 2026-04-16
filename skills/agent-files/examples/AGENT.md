@@ -130,13 +130,13 @@ How to update:
 
 The agent shall not modify `AGENT_GOAL.md` as part of the dispatcher. The file is modified only when the user explicitly and unambiguously instructs a change to the mission, scope, non-goals, success criteria, or constraints. Implicit signals, inferred preferences, and routine task updates do not satisfy this condition. If a turn reveals that the mission as stated is wrong, the agent shall flag the conflict and stop rather than self-edit the goal file.
 
-### Update both when both conditions are true
+### Update `AGENT_PROGRESS.md` and `AGENT_HARNESS.md` together when a single turn changes workspace state and reveals a durable rule
 
-Update `AGENT_PROGRESS.md` and `AGENT_HARNESS.md` together when:
+Update `AGENT_PROGRESS.md` and `AGENT_HARNESS.md` together when one turn produces both a concrete workspace-state change and a durable reusable rule. Two example situations:
 
 - a concrete task advance also reveals a reusable operating preference
 - a user correction changes both the current task state and future workflow expectations
 
-When both conditions are true, the agent shall not update only one file for convenience.
+When a single turn produces both, the agent shall not update only one file for convenience.
 
 Updates to `AGENT_GOAL.md` are never bundled with this rule. The goal file is modified only on explicit user instruction, never as a side effect of any other update.
