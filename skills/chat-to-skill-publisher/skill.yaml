@@ -1,0 +1,16 @@
+id: chat-to-skill-publisher
+name: Chat to Skill Publisher
+description: Draft a reusable skill package from chat history and optionally publish it into a skill marketplace repository
+category: devtools
+tags:
+  - agents
+  - chat-history
+  - skill-authoring
+  - publishing
+difficulty: advanced
+repo: https://github.com/zhouyou-gu/skill-marketplace-template
+install:
+  pip: pyyaml
+agent:
+  protocol: mcp
+  tool_schema: tool.json

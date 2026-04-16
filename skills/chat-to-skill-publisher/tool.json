@@ -1,0 +1,103 @@
+{
+  "name": "chat_to_skill_publish",
+  "title": "Chat to Skill Publisher",
+  "description": "Draft a reusable skill package from chat history and optionally publish it into a skill marketplace repository",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "project_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Current project root where the draft package will be staged under .temp/<skill-id>/"
+      },
+      "skill_brief": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Short instruction describing the kind of skill to extract from the conversation"
+      },
+      "transcript_text": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Optional pasted transcript text from Claude or another agent"
+      },
+      "skill_id_hint": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Optional preferred skill id to use for the generated package"
+      },
+      "marketplace_repo_url": {
+        "type": "string",
+        "minLength": 1,
+        "default": "https://github.com/zhouyou-gu/skill-marketplace-template",
+        "description": "Marketplace repository URL used to resolve the publish target"
+      },
+      "publish": {
+        "type": "boolean",
+        "default": false,
+        "description": "If true, publish the generated skill into the resolved marketplace repository after drafting"
+      },
+      "dry_run": {
+        "type": "boolean",
+        "default": false,
+        "description": "If true, return the draft and publish plan without writing files"
+      }
+    },
+    "required": [
+      "project_dir",
+      "skill_brief"
+    ],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "skill_id": {
+        "type": "string"
+      },
+      "draft_path": {
+        "type": "string"
+      },
+      "published": {
+        "type": "boolean"
+      },
+      "published_target": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "summary": {
+        "type": "string"
+      },
+      "files_created": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "warnings": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "open_questions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "skill_id",
+      "draft_path",
+      "published",
+      "published_target",
+      "summary",
+      "files_created",
+      "warnings",
+      "open_questions"
+    ],
+    "additionalProperties": false
+  }
+}
