@@ -30,6 +30,15 @@ It works in two stages:
 - prefers local-only ignore configuration for `.temp/` when the project is a git repo
 - keeps only reusable workflow and small normalized examples
 
+## Genericize Before Publish
+
+- reviews every draft file and strips project ties so the published skill is reusable outside the originating chat
+- replaces absolute user/project paths with `/tmp/<example>/...` placeholders
+- rewrites project-specific proper nouns and domain vocabulary in examples, missions, and descriptions into domain-neutral stand-ins
+- removes personal-fork `repo:` URLs and install-time dependencies the runtime does not actually invoke
+- records each non-trivial rewrite as a `warnings` entry so the user can audit what changed between chat-derived draft and publishable skill
+- escalates via `open_questions` when genericization would gut the skill's value
+
 ## Parent Inference
 
 - resolves the marketplace source from `marketplace_local_path` first, then a local clone matching `marketplace_repo_url`; skips inference with a warning otherwise
