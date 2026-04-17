@@ -31,6 +31,11 @@
         "default": "https://github.com/zhouyou-gu/skill-marketplace-template",
         "description": "Marketplace repository URL used to resolve the publish target"
       },
+      "marketplace_local_path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Optional filesystem path to a local clone of the marketplace; used for parent inference and publish"
+      },
       "publish": {
         "type": "boolean",
         "default": false,
@@ -75,6 +80,15 @@
           "type": "string"
         }
       },
+      "inferred_parents": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "description": "Skill ids written into the draft skill.yaml parents field after user confirmation"
+      },
       "warnings": {
         "type": "array",
         "items": {
@@ -95,6 +109,7 @@
       "published_target",
       "summary",
       "files_created",
+      "inferred_parents",
       "warnings",
       "open_questions"
     ],

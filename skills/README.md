@@ -4,19 +4,20 @@ This folder is the source of truth for all marketplace skills.
 
 ## How to Add a Skill
 
-1. Create a new folder: `skills/<skill-id>/`.
-2. Add required files:
+1. Before creating a new skill, browse `skills/` and the marketplace to check for overlapping functionality. If your skill builds on existing ones, list them under `parents` in `skill.yaml` (see below) so reviewers can confirm you are not duplicating work.
+2. Create a new folder: `skills/<skill-id>/`.
+3. Add required files:
    - `SKILL.md`
    - `skill.yaml`
    - `tool.json`
-3. Add recommended files:
+4. Add recommended files:
    - `README.md`
    - `examples/` — one or more reference materials such as a runnable script (`basic.py` is the conventional name), templates, sample inputs, or expected outputs
-4. Keep naming consistent:
+5. Keep naming consistent:
    - Folder name must match `skill.yaml:id`.
    - `SKILL.md` frontmatter `name` must match `skill.yaml:id`.
-5. Ensure `category` in `skill.yaml` is listed in `config/marketplace.json`.
-6. Run checks from the repository root:
+6. Ensure `category` in `skill.yaml` is listed in `config/marketplace.json`.
+7. Run checks from the repository root:
 
 ```bash
 python3 scripts/validate_skills.py
@@ -25,7 +26,7 @@ python3 scripts/build_registry.py
 python3 scripts/build_search_index.py
 ```
 
-7. Commit your new `skills/<skill-id>/` files and open a pull request.
+8. Commit your new `skills/<skill-id>/` files and open a pull request.
 
 ## Skill Folder Template
 
@@ -81,6 +82,10 @@ Required fields:
 - `install`
 - `agent`
 
+Optional fields:
+
+- `parents` — list of skill `id`s this skill depends on, extends, or composes. Use it to make reuse explicit and prevent overlapping skills. Validated to exist; self-reference is rejected.
+
 Rules:
 
 1. `id` must be lowercase kebab-case and match folder name.
@@ -90,6 +95,7 @@ Rules:
 5. `install` must include at least one of `pip` or `npm`.
 6. `agent.protocol` must be `mcp`.
 7. `agent.tool_schema` usually points to `tool.json`.
+8. Every entry in `parents` must be the `id` of another skill in `skills/`; a skill must not list itself.
 
 Example:
 
@@ -108,9 +114,34 @@ install:
 agent:
   protocol: mcp
   tool_schema: tool.json
+parents:
+  - agent-files
 ```
 
 Note: if `repo` uses `https://github.com/example/...`, `build_registry.py` can auto-map it to the current repository path when possible.
+
+### `README.md` (recommended human docs)
+
+When `parents` is set in `skill.yaml`, include a short `## Parents` section in the skill's own `README.md` that explains *why* each parent is listed (one line each). This is human prose for reviewers; the machine-readable truth lives in `skill.yaml:parents`.
+
+Example:
+
+```markdown
+## Parents
+
+- `agent-files` — this skill fills in the AGENT_GOAL.md scaffolded by agent-files.
+- `research-goal-curator` — extends its goal-curation prompts.
+```
+
+### Finding child skills
+
+Child skills are **not stored** — they are the inverse of `parents` and can be derived on demand. To list every skill that declares `<your-id>` as a parent, grep the skills folder:
+
+```bash
+grep -rEn "^\s*-\s*<your-id>\s*$" skills/*/skill.yaml
+```
+
+For a full parent/child dependency graph across the marketplace, use the [`skill-link`](skill-link/) skill.
 
 ### `tool.json` (agent invocation contract)
 
@@ -165,3 +196,6 @@ Example:
 5. **Validation/build script failure**
    - Error: scripts fail due to invalid metadata, schema, or install target.
    - Fix: run validation/build commands locally and fix reported errors before pushing.
+6. **Invalid parent reference**
+   - Error: `parents[i]: parent skill 'X' does not exist`, or `parents[i]: skill cannot list itself as a parent`.
+   - Fix: ensure every `parents` entry matches an existing `skills/<id>/` folder and remove any self-reference.

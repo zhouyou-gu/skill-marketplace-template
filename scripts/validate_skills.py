@@ -125,6 +125,7 @@ def main() -> int:
 
     seen_skill_ids: dict[str, Path] = {}
     tool_name_to_ids: dict[str, list[str]] = {}
+    loaded_skills: list[tuple[Path, dict[str, Any]]] = []
 
     for skill_dir in skill_dirs:
         skill_yaml_path = skill_dir / "skill.yaml"
@@ -152,6 +153,8 @@ def main() -> int:
             continue
 
         collect_schema_errors(skill_validator, skill_data, str(skill_yaml_path.relative_to(ROOT)), errors)
+
+        loaded_skills.append((skill_yaml_path, skill_data))
 
         skill_id = skill_data.get("id")
         if isinstance(skill_id, str):
@@ -217,6 +220,23 @@ def main() -> int:
         tool_name = tool_data.get("name")
         if isinstance(tool_name, str) and isinstance(skill_id, str):
             tool_name_to_ids.setdefault(tool_name, []).append(skill_id)
+
+    for skill_yaml_path, skill_data in loaded_skills:
+        parents = skill_data.get("parents")
+        if not isinstance(parents, list):
+            continue
+        skill_id = skill_data.get("id")
+        for i, parent_id in enumerate(parents):
+            if not isinstance(parent_id, str):
+                continue
+            if isinstance(skill_id, str) and parent_id == skill_id:
+                errors.append(
+                    f"{skill_yaml_path.relative_to(ROOT)}:parents[{i}]: skill cannot list itself as a parent"
+                )
+            elif parent_id not in seen_skill_ids:
+                errors.append(
+                    f"{skill_yaml_path.relative_to(ROOT)}:parents[{i}]: parent skill '{parent_id}' does not exist"
+                )
 
     for tool_name, skill_ids in sorted(tool_name_to_ids.items()):
         if len(skill_ids) > 1:

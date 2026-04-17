@@ -65,3 +65,7 @@ The templates live in [`examples/`](examples/) and are copied into `target_dir` 
 - `REVISION_TASK.md` is copied only when `revision_mode` is `manuscript_and_response_letter`.
 
 Each template carries its own boundary clause so the core four-file contract does not drift toward duplication or cross-file contamination, and the optional sidecar remains lower-precedence than the control contract.
+
+## Parents
+
+- `agent-files` — specializes the same four-file AGENT contract for LaTeX IEEE-style manuscript revision, adding manuscript-specific templates and an optional `REVISION_TASK.md` sidecar.

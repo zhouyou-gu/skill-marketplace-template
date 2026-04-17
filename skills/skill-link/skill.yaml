@@ -1,0 +1,16 @@
+id: skill-link
+name: Skill Link
+description: Build and query the parent/child dependency graph across skills in a marketplace
+category: devtools
+tags:
+  - graph
+  - dependencies
+  - audit
+  - meta
+difficulty: beginner
+repo: https://github.com/zhouyou-gu/skill-marketplace-template
+install:
+  pip: pyyaml
+agent:
+  protocol: mcp
+  tool_schema: tool.json

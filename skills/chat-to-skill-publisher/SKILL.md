@@ -20,6 +20,7 @@ description: Turn the current chat history and optional pasted agent transcripts
 - `transcript_text`: optional pasted transcript text from Claude or another agent
 - `skill_id_hint`: optional preferred skill id
 - `marketplace_repo_url`: optional target marketplace repository URL, defaulting to `https://github.com/zhouyou-gu/skill-marketplace-template`
+- `marketplace_local_path`: optional filesystem path to a local clone of the marketplace repository; when set, it is used as the source for parent inference and for publish
 - `publish`: when true, publish after drafting
 - `dry_run`: when true, return the draft and publish plan without writing
 
@@ -30,9 +31,23 @@ description: Turn the current chat history and optional pasted agent transcripts
 3. Resolve the skill id from `skill_id_hint` or from the workflow itself. Keep it lowercase kebab-case and consistent across folder name, `SKILL.md`, and `skill.yaml`.
 4. Draft a full skill package in `project_dir/.temp/<skill-id>/`: `SKILL.md`, `skill.yaml`, `tool.json`, `README.md`, and `examples/`.
 5. If `project_dir` is a git repository and `.temp/` is not ignored, prefer adding a local-only ignore via `.git/info/exclude` instead of editing tracked ignore files. If that is not possible, continue with a warning.
-6. Keep the draft aligned to `skill-marketplace-template` conventions: matching ids, allowed category, required metadata, valid tool contract, and concise reusable examples.
-7. If `publish` is false, stop after drafting and return the draft summary.
-8. If `publish` is true, resolve the marketplace target from `marketplace_repo_url` by preferring a matching local clone. If a local clone is available, publish into `skills/<skill-id>/` there and run the validation and registry build checks. If no local clone is available, keep the draft and return a publish-ready summary with warnings.
+6. Infer parent skills from the target marketplace (see "Parent Inference" below) and update the draft in place: record the confirmed ids on `inferred_parents`, write them into the draft's `skill.yaml` under `parents`, and add a matching `## Parents` section to the draft's `README.md` with one line per parent explaining the relationship.
+7. Keep the draft aligned to `skill-marketplace-template` conventions: matching ids, allowed category, required metadata, valid tool contract, non-self-referential parents, and concise reusable examples.
+8. If `publish` is false, stop after drafting and return the draft summary.
+9. If `publish` is true, resolve the marketplace target from `marketplace_local_path` or `marketplace_repo_url` by preferring a matching local clone. If a local clone is available, publish into `skills/<skill-id>/` there and run the validation and registry build checks. If no local clone is available, keep the draft and return a publish-ready summary with warnings.
+
+## Parent Inference
+
+- Resolve the marketplace source in this order: explicit `marketplace_local_path`, then a local clone matching `marketplace_repo_url`, then skip inference with a warning.
+- Enumerate every `skills/*/skill.yaml` in the resolved marketplace and load `id`, `description`, `tags`, and existing `parents` for each.
+- Compare the draft's brief, workflow, inputs, and outputs against each existing skill. Classify each existing skill as one of:
+  1. `parent_candidate` — the draft depends on, extends, composes, or specializes this skill's functionality (for example: the draft consumes files this skill scaffolds, or the draft is a domain-specific variant of this skill's workflow).
+  2. `overlap_warning` — the draft shares inputs, outputs, or purpose at the same abstraction level; flag this and ask the user whether to narrow the draft or abandon it to avoid duplication.
+  3. `unrelated` — no meaningful relationship; ignore.
+- Interact with the user to confirm each `parent_candidate` before writing it to the draft. Do not auto-add parents silently. Record any rejected candidate as an `open_question` when the evidence is close.
+- Reject self-reference and duplicate ids in the confirmed list. Every confirmed parent must match an existing skill id in the resolved marketplace.
+- Emit each `overlap_warning` as a string in `warnings`; the user decides whether to proceed, narrow, or stop.
+- Return the final confirmed list in `inferred_parents`. An empty list is valid and means no parent relationships were found.
 
 ## Outputs
 
@@ -42,6 +57,7 @@ description: Turn the current chat history and optional pasted agent transcripts
 - `published_target`
 - `summary`
 - `files_created`
+- `inferred_parents`
 - `warnings`
 - `open_questions`
 
@@ -51,6 +67,8 @@ description: Turn the current chat history and optional pasted agent transcripts
 - If the extracted workflow would preserve too much raw transcript narrative, rewrite it into reusable instructions or stop and ask the user what should be retained.
 - If `publish=true` but no matching local clone can be resolved for `marketplace_repo_url`, do not guess a publish path; keep the local draft and return warnings.
 - If the generated metadata or tool contract would violate marketplace conventions, fix the draft before publishing or stop with explicit warnings.
+- If parent inference cannot resolve a marketplace source, skip inference, set `inferred_parents: []`, and add a warning — do not block drafting.
+- If the draft overlaps heavily with an existing skill (an `overlap_warning`), surface the warning, stop before publishing, and ask the user whether to narrow the draft or abandon it.
 
 ## Tool Contract
 
@@ -58,3 +76,4 @@ description: Turn the current chat history and optional pasted agent transcripts
 - `project_dir` and `skill_brief` are required.
 - Use current in-agent chat history when available; `transcript_text` is optional supporting input.
 - `publish` defaults to `false`; explicit publish intent is required before modifying a marketplace repo.
+- `inferred_parents` is always returned (possibly empty) so the caller can see exactly which parent ids were written into the draft.

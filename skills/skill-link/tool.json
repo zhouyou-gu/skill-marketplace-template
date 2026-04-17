@@ -1,0 +1,67 @@
+{
+  "name": "skill_link_graph",
+  "title": "Skill Dependency Graph",
+  "description": "Derive parent and child relationships across all skills in a marketplace by reading every skill.yaml",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "skills_root": {
+        "type": "string",
+        "minLength": 1,
+        "default": "skills",
+        "description": "Path to the marketplace skills directory"
+      },
+      "skill_id": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+        "description": "Optional. Return only the node for this skill id"
+      }
+    },
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "nodes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "parents": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "children": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "parents",
+            "children"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "warnings": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "nodes",
+      "warnings"
+    ],
+    "additionalProperties": false
+  }
+}

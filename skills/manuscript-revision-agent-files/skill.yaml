@@ -9,9 +9,11 @@ tags:
   - latex
   - ieee
 difficulty: beginner
-repo: https://github.com/example/manuscript-revision-agent-files-skill
+repo: https://github.com/zhouyou-gu/skill-marketplace-template
 install:
   pip: jinja2
 agent:
   protocol: mcp
   tool_schema: tool.json
+parents:
+  - agent-files

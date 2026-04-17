@@ -10,10 +10,12 @@ It curates an existing `AGENT_GOAL.md` from a research brief and optional chat c
 - the user wants to refine, clarify, or save a research goal
 - you need to preserve exact user-approved wording while making the whole goal file internally consistent
 
-## Use `agent-files` First When
+## Scaffold First When
 
 - the workspace does not yet have `AGENT_GOAL.md`
 - the user wants to scaffold the full AGENT-file contract
+
+Route to `agent-files` for generic workspaces or `manuscript-revision-agent-files` for LaTeX IEEE manuscript revision, then return to this skill to curate the goal file.
 
 ## Inputs
 
@@ -29,3 +31,8 @@ It curates an existing `AGENT_GOAL.md` from a research brief and optional chat c
 3. Interact with the user until the goal wording is explicit.
 4. Preserve approved wording where the user has clearly chosen it.
 5. Update the full goal file, or preview the update when `dry_run=true`.
+
+## Parents
+
+- `agent-files` — this skill refines the `AGENT_GOAL.md` file that `agent-files` scaffolds for generic workspaces.
+- `manuscript-revision-agent-files` — this skill also refines the `AGENT_GOAL.md` file that the manuscript-revision scaffolder produces for LaTeX IEEE workspaces.

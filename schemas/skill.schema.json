@@ -96,6 +96,15 @@
           "minLength": 1
         }
       }
+    },
+    "parents": {
+      "type": "array",
+      "uniqueItems": true,
+      "default": [],
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
     }
   }
 }

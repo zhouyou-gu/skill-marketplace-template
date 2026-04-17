@@ -8,7 +8,7 @@ tags:
   - documentation
   - templates
 difficulty: beginner
-repo: https://github.com/example/agent-files-skill
+repo: https://github.com/zhouyou-gu/skill-marketplace-template
 install:
   pip: jinja2
 agent:

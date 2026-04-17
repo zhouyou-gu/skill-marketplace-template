@@ -14,3 +14,6 @@ install:
 agent:
   protocol: mcp
   tool_schema: tool.json
+parents:
+  - agent-files
+  - manuscript-revision-agent-files
