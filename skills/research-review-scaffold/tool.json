@@ -1,0 +1,106 @@
+{
+  "name": "research_review_scaffold",
+  "title": "Research Review Scaffold",
+  "description": "Create a low-entropy review workspace from a research intention",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "project_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Project root where the review workspace should be created"
+      },
+      "research_intention": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Concise statement of the review topic or research question"
+      },
+      "review_dir": {
+        "type": "string",
+        "minLength": 1,
+        "default": "review",
+        "description": "Relative directory path for the review workspace, defaulting to review"
+      },
+      "chat_context": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Optional chat excerpts or notes that clarify the review intention and theme wording"
+      },
+      "theme_count_hint": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Optional preferred starting theme count; default behavior is approximately 3 themes"
+      },
+      "overwrite": {
+        "type": "boolean",
+        "default": false,
+        "description": "If true, replace existing scaffold files in the target review workspace"
+      },
+      "dry_run": {
+        "type": "boolean",
+        "default": false,
+        "description": "If true, return the scaffold plan without writing files"
+      }
+    },
+    "required": [
+      "project_dir",
+      "research_intention"
+    ],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "review_path": {
+        "type": "string"
+      },
+      "theme_folders": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "files_created": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "files_skipped": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "summary": {
+        "type": "string"
+      },
+      "written": {
+        "type": "boolean"
+      },
+      "warnings": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "open_questions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "review_path",
+      "theme_folders",
+      "files_created",
+      "files_skipped",
+      "summary",
+      "written",
+      "warnings",
+      "open_questions"
+    ],
+    "additionalProperties": false
+  }
+}

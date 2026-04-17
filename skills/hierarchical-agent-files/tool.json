@@ -1,0 +1,112 @@
+{
+  "name": "hierarchical_agent_files_init",
+  "title": "Hierarchical Agent File Scaffold",
+  "description": "Scaffold a two-level parent + children agent-file hierarchy in one shot. Delegates per-node base scaffolding to agent_files_init (from the agent-files skill) and patches each node with hierarchy-specific clauses: a slim child AGENT.md (parent-first read order, precedence, update routing back to parent, boundary), a parent-outer-boundary constraint in each child AGENT_GOAL.md, the progress-scope rule in the parent AGENT_HARNESS.md, and a seeded parent AGENT_PROGRESS.md Completed Changes ledger.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "parent_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Directory where the parent four-file agent contract is scaffolded."
+      },
+      "parent_mission": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Long-term mission written into the parent AGENT_GOAL.md. Required so the scaffolded contract is internally consistent on first read."
+      },
+      "parent_objective": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Optional in-flight objective for the parent AGENT_PROGRESS.md. If omitted, the Current Objective section is removed by agent-files rather than left as a placeholder."
+      },
+      "parent_name": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Short name used in child cross-references (e.g., in the child precedence block). Defaults to basename(parent_dir) with trailing slash stripped."
+      },
+      "children": {
+        "type": "array",
+        "minItems": 1,
+        "description": "List of direct-child nested workspaces to scaffold under parent_dir.",
+        "items": {
+          "type": "object",
+          "properties": {
+            "relative_dir": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^/\\\\][^/\\\\]*$",
+              "description": "Child folder name relative to parent_dir. Must be a single path segment: no slashes, no '..', not absolute."
+            },
+            "mission": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Long-term mission written into this child's AGENT_GOAL.md."
+            },
+            "objective": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Optional in-flight objective for this child's AGENT_PROGRESS.md."
+            }
+          },
+          "required": ["relative_dir", "mission"],
+          "additionalProperties": false
+        }
+      },
+      "overwrite": {
+        "type": "boolean",
+        "default": false,
+        "description": "If true, existing files in any node are replaced. If false, a pre-existing parent contract causes an abort; a pre-existing child contract causes files_skipped with patches still applied."
+      }
+    },
+    "required": ["parent_dir", "parent_mission", "children"],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "parent_dir": {
+        "type": "string"
+      },
+      "parent_name": {
+        "type": "string"
+      },
+      "children_created": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Absolute paths of child directories successfully scaffolded."
+      },
+      "files_created": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "description": "Per-node files created. Keyed by node absolute path; value is list of files written."
+      },
+      "files_skipped": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "description": "Per-node files skipped because they already existed and overwrite was false."
+      },
+      "patches_applied": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "description": "Per-node patch names applied after the base files were placed. Expected parent patches: ['progress_scope_rule', 'parent_progress_seed']. Expected child patches: ['child_agent_md', 'child_outer_boundary']."
+      },
+      "warnings": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Non-fatal issues: progress-scope rule already present, child AGENT_GOAL.md missing ## Constraints, child directory already had a contract (files skipped, patches still applied)."
+      }
+    },
+    "required": ["parent_dir", "parent_name", "children_created", "files_created", "files_skipped", "patches_applied", "warnings"],
+    "additionalProperties": false
+  }
+}

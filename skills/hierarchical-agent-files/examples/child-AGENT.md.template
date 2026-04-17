@@ -1,0 +1,46 @@
+# Agent Control
+
+**This file is the control contract for `{{ parent_name }}/{{ child_relative_dir }}/`. It defines read order, precedence, file roles, and update routing for this nested workspace.**
+
+This folder is a nested workspace inside `{{ parent_name }}/`. Agents working in `{{ child_relative_dir }}/` use the parent workspace as the outer mission boundary and the local files as the inner operating contract.
+
+## Mandatory Read Order
+
+Read the parent workspace first:
+
+1. `../AGENT.md`
+2. `../AGENT_GOAL.md`
+3. `../AGENT_HARNESS.md`
+4. `../AGENT_PROGRESS.md`
+
+Then read the local workspace:
+
+5. `AGENT.md`
+6. `AGENT_GOAL.md`
+7. `AGENT_HARNESS.md`
+8. `AGENT_PROGRESS.md`
+
+## Local File Roles
+
+- `AGENT.md` holds the local control contract for `{{ child_relative_dir }}/`.
+- `AGENT_GOAL.md` holds the local mission and scope for `{{ child_relative_dir }}/`.
+- `AGENT_HARNESS.md` holds durable local workflow rules and structure guidance.
+- `AGENT_PROGRESS.md` holds the live state of this nested workspace.
+
+## Precedence
+
+- The parent `{{ parent_name }}/` agent files define the outer mission and constraints for this folder.
+- The local `{{ child_relative_dir }}/` agent files define how local work is organized and maintained inside that boundary.
+- When a local rule and a parent rule both apply, follow the parent rule for mission scope and the local rule for local structure and workflow.
+
+## Update Routing
+
+- Update `{{ child_relative_dir }}/AGENT_PROGRESS.md` in the same turn whenever local workspace state changes.
+- Update `{{ child_relative_dir }}/AGENT_HARNESS.md` when a durable local rule becomes reusable beyond the current turn.
+- Update `{{ child_relative_dir }}/AGENT_GOAL.md` only when the user explicitly instructs a mission change for this workspace.
+- Update the parent `../AGENT_PROGRESS.md` in the same turn when the overall `{{ parent_name }}/` workspace state changes because of work inside this folder.
+
+## Boundary
+
+- Keep this nested workspace focused on its local mission as declared in `{{ child_relative_dir }}/AGENT_GOAL.md`.
+- Keep parent-wide framing in the parent `{{ parent_name }}/` workspace unless the work is specifically about local structure or evidence.

@@ -1,0 +1,18 @@
+id: research-review-scaffold
+name: Research Review Scaffold
+description: Create a low-entropy review workspace from a research intention, including nested review agent files, root review docs, a reusable note template, and topic-derived theme folders
+category: devtools
+tags:
+  - research
+  - literature-review
+  - scaffolding
+  - agents
+difficulty: intermediate
+repo: https://github.com/zhouyou-gu/skill-marketplace-template
+install:
+  pip: pyyaml
+agent:
+  protocol: mcp
+  tool_schema: tool.json
+parents:
+  - agent-files

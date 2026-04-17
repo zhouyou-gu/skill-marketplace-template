@@ -1,0 +1,17 @@
+{
+  "parent_dir": "/tmp/example-workspace/my-project",
+  "parent_mission": "Maintain a coherent parent workspace whose work is partitioned across two sibling nested workspaces, each with its own local mission.",
+  "parent_objective": "Stand up the parent and children four-file contracts so downstream work has a stable operating surface.",
+  "parent_name": "my-project",
+  "children": [
+    {
+      "relative_dir": "module-a",
+      "mission": "Own the first area of work inside the parent mission and track its local state here."
+    },
+    {
+      "relative_dir": "module-b",
+      "mission": "Own the second area of work inside the parent mission and track its local state here."
+    }
+  ],
+  "overwrite": false
+}

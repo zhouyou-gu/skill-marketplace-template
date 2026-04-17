@@ -1,0 +1,6 @@
+Parent-scope entries only. Changes internal to nested workspaces live in their own progress file ({{ child_progress_paths_csv }}).
+
+- [Scaffold] Created `{{ parent_name }}/` with the four-file agent control contract from the upstream `agent-files` template.
+{{#each children}}
+- [Scaffold] Created `{{ child_relative_dir }}/` as a nested workspace with its own four-file agent contract.
+{{/each}}
