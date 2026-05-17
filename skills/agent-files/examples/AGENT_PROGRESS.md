@@ -6,29 +6,24 @@
 
 {{ objective }}
 
-> Replace the placeholder above with the concrete in-flight objective. Remove this section entirely when no active workstream needs handoff context.
+> Current objective supplied at scaffold time. Remove this section entirely when no active workstream needs handoff context.
 
 ## Repository State
 
-- _(describe the branch, uncommitted edits, and any recent committed history relevant to the next agent)_
+- Not yet recorded.
 
 ## Workspace Artifacts
 
-- _(list the source artifacts, derived artifacts, generated artifacts, supporting assets, and control files in stable categories rather than exhaustive file-by-file lists)_
+- Not yet recorded.
 
 ## Completed Changes
 
-<!--
-Progress entry template
-- [Category] <factual completed change>
--->
-
-- _(append one factual bullet per meaningful completed change; treat this section as a cumulative ledger unless the user explicitly requests reset or condense)_
+- No completed changes recorded yet.
 
 ## Blockers and Risks
 
-- _(record only currently blocking facts; remove once resolved)_
+- No blockers recorded.
 
 ## Next Resume Point
 
-- _(name the concrete next action, or note that the resume point is the next user instruction)_
+- Await the next user instruction.

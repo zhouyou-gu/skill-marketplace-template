@@ -16,17 +16,27 @@ description: Scaffold AGENT.md, AGENT_GOAL.md, AGENT_HARNESS.md, and AGENT_PROGR
 ## Inputs
 
 - `target_dir`: directory where the four AGENT files will be scaffolded
-- `mission`: long-term mission string written into `AGENT_GOAL.md`; required so the scaffolded contract is internally consistent on first read
-- `objective`: optional concrete in-flight objective written into `AGENT_PROGRESS.md`; when omitted, the `## Current Objective` section is removed rather than left as a literal placeholder
-- `overwrite`: when true, existing files in `target_dir` are replaced; otherwise they are skipped and listed in `files_skipped`
+- `mission`: one- or two-sentence long-term mission statement written into `AGENT_GOAL.md`; required so the scaffolded contract is internally consistent on first read. It must not include reusable workflow rules, formatting preferences, current task state, next steps, or transient objectives.
+- `objective`: optional concrete in-flight objective written into `AGENT_PROGRESS.md`; it must be transient current work, not a second mission statement or permanent scope rule. When omitted, the `## Current Objective` section is removed rather than left as a literal placeholder.
+- `overwrite`: when true, existing files in `target_dir` are replaced; otherwise compatible existing files are skipped and listed in `files_skipped`
 
 ## Workflow
 
 1. Receive `target_dir` and `mission`. Confirm the directory exists or create it. `mission` is required so the scaffolded contract is internally consistent the moment a later agent reads it; `AGENT_GOAL.md` is agent-immutable after scaffold and cannot be filled in autonomously later.
-2. For each of `AGENT.md`, `AGENT_GOAL.md`, `AGENT_HARNESS.md`, `AGENT_PROGRESS.md`:
+2. Classify the supplied `mission` and optional `objective` before writing:
+   - mission-level purpose belongs in `mission`
+   - transient current work belongs in `objective`
+   - reusable workflow rules and preferences belong in future `AGENT_HARNESS.md` updates, not in `mission`
+   - current repository state, blockers, and next steps belong in future `AGENT_PROGRESS.md` updates, not in `mission`
+3. Before partial adoption, inspect any existing `AGENT.md`, `AGENT_GOAL.md`, `AGENT_HARNESS.md`, or `AGENT_PROGRESS.md` in `target_dir`. If any of these files already exist and `overwrite` is false, proceed only when every existing file passes the compatibility checklist below; otherwise stop and ask whether to use `overwrite=true` or choose a clean target directory. Do not mix boundary-aware files with incompatible older files.
+   - `AGENT.md` must start with `# Agent Control` and contain the phrase `control contract`.
+   - `AGENT_GOAL.md` must start with `# Mission` and contain the phrase `agent-immutable`.
+   - `AGENT_HARNESS.md` must start with `# Workspace Harness` and contain the phrase `reusable playbook`.
+   - `AGENT_PROGRESS.md` must start with `# Progress` and contain the phrase `live-state record`.
+4. For each of `AGENT.md`, `AGENT_GOAL.md`, `AGENT_HARNESS.md`, `AGENT_PROGRESS.md`:
    - If the file already exists and `overwrite` is false, skip it and record the path in `files_skipped`.
-   - Otherwise copy the corresponding template from `examples/` into `target_dir`. Substitute `mission` for the `{{ mission }}` placeholder in `AGENT_GOAL.md`. If `objective` is provided, substitute it for the `{{ objective }}` placeholder in `AGENT_PROGRESS.md`; if `objective` is omitted, remove the entire `## Current Objective` section from `AGENT_PROGRESS.md` rather than leaving a literal placeholder, so the file remains internally consistent.
-3. Return `target_dir`, `files_created`, and `files_skipped`.
+   - Otherwise copy the corresponding template from `examples/` into `target_dir`. Substitute `mission` for the `{{ mission }}` placeholder in `AGENT_GOAL.md`; the remaining goal sections render as explicit "not yet specified by user" entries rather than instructional placeholders, so they are not mistaken for user-approved scope. If `objective` is provided, substitute it for the `{{ objective }}` placeholder in `AGENT_PROGRESS.md`; if `objective` is omitted, remove the entire `## Current Objective` section from `AGENT_PROGRESS.md` rather than leaving a literal placeholder, so the file remains internally consistent.
+5. Return `target_dir`, `files_created`, and `files_skipped`.
 
 ## Outputs
 
@@ -37,12 +47,14 @@ description: Scaffold AGENT.md, AGENT_GOAL.md, AGENT_HARNESS.md, and AGENT_PROGR
 ## Failure / Escalation
 
 - If `target_dir` cannot be created or is not writable, fail cleanly with an explicit error and write no files.
-- If `mission` is missing, empty, or still a placeholder, stop and ask the user for a concrete mission before writing — `AGENT_GOAL.md` must be internally consistent on first read.
-- If `target_dir` already contains some of the four files and `overwrite` is false, proceed and record them in `files_skipped`; this is not an error.
+- If `mission` is missing, empty, still a placeholder, or mixes in workflow rules/current state/next steps, stop and ask the user for a clean mission before writing — `AGENT_GOAL.md` must be internally consistent on first read.
+- If `objective` is supplied but reads like permanent mission, scope, policy, or success criteria, stop and ask the user to reframe it as transient current work or omit it.
+- If `target_dir` already contains any of the four files and `overwrite` is false, proceed only after compatibility inspection. If the existing files do not match this four-file contract, stop rather than silently creating a mixed-boundary system.
 - If the caller wants to refine an existing `AGENT_GOAL.md`, do not re-scaffold; route to `research-goal-curator`.
 
 ## Tool Contract
 
 - Read [`tool.json`](tool.json) for the authoritative schema.
+- The JSON schema enforces input/output shape only. The semantic checks for clean `mission`, transient `objective`, and compatible partial adoption are workflow requirements enforced before writing files.
 - Templates live in [`examples/`](examples/) as standalone markdown files and are copied into the target directory under the substitution rules in step 2 of the workflow above.
 - `AGENT_GOAL.md` is agent-immutable after scaffold. Subsequent modifications require explicit user instruction.

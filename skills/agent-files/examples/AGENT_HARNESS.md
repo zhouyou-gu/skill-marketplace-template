@@ -2,9 +2,9 @@
 
 **This file is the reusable playbook for the workspace. It holds durable workflow rules and generalized operating preferences. It shall not define control-file update policy, restate or modify the mission, or record live task state.**
 
-## Task Context
+## Stable Operating Context
 
-> Describe, in two or three sentences, what this workspace is and which artifacts are the source of truth. Keep it durable: revise only when the workspace's character materially changes.
+> Record only durable operating context needed to execute tasks consistently, such as canonical source-vs-generated artifact conventions. Do not describe mission scope, success criteria, current file inventory, active work, or blockers here; those belong in `AGENT_GOAL.md` or `AGENT_PROGRESS.md`.
 
 ## Standard Operating Loop
 

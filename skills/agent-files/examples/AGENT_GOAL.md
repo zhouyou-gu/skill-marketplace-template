@@ -6,26 +6,23 @@
 
 {{ mission }}
 
-> Replace the placeholder above with a one- or two-sentence mission statement. Keep it durable: it shall survive many turns, many tasks, and many contributors without edit.
+> Mission statement supplied at scaffold time. Keep it durable: it shall survive many turns, many tasks, and many contributors without edit.
 
 ## Scope
 
-- Name the artifacts, surfaces, or systems this mission covers.
-- Name the kinds of work that advance the mission.
+- Not yet specified by user. Until amended, only the mission statement above is durable scope. Explicit user instructions govern the current turn but do not become persistent scope unless the user explicitly amends this file.
 
 ## Non-Goals
 
-- Name the surfaces and work the mission explicitly excludes.
-- Non-goals bind the agent as strictly as scope. Contemplated work outside scope or inside non-goals is out-of-contract; the agent shall stop and request user direction.
+- No non-goals have been specified by user. If contemplated work appears outside the mission statement, stop and request user direction rather than inferring a durable non-goal.
 
 ## Success Criteria
 
-- List the concrete outcomes that, taken together, mean the mission is accomplished.
-- Each criterion shall be verifiable without re-interviewing the user.
+- Not yet specified by user. Do not invent success criteria from routine task progress; ask the user before recording durable completion criteria.
 
 ## Constraints
 
-- List the constraints the mission imposes on the workspace itself — legal, ethical, regulatory, contractual, or irreducible technical limits.
+- No additional mission-level constraints have been specified by user.
 - A constraint belongs here only if removing it would change the mission. Workflow preferences, style rules, formatting conventions, validation habits, and operating routines are not mission constraints; they belong in `AGENT_HARNESS.md`.
 - Mission constraints outrank harness preferences by virtue of `AGENT.md`'s precedence rules; this section shall not restate that precedence or reach into harness jurisdiction.
 
