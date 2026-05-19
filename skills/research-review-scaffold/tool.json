@@ -13,7 +13,7 @@
       "research_intention": {
         "type": "string",
         "minLength": 1,
-        "description": "Concise statement of the review topic or research question"
+        "description": "Concise statement of the review topic or research question, used to derive a purpose-only review mission rather than workflow rules or current state"
       },
       "review_dir": {
         "type": "string",
@@ -24,7 +24,7 @@
       "chat_context": {
         "type": "string",
         "minLength": 1,
-        "description": "Optional chat excerpts or notes that clarify the review intention and theme wording"
+        "description": "Optional chat excerpts or notes that clarify the review intention and theme wording; not persistent scope unless intentionally converted into mission or scaffold text"
       },
       "theme_count_hint": {
         "type": "integer",
@@ -34,7 +34,7 @@
       "overwrite": {
         "type": "boolean",
         "default": false,
-        "description": "If true, replace existing scaffold files in the target review workspace"
+        "description": "If true, replace existing scaffold files in the target review workspace; if false, rely on agent-files compatibility checks for AGENT files and skip review-doc collisions"
       },
       "dry_run": {
         "type": "boolean",

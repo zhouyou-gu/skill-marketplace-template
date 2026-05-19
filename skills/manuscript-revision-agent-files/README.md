@@ -7,16 +7,16 @@ Use this skill when a LaTeX IEEE-style paper workspace needs a disciplined, reco
 ## Capabilities
 
 - Provision four files whose jurisdictions remain mutually exclusive: control vs. long-term mission vs. reusable playbook vs. live state
-- Seed `AGENT_GOAL.md` with a required long-term manuscript mission so the scaffolded contract is internally consistent on first read
-- Optionally seed `AGENT_PROGRESS.md` with an initial objective; if omitted, the `Current Objective` section is removed rather than left as a literal placeholder
+- Seed `AGENT_GOAL.md` with a required long-term manuscript mission statement and neutral "not yet specified" entries for unprovided goal sections, so the scaffolded contract is internally consistent on first read
+- Optionally seed `AGENT_PROGRESS.md` with a transient current objective; if omitted, the `Current Objective` section is removed rather than left as a literal placeholder
 - Optionally add `REVISION_TASK.md` when the workspace needs a task-specific brief for joint manuscript and response-letter drafting
-- Skip or overwrite existing files under caller control
+- Skip or overwrite existing files under caller control, with compatibility checks before partial adoption
 
 ## File Roles
 
 A later agent must read the four core AGENT files in order: `AGENT.md` -> `AGENT_GOAL.md` -> `AGENT_HARNESS.md` -> `AGENT_PROGRESS.md`.
 
-- [`AGENT.md`](examples/AGENT.md) - the control contract: file roles, read order, precedence, update routing, boundary enforcement. **Sole authority on how the four-file system operates.**
+- [`AGENT.md`](examples/AGENT.md) - the control contract: file roles, read order, local precedence among the four core files, update routing, boundary enforcement. **Sole authority on how the workspace-local four-file system operates; it does not override higher-precedence instructions.**
 - [`AGENT_GOAL.md`](examples/AGENT_GOAL.md) - the long-term mission: statement, scope, non-goals, success criteria, constraints. **Immutable to the agent.** Changes only on explicit user instruction.
 - [`AGENT_HARNESS.md`](examples/AGENT_HARNESS.md) - the reusable playbook: durable workflow rules and generalized manuscript-revision preferences. **Must not become a task log or restate the mission.**
 - [`AGENT_PROGRESS.md`](examples/AGENT_PROGRESS.md) - the live state: current objective, repository state, completed changes, next resume point. **Must not define workflow policy or revise the mission.**
@@ -38,12 +38,13 @@ target_dir/
 ## Tool
 
 - Name: `manuscript_revision_agent_files_init`
-- Input: `target_dir` (required), `mission` (required), optional `objective`, optional `revision_mode`, optional `overwrite`
+- Input: `target_dir` (required), `mission` (required one- or two-sentence manuscript mission statement), optional transient `objective`, optional `revision_mode`, optional `overwrite`
 - Output: `target_dir`, `files_created`, `files_skipped`
+- Note: `tool.json` validates input/output shape. The skill workflow performs the semantic checks that keep mission, objective, sidecar, and partial-adoption boundaries clean.
 
 ## Example MCP Request
 
-The `mission` and `objective` strings below are illustrative. `revision_mode` defaults to `manuscript_only`; set it to `manuscript_and_response_letter` when the scaffold should include the auxiliary joint-revision brief.
+The `mission` and `objective` strings below are illustrative. Keep `mission` durable and purpose-only; keep `objective` transient and tied to the current workstream. `revision_mode` defaults to `manuscript_only`; set it to `manuscript_and_response_letter` when the scaffold should include the auxiliary joint-revision brief.
 
 ```json
 {
@@ -62,10 +63,11 @@ The templates live in [`examples/`](examples/) and are copied into `target_dir` 
 - The four core AGENT templates are always copied subject to the skip-or-overwrite rule.
 - The required `mission` input replaces the `{{ mission }}` placeholder in `AGENT_GOAL.md`.
 - The optional `objective` input replaces the `{{ objective }}` placeholder in `AGENT_PROGRESS.md`. If `objective` is omitted, the `Current Objective` section is removed entirely so that no literal placeholder reaches the workspace.
+- Other initial sections use explicit neutral values such as "Not yet recorded" or "Not yet specified by user" rather than instructional placeholders.
 - `REVISION_TASK.md` is copied only when `revision_mode` is `manuscript_and_response_letter`.
 
 Each template carries its own boundary clause so the core four-file contract does not drift toward duplication or cross-file contamination, and the optional sidecar remains lower-precedence than the control contract.
 
 ## Parents
 
-- `agent-files` — specializes the same four-file AGENT contract for LaTeX IEEE-style manuscript revision, adding manuscript-specific templates and an optional `REVISION_TASK.md` sidecar.
+- `agent-files` — specializes the same hardened four-file AGENT contract for LaTeX IEEE-style manuscript revision, adding manuscript-specific templates and an optional lower-precedence `REVISION_TASK.md` sidecar.

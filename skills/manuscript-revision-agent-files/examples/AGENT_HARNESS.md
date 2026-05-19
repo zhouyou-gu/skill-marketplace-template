@@ -2,9 +2,9 @@
 
 **This file is the reusable playbook for the workspace. It holds durable workflow rules and generalized operating preferences. It shall not define control-file update policy, restate or modify the mission, or record live task state.**
 
-## Task Context
+## Stable Operating Context
 
-This workspace is for revising a LaTeX IEEE-style manuscript and its directly supporting artifacts. `main.tex` is the primary source of truth; bibliography, figures, appendix material, and optional derived explanations such as `narrative.md` are supporting artifacts that stay synchronized to the manuscript when the underlying logic changes materially. If `REVISION_TASK.md` exists, it is a task-specific sidecar for joint manuscript-response work and does not replace this harness.
+This workspace is for revising a LaTeX IEEE-style manuscript and its directly supporting artifacts. `main.tex` is the primary manuscript source of truth; bibliography, figures, appendix material, and optional derived explanations such as `narrative.md` are supporting artifacts that stay synchronized to the manuscript when the underlying logic changes materially. If `REVISION_TASK.md` exists, it is a task-specific sidecar for joint manuscript-response work and does not replace this harness. Do not describe mission scope, success criteria, current file inventory, active work, or blockers here; those belong in `AGENT_GOAL.md` or `AGENT_PROGRESS.md`.
 
 ## Standard Operating Loop
 

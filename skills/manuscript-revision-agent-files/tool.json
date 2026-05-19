@@ -13,12 +13,12 @@
       "mission": {
         "type": "string",
         "minLength": 1,
-        "description": "Long-term manuscript-revision mission written into AGENT_GOAL.md. Required so the scaffolded contract is internally consistent on first read; the agent cannot edit AGENT_GOAL.md after scaffold without explicit user instruction"
+        "description": "One- or two-sentence long-term manuscript-revision mission statement written into AGENT_GOAL.md. Required so the scaffolded contract is internally consistent on first read; must not include workflow preferences, current state, next steps, transient response-letter tasks, or transient objectives"
       },
       "objective": {
         "type": "string",
         "minLength": 1,
-        "description": "Concrete in-flight objective written into AGENT_PROGRESS.md. If omitted, the scaffolded AGENT_PROGRESS.md omits the Current Objective section entirely rather than leaving a literal placeholder"
+        "description": "Concrete transient in-flight manuscript/revision objective written into AGENT_PROGRESS.md. Must not define permanent mission, manuscript scope, policy, or success criteria. If omitted, the scaffolded AGENT_PROGRESS.md omits the Current Objective section entirely"
       },
       "revision_mode": {
         "type": "string",
@@ -32,7 +32,7 @@
       "overwrite": {
         "type": "boolean",
         "default": false,
-        "description": "If true, existing scaffold files in target_dir are replaced; if false, existing files are skipped"
+        "description": "If true, existing scaffold files in target_dir are replaced; if false, only compatible existing files are recorded as skipped after boundary-contract inspection"
       }
     },
     "required": [

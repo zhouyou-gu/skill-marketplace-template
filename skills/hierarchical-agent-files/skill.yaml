@@ -1,6 +1,6 @@
 id: hierarchical-agent-files
 name: Hierarchical Agent File Scaffold
-description: Scaffold a two-level parent + children agent-file hierarchy in one shot. Delegates per-node base scaffolding to agent-files and installs the hierarchy-specific clauses (parent-first read order, outer-boundary constraint, progress-scope rule, parent ledger seed) so every node in the tree is internally consistent on first read.
+description: Scaffold a two-level parent + children agent-file hierarchy in one shot. Delegates per-node base scaffolding to agent-files and installs the hierarchy-specific clauses (parent-first read order, outer-boundary constraint, progress-scope rule, deferred parent ledger seed) so every node in the tree is internally consistent on first read.
 category: devtools
 tags:
   - agents

@@ -13,12 +13,12 @@
       "research_brief": {
         "type": "string",
         "minLength": 1,
-        "description": "Concise statement of the research intent to preserve and refine"
+        "description": "Concise statement of the research intent to preserve and refine into durable goal-file content"
       },
       "chat_context": {
         "type": "string",
         "minLength": 1,
-        "description": "Optional chat excerpts or planning notes that clarify wording and user intent"
+        "description": "Optional chat excerpts or planning notes that clarify wording and user intent; not persistent scope unless explicitly approved as goal-file content"
       },
       "dry_run": {
         "type": "boolean",

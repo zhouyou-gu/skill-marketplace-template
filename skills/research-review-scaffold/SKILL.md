@@ -16,20 +16,20 @@ description: Create a low-entropy `review/` workspace from a user's research int
 ## Inputs
 
 - `project_dir`: project root where the review workspace should be created
-- `research_intention`: concise statement of the review topic or research question
+- `research_intention`: concise statement of the review topic or research question; used to derive a purpose-only review mission, not workflow rules or current task state
 - `review_dir`: optional relative path for the review folder, default `review`
-- `chat_context`: optional conversation context that helps clarify wording and theme derivation
+- `chat_context`: optional conversation context that helps clarify wording and theme derivation; it must not become durable scope unless intentionally converted into the review mission or explicit scaffold text
 - `theme_count_hint`: optional preferred starting theme count; default behavior is approximately 3 themes
 - `overwrite`: when true, allow replacing existing scaffold files; otherwise skip collisions
 - `dry_run`: when true, return the scaffold plan without writing
 
 ## Workflow
 
-1. Read `research_intention` and any `chat_context`, then clarify the review question until the intended literature scope is stable enough to scaffold.
+1. Read `research_intention` and any `chat_context`, then clarify the review question until the intended literature scope is stable enough to scaffold. Treat chat context as supporting evidence only; do not persist chat-only instructions as durable review scope unless they are intentionally converted into the mission or scaffold docs.
 2. Derive a low-entropy starting theme map from the user's intention. Default to about 3 themes when no `theme_count_hint` is provided, but do not hard-code a maximum.
 3. Resolve the target review folder as `project_dir/<review_dir>`.
 4. Create a self-contained review workspace even when no parent agent workspace exists.
-5. Scaffold the four base agent files by invoking the `agent-files` skill (tool `agent_files_init`) with `target_dir = project_dir/<review_dir>`, `mission` derived from the stabilized `research_intention`, and the same `overwrite` flag. This is the mechanism by which the parent relationship to `agent-files` is realized — do not re-implement the four base templates locally. On completion the target folder holds:
+5. Scaffold the four base agent files by invoking the `agent-files` skill (tool `agent_files_init`) with `target_dir = project_dir/<review_dir>`, a purpose-only `mission` derived from the stabilized `research_intention`, and the same `overwrite` flag. The derived mission must not include reusable workflow rules, current repository state, source-collection next steps, or transient objectives. This is the mechanism by which the parent relationship to `agent-files` is realized — do not re-implement the four base templates locally. On completion the target folder holds:
    - `AGENT.md`
    - `AGENT_GOAL.md`
    - `AGENT_HARNESS.md`
@@ -49,7 +49,7 @@ description: Create a low-entropy `review/` workspace from a user's research int
    - `references.bib` is empty or stubbed
    - no literature notes, source rows, or bibliography entries are created in v1
 9. If the topic crosses domains, mark transfer into the target domain as inference in the scaffold text unless the user clearly scopes the review as cross-domain by design.
-10. If `overwrite` is false, skip existing files cleanly and return them in `files_skipped`.
+10. If `overwrite` is false, rely on the upstream `agent-files` compatibility checks for the four AGENT files. For review-specific root docs, skip existing files cleanly and return them in `files_skipped`.
 11. If `dry_run` is true, perform steps 1–3 and 7 (derive the theme map) without writing. Return `written=false`, the planned `review_path`, the planned `theme_folders`, and the list of files that would be created in `files_created` as intent only; leave `files_skipped` empty; do not invoke `agent_files_init`.
 
 ## Outputs
@@ -67,12 +67,14 @@ description: Create a low-entropy `review/` workspace from a user's research int
 
 - If the research intention is too ambiguous to derive a stable review question or theme map, stop with `written=false` and list the blockers in `open_questions`.
 - If the derived themes are obviously unstable or one-off chat artifacts, refine them with the user before writing.
-- If the target folder already exists and `overwrite=false`, do not replace files silently; skip them and report the collisions.
+- If the target folder already exists and `overwrite=false`, do not replace files silently; rely on `agent-files` compatibility checks for AGENT files, skip compatible collisions, and report all collisions.
+- If deriving the review mission would require embedding workflow rules, current state, or source-collection next steps, stop and ask the user for a cleaner purpose statement.
 - If the request expands into corpus building, note taking, or bibliography population, state that those are follow-on review tasks rather than part of the initial scaffold.
 
 ## Tool Contract
 
 - Read [`tool.json`](tool.json) for the authoritative schema.
+- The JSON schema enforces input/output shape only. Semantic checks for purpose-only derived mission text and chat-context persistence are workflow requirements enforced before writing files.
 - `project_dir` and `research_intention` are required.
 - `review_dir`, `chat_context`, `theme_count_hint`, `overwrite`, and `dry_run` are optional.
 - Return the full output envelope even when no write occurs.

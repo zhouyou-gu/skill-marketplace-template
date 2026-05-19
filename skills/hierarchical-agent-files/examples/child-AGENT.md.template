@@ -1,8 +1,32 @@
 # Agent Control
 
-**This file is the control contract for `{{ parent_name }}/{{ child_relative_dir }}/`. It defines read order, precedence, file roles, and update routing for this nested workspace.**
+**This file is the control contract for the workspace-local four-file agent system in `{{ parent_name }}/{{ child_relative_dir }}/`. It is the sole authority on local file roles, read order, precedence among these four local files, update routing, and boundary enforcement inside this nested workspace. It does not override the parent workspace, higher-precedence system, developer, user, repository, legal, security, or tool instructions. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
 
 This folder is a nested workspace inside `{{ parent_name }}/`. Agents working in `{{ child_relative_dir }}/` use the parent workspace as the outer mission boundary and the local files as the inner operating contract.
+
+## Functional Boundaries by File
+
+- `AGENT.md` holds only the local four-file control contract for `{{ child_relative_dir }}/`.
+- `AGENT_GOAL.md` holds the local mission and scope for `{{ child_relative_dir }}/`; it is agent-immutable absent explicit user instruction.
+- `AGENT_HARNESS.md` holds durable local workflow rules and structure guidance.
+- `AGENT_PROGRESS.md` holds the live state of this nested workspace.
+
+Boundary test: if a local rule would still matter when no agent files existed, it is usually `AGENT_HARNESS.md` material rather than `AGENT.md` material.
+
+Actual workspace state wins over stale local or parent progress notes. If a progress entry conflicts with the repository, files, or rendered artifacts in front of you, refresh the owning `AGENT_PROGRESS.md` before relying on the stale narrative.
+
+## Boundary Audit Checklist
+
+When handoff quality degrades or boundary drift is suspected, audit the parent and local files before continuing substantive work:
+
+- Local `AGENT.md` contains only nested four-file control-system rules, not task execution policy.
+- Local `AGENT_GOAL.md` contains only local mission, scope, non-goals, success criteria, and mission-level constraints within the parent boundary.
+- Local `AGENT_HARNESS.md` contains only durable local operating rules and preferences, not current state or mission amendments.
+- Local `AGENT_PROGRESS.md` contains only current nested workspace state, blockers, completed changes, and next resume point, not durable policy.
+- Parent and local progress files describe current workspace state; stale claims that conflict with actual files are corrected or compacted.
+- Durable local rules discovered in local progress are moved to local harness; parent-scope rules are routed to the parent harness.
+- Cross-child ownership, shared blockers, and coordination decisions are not stored as local scope unless this child owns the local evidence.
+- Neutral scaffold entries such as "Not yet specified by user" are not treated as user-approved scope, non-goals, success criteria, or constraints.
 
 ## Mandatory Read Order
 
@@ -20,27 +44,36 @@ Then read the local workspace:
 7. `AGENT_HARNESS.md`
 8. `AGENT_PROGRESS.md`
 
-## Local File Roles
-
-- `AGENT.md` holds the local control contract for `{{ child_relative_dir }}/`.
-- `AGENT_GOAL.md` holds the local mission and scope for `{{ child_relative_dir }}/`.
-- `AGENT_HARNESS.md` holds durable local workflow rules and structure guidance.
-- `AGENT_PROGRESS.md` holds the live state of this nested workspace.
-
 ## Precedence
 
+- Higher-precedence system, developer, user, repository, legal, security, and tool instructions govern before this local file contract. A normal task request may authorize current-turn work, but it does not silently amend durable parent or local mission, scope, non-goals, success criteria, or constraints.
 - The parent `{{ parent_name }}/` agent files define the outer mission and constraints for this folder.
 - The local `{{ child_relative_dir }}/` agent files define how local work is organized and maintained inside that boundary.
-- When a local rule and a parent rule both apply, follow the parent rule for mission scope and the local rule for local structure and workflow.
+- When a local rule and a parent rule both apply, follow the parent rule for outer mission scope and the local rule for local structure and workflow.
+- If contemplated work conflicts with the parent mission or local mission, stop and request explicit user direction. The user may authorize a one-off exception for the current turn, but goal files change only when the user explicitly and unambiguously instructs a durable mission amendment.
+- If parent or local progress conflicts with actual workspace state, actual state controls and the stale progress entry must be refreshed before it guides future work.
+- If a narrative record outside the owning `AGENT_PROGRESS.md` (a stale summary, duplicated control-file bullet, or old chat-thread note) conflicts with that progress file, treat the owning progress file as the authoritative narrative unless actual workspace state says otherwise, and clean up the drift in the stale record.
+- If a durable local rule appears only in local progress, move it to local harness and leave only the current-state residue in progress.
 
 ## Update Routing
 
 - Update `{{ child_relative_dir }}/AGENT_PROGRESS.md` in the same turn whenever local workspace state changes.
 - Update `{{ child_relative_dir }}/AGENT_HARNESS.md` when a durable local rule becomes reusable beyond the current turn.
 - Update `{{ child_relative_dir }}/AGENT_GOAL.md` only when the user explicitly instructs a mission change for this workspace.
-- Update the parent `../AGENT_PROGRESS.md` in the same turn when the overall `{{ parent_name }}/` workspace state changes because of work inside this folder.
+- Update the parent `../AGENT_PROGRESS.md` only for parent-scope state: creating or removing this child workspace, cross-child coordination, parent-owned blockers or decisions, or changes to parent files. Do not mirror internal child changes in parent progress.
+- Do not write sibling-internal facts into this local progress file. If work spans siblings, route shared coordination to the parent and local facts to each affected child.
+- If reusable policy appears only in local progress, move it to local harness and condense the progress entry.
+- Dispatcher-maintenance edits are terminal: updating local or parent progress/harness files to satisfy this routing does not itself require another update entry unless the update records a separate substantive workspace change.
+- Treat local `Completed Changes` as a handoff ledger, not an exhaustive event log; preserve currently relevant facts and condense older entries into milestone summaries when doing so improves handoff clarity.
+
+Applying update routing is mandatory for every turn that changes this nested workspace:
+
+- A turn is complete only when local progress reflects local state and parent progress reflects any parent-scope effect.
+- Do not batch meaningful updates across turns or collapse separate state changes into one coarse bullet.
+- If one turn changes local state and reveals a durable local rule, update both local progress and local harness in the same turn.
 
 ## Boundary
 
 - Keep this nested workspace focused on its local mission as declared in `{{ child_relative_dir }}/AGENT_GOAL.md`.
 - Keep parent-wide framing in the parent `{{ parent_name }}/` workspace unless the work is specifically about local structure or evidence.
+- Keep sibling work in the owning sibling workspace. Parent files carry cross-child framing and coordination; child files carry only this child's local facts.

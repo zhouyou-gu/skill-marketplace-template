@@ -7,10 +7,11 @@ Result of running the skill with the inputs in `request.json`.
 ├─ AGENT.md                       # base agent-files parent template
 ├─ AGENT_GOAL.md                  # mission: "Maintain a coherent parent workspace..."
 ├─ AGENT_HARNESS.md               # base + progress-scope rule bullet injected under ## Reusable Preferences
-├─ AGENT_PROGRESS.md              # base + seeded ## Completed Changes:
-│                                 #   "Parent-scope entries only. Changes internal to nested workspaces
-│                                 #    live in their own progress file (`module-a/AGENT_PROGRESS.md`,
-│                                 #    `module-b/AGENT_PROGRESS.md`)."
+├─ AGENT_PROGRESS.md              # base + seeded ## Completed Changes after child success:
+│                                 #   "Parent-scope entries only. This seed is written after every
+│                                 #    listed nested workspace has completed its hierarchy contract.
+│                                 #    Changes internal to nested workspaces live in their own progress
+│                                 #    file (`module-a/AGENT_PROGRESS.md`, `module-b/AGENT_PROGRESS.md`)."
 │                                 #   - [Scaffold] Created `my-project/` with the four-file agent
 │                                 #     control contract from the upstream `agent-files` template.
 │                                 #   - [Scaffold] Created `module-a/` as a nested workspace with its
@@ -25,6 +26,7 @@ Result of running the skill with the inputs in `request.json`.
 │  │                              # + first Constraints bullet:
 │  │                              #   "The parent `my-project/` mission remains the outer
 │  │                              #    boundary for this workspace."
+│  │                              # + child-mission and current-turn context constraints
 │  ├─ AGENT_HARNESS.md            # base agent-files template, unchanged
 │  └─ AGENT_PROGRESS.md           # base agent-files template, unchanged
 └─ module-b/

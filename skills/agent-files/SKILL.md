@@ -18,7 +18,7 @@ description: Scaffold AGENT.md, AGENT_GOAL.md, AGENT_HARNESS.md, and AGENT_PROGR
 - `target_dir`: directory where the four AGENT files will be scaffolded
 - `mission`: one- or two-sentence long-term mission statement written into `AGENT_GOAL.md`; required so the scaffolded contract is internally consistent on first read. It must not include reusable workflow rules, formatting preferences, current task state, next steps, or transient objectives.
 - `objective`: optional concrete in-flight objective written into `AGENT_PROGRESS.md`; it must be transient current work, not a second mission statement or permanent scope rule. When omitted, the `## Current Objective` section is removed rather than left as a literal placeholder.
-- `overwrite`: when true, existing files in `target_dir` are replaced; otherwise compatible existing files are skipped and listed in `files_skipped`
+- `overwrite`: when true, existing files in `target_dir` are replaced; otherwise only compatible existing files are recorded in `files_skipped`
 
 ## Workflow
 

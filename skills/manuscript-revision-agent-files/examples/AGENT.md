@@ -1,10 +1,10 @@
 # Agent Control
 
-**This file is the control contract for the workspace. It is the sole authority on file roles, read order, precedence, update routing, and boundary enforcement. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
+**This file is the control contract for the workspace-local four-file agent system. It is the sole authority on file roles, read order, precedence among these four core files, update routing, and boundary enforcement. It does not override higher-precedence system, developer, user, repository, legal, security, venue, or tool instructions. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
 
 This workspace operates under a four-file control system. The files are non-overlapping, each holds exclusive jurisdiction over one function, and no file may encroach upon another's scope.
 
-- `AGENT.md` - the control file; sole authority on how the control system operates.
+- `AGENT.md` - the control file; sole authority on how this four-file control system operates.
 - `AGENT_GOAL.md` - the long-term mission file; agent-immutable absent explicit user instruction.
 - `AGENT_HARNESS.md` - the reusable playbook; durable workflow and preference rules.
 - `AGENT_PROGRESS.md` - the live state file; factual record of current work.
@@ -17,6 +17,7 @@ These files are intended to be sufficient, by themselves, for a later agent to r
 Design obligations:
 
 - A later agent shall be able to recover both how to operate and what is true by reading these files alone.
+- This contract governs only the local four-file system and optional lower-precedence sidecar; it never overrides higher-precedence instructions or the actual workspace state.
 - Durable reusable rules belong in `AGENT_HARNESS.md`.
 - Transient task state belongs in `AGENT_PROGRESS.md`.
 - The long-term mission belongs in `AGENT_GOAL.md` and may not be edited autonomously.
@@ -28,8 +29,8 @@ Each file has exclusive jurisdiction over one class of information and is prohib
 
 ### `AGENT.md` - Control
 
-- **Holds:** file roles, read order, precedence, update routing, boundary enforcement.
-- **Prohibited from:** serving as a task log; storing reusable playbook content; recording live progress; restating or modifying the mission.
+- **Holds:** file roles, read order, precedence among the four core agent files, update routing, boundary enforcement.
+- **Prohibited from:** serving as a task log; storing reusable playbook content; recording live progress; restating or modifying the mission; storing manuscript-execution rules that would remain useful even without this four-file control system.
 
 ### `AGENT_GOAL.md` - Long-Term Mission
 
@@ -53,6 +54,19 @@ When deciding where a piece of information belongs, the agent shall classify it 
 - what the workspace exists to accomplish -> `AGENT_GOAL.md`
 - how a later agent shall operate across tasks -> `AGENT_HARNESS.md`
 - what is true right now in this workspace -> `AGENT_PROGRESS.md`
+
+Boundary test: if a manuscript or revision rule would still matter when no agent files existed, it is usually `AGENT_HARNESS.md` material rather than `AGENT.md` material.
+
+## Boundary Audit Checklist
+
+When handoff quality degrades or boundary drift is suspected, audit the core files before continuing substantive work:
+
+- `AGENT.md` contains only four-file control-system rules and optional sidecar routing, not manuscript execution policy.
+- `AGENT_GOAL.md` contains only mission, scope, non-goals, success criteria, and mission-level manuscript constraints.
+- `AGENT_HARNESS.md` contains only durable manuscript operating rules and preferences, not current state or mission amendments.
+- `AGENT_PROGRESS.md` contains only current workspace state, blockers, completed changes, and next resume point, not durable policy.
+- `REVISION_TASK.md`, when present, remains a lower-precedence current revision brief and is not treated as mission, harness, or canonical progress.
+- Neutral scaffold entries such as "Not yet specified by user" are not treated as user-approved scope, non-goals, success criteria, or constraints.
 
 ## Optional Auxiliary File
 
@@ -85,8 +99,9 @@ While processing the workspace:
 
 ## Control-File Precedence
 
+- Higher-precedence system, developer, user, repository, legal, security, venue, and tool instructions govern before this local file contract. A normal task request may authorize current-turn work, but it does not silently amend durable mission, scope, non-goals, success criteria, or constraints.
 - `AGENT.md` governs which file owns a given question.
-- `AGENT_GOAL.md` governs whether the contemplated work is in scope. If contemplated work conflicts with the mission, the agent shall stop and request explicit user direction rather than edit the goal file.
+- `AGENT_GOAL.md` governs whether the contemplated work is durably in scope. If contemplated work conflicts with the mission, the agent shall stop and request explicit user direction. The user may authorize a one-off exception for the current turn, but the goal file changes only when the user explicitly and unambiguously instructs a durable mission amendment.
 - `AGENT_HARNESS.md` governs how to operate, unless `AGENT.md` says otherwise.
 - `AGENT_PROGRESS.md` is the canonical narrative record of the current task state and resume point. The workspace itself - file system, version-control state, build outputs, and other materializations - is the ground truth for what is currently true.
 - If `AGENT_PROGRESS.md` conflicts with the actual workspace, the workspace wins. The agent shall refresh `AGENT_PROGRESS.md` from the workspace, never rewrite the workspace to match the note.
@@ -95,7 +110,7 @@ While processing the workspace:
 
 ## Update Dispatcher
 
-`AGENT.md` is the sole authority on whether the agent shall update `AGENT_HARNESS.md`, `AGENT_PROGRESS.md`, both, or neither. `AGENT_GOAL.md` lies outside the dispatcher's authority and is modified only upon explicit user instruction.
+`AGENT.md` is the local authority on whether the agent shall update `AGENT_HARNESS.md`, `AGENT_PROGRESS.md`, both, or neither. `AGENT_GOAL.md` lies outside the dispatcher's authority and is modified only upon explicit user instruction.
 
 ### Enforcement: updates are automatic and per-turn
 
@@ -105,6 +120,7 @@ Applying the dispatcher is a mandatory step of every turn that touches workspace
 - The agent shall not wait to be asked. If the user must request the update, the contract has already been broken.
 - A turn is complete only when the underlying edit has been applied, `AGENT_PROGRESS.md` reflects the new state, and any durable rule revealed during the turn has been moved into `AGENT_HARNESS.md`.
 - The agent shall not batch updates across turns or collapse multiple meaningful edits into one coarse summary bullet.
+- Dispatcher-maintenance edits are terminal: updating `AGENT_PROGRESS.md`, `AGENT_HARNESS.md`, or `REVISION_TASK.md` to satisfy this dispatcher does not itself require another update entry unless the update records a separate substantive workspace change.
 
 ### Update `AGENT_PROGRESS.md` when concrete workspace state changes
 
@@ -120,7 +136,7 @@ How to update:
 - add or revise a current objective only when a concrete active workstream needs handoff context
 - refresh repository state and workspace artifacts
 - append or revise `Completed Changes` with one factual bullet per meaningful completed change
-- treat `Completed Changes` as a permanent cumulative ledger unless the user explicitly requests reset or condense
+- treat `Completed Changes` as a handoff ledger, not an exhaustive event log; preserve currently relevant facts and condense older entries into milestone summaries when doing so improves handoff clarity
 - revise the next resume point to reflect any blocking condition
 - keep entries factual and current, and do not migrate workflow policy into this file
 

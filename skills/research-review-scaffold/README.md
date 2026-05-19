@@ -27,20 +27,20 @@ It is for the step before literature collection. The skill creates the review st
 ## Inputs
 
 - `project_dir`
-- `research_intention`
+- `research_intention` (used to derive a purpose-only review mission)
 - optional `review_dir`
-- optional `chat_context`
+- optional `chat_context` (supporting context only; not persistent scope unless intentionally converted into mission/scaffold text)
 - optional `theme_count_hint`
 - optional `overwrite`
 - optional `dry_run`
 
 ## Parents
 
-- `agent-files` — this skill scaffolds the four base AGENT files inside the review workspace and then adds review-specific root docs, a paper-note template, and topic-derived theme folders on top of that base.
+- `agent-files` — this skill scaffolds the hardened four base AGENT files inside the review workspace with a purpose-only mission, then adds review-specific root docs, a paper-note template, and topic-derived theme folders on top of that base.
 
 ## Example Flow
 
 1. Read the user's research intention and any topic-defining chat context.
-2. Interact to stabilize the review question and derive a compact seed theme map.
+2. Interact to stabilize the review question, decide which chat context becomes durable scaffold text, and derive a compact seed theme map.
 3. Create the nested review workspace with low-entropy root docs and a paper-note template.
 4. Return the created and skipped files, the chosen theme folders, and any open questions.
