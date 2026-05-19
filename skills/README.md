@@ -133,12 +133,58 @@ Example:
 - `research-goal-curator` — extends its goal-curation prompts.
 ```
 
-### Finding child skills
+## Agent-File Skill Design Harness
 
-Child skills are **not stored** — they are the inverse of `parents` and can be derived on demand. To list every skill that declares `<your-id>` as a parent, grep the skills folder:
+Use these rules when adding or changing any skill that scaffolds AGENT files, composes an AGENT-file scaffolder, patches generated AGENT files, or curates AGENT-file content.
+
+### Parent/Child Boundaries
+
+1. Parent skills must be independent from child skills. A parent must not name a child, route to a child, reserve child sidecars, or describe child-specific behavior.
+2. Child skills may name and invoke their parents. If a child composes a parent, declare that parent in `skill.yaml:parents` and explain the relationship in the child `README.md`.
+3. Do not declare a parent just because a skill can operate after another skill. Declare a parent only when the skill depends on, extends, composes, or patches that parent's output contract.
+4. Children are not stored in metadata. They are derived from other skills' `parents` entries.
+5. A child must not duplicate parent-owned templates. It may invoke the parent, verify the parent output, and add bounded child-owned extensions.
+6. Bounded child extensions must be identified by stable headings or markers. With `overwrite=true`, refresh only those child-owned sections; do not rewrite unrelated parent-owned or user-authored content.
+7. Sibling coordination belongs in the nearest common parent-owned contract. One child must not silently become another child's authority.
+
+### Core AGENT File Boundaries
+
+1. `AGENT.md` owns file roles, read order, local precedence, update routing, and boundary enforcement for the local contract only. It must not store mission, reusable playbook content, or live progress.
+2. `AGENT_GOAL.md` owns durable mission, scope, non-goals, success criteria, and mission-level constraints. It is agent-immutable unless the user explicitly instructs a durable goal change.
+3. `AGENT_HARNESS.md` owns reusable workflow rules and stable operating preferences. It must not record current blockers, artifact inventory, chronological logs, or mission amendments.
+4. `AGENT_PROGRESS.md` owns live workspace state, concrete completed changes, execution blockers, and the canonical resume point. It must not define durable policy or revise the mission.
+5. `AGENT.md` templates and any patch that defines read order, local precedence, update routing, or sidecar authority must include the higher-precedence caveat: local AGENT files do not override system, developer, user, repository, legal, security, venue, or tool instructions.
+6. A normal user task may authorize current-turn work, but it does not silently amend durable mission, scope, non-goals, success criteria, constraints, or reusable rules.
+
+### Mission, Objective, and Sidecar Rules
+
+1. `mission` inputs must be durable and purpose-only. They must not include workflow rules, current state, next steps, transient objectives, or sidecar-specific task details.
+2. `objective` inputs must be transient current work. They must not become a second mission statement, permanent scope, policy, or success criteria.
+3. Sidecars are lower-precedence auxiliaries. If a later agent needs to read a sidecar, the generated workspace contract must register the sidecar read order and update routing; README-only instructions are not enough.
+4. Sidecars must not become second copies of mission, harness, or progress. Durable rules belong in `AGENT_HARNESS.md`; execution blockers and canonical resume state belong in `AGENT_PROGRESS.md`.
+5. If a sidecar records current state, define exactly which current-state facts it owns and which facts remain owned by `AGENT_PROGRESS.md`.
+
+### Compatibility and Validation
+
+1. With `overwrite=false`, inspect existing files before adopting them. Compatible files may be skipped; incompatible files must stop the run rather than creating a mixed contract.
+2. JSON Schema validates shape only. Semantic checks such as clean mission text, transient objective text, compatible existing files, and bounded child patches must be documented in `SKILL.md`, `README.md`, and `tool.json` descriptions where relevant.
+3. `skill.yaml:parents`, the skill `README.md ## Parents` section, and any tool/skill descriptions must agree. Do not leave stale parent references after changing ownership.
+4. After boundary-related changes, run:
 
 ```bash
-grep -rEn "^\s*-\s*<your-id>\s*$" skills/*/skill.yaml
+python3 scripts/validate_skills.py
+python3 scripts/build_registry.py
+python3 scripts/build_search_index.py
+```
+
+Generated `registry/*.json` files are build artifacts and should not be committed unless the repository policy changes.
+
+### Finding child skills
+
+Child skills are **not stored** — they are the inverse of `parents` and can be derived on demand. To list every skill that declares `<your-id>` as a parent, search the skills folder:
+
+```bash
+rg -n "^\s*-\s*<your-id>\s*$" skills/*/skill.yaml
 ```
 
 For a full parent/child dependency graph across the marketplace, use the [`skill-link`](skill-link/) skill.

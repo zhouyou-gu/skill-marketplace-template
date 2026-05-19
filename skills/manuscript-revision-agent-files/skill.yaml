@@ -1,6 +1,6 @@
 id: manuscript-revision-agent-files
 name: Manuscript Revision Agent Files
-description: Scaffold manuscript-revision AGENT files for LaTeX IEEE-style papers, with an optional REVISION_TASK.md sidecar for joint manuscript and response-letter drafting
+description: Extend manuscript-writing AGENT files for LaTeX IEEE-style revision with bounded revision-response patches and a REVISION_TASK.md sidecar
 category: devtools
 tags:
   - agents
@@ -16,4 +16,4 @@ agent:
   protocol: mcp
   tool_schema: tool.json
 parents:
-  - agent-files
+  - manuscript-writing-agent-files

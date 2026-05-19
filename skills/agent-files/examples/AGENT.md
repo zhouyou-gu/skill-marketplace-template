@@ -1,6 +1,6 @@
 # Agent Control
 
-**This file is the control contract for the workspace-local four-file agent system. It is the sole authority on file roles, read order, precedence among these four files, update routing, and boundary enforcement. It does not override higher-precedence system, developer, user, repository, legal, security, or tool instructions. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
+**This file is the control contract for the workspace-local four-file agent system. It is the sole authority on file roles, read order, precedence among these four files, update routing, and boundary enforcement. It does not override higher-precedence system, developer, user, repository, legal, security, venue, or tool instructions. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
 
 This workspace operates under a four-file control system. The files are non-overlapping, each holds exclusive jurisdiction over one function, and no file may encroach upon another's scope.
 
@@ -11,12 +11,12 @@ This workspace operates under a four-file control system. The files are non-over
 
 ## Agent-File Contract
 
-These files are intended to be sufficient, by themselves, for a later agent to recover how the workspace is governed, what the workspace is for, how to operate within it, and what is currently true. If the user instructs the agent to read the agent files, the agent shall read all four files in the mandatory order below and treat them jointly as the workspace operating contract.
+For the base contract, these files are intended to be sufficient for a later agent to recover how the workspace is governed, what the workspace is for, how to operate within it, and what is currently true. Child skills may register lower-precedence sidecars in this file; when present, those sidecars supplement the specific current-state facts assigned to them without changing the four core files' ownership boundaries. If the user instructs the agent to read the agent files, the agent shall read all four core files in the mandatory order below and treat them jointly as the workspace operating contract.
 
 Design obligations:
 
-- A later agent shall be able to recover both how to operate and what is true by reading these files alone.
-- This contract governs only the local four-file system; it never overrides higher-precedence instructions or the actual workspace state.
+- A later agent shall be able to recover how to operate, what current-state records exist, and where any supplemental sidecar facts live by reading these core files and any sidecars registered in `AGENT.md`.
+- This contract governs only the local four-file system; it never overrides higher-precedence system, developer, user, repository, legal, security, venue, or tool instructions, nor the actual workspace state.
 - Durable reusable rules belong in `AGENT_HARNESS.md`.
 - Transient task state belongs in `AGENT_PROGRESS.md`.
 - The long-term mission belongs in `AGENT_GOAL.md` and may not be edited autonomously.
@@ -84,7 +84,7 @@ While processing the workspace:
 
 ## Control-File Precedence
 
-- Higher-precedence system, developer, user, repository, legal, security, and tool instructions govern before this local file contract. A normal task request may authorize current-turn work, but it does not silently amend durable mission, scope, non-goals, success criteria, or constraints.
+- Higher-precedence system, developer, user, repository, legal, security, venue, and tool instructions govern before this local file contract. A normal task request may authorize current-turn work, but it does not silently amend durable mission, scope, non-goals, success criteria, or constraints.
 - `AGENT.md` governs which file owns a given question.
 - `AGENT_GOAL.md` governs whether the contemplated work is durably in scope. If contemplated work conflicts with the mission, the agent shall stop and request explicit user direction. The user may authorize a one-off exception for the current turn, but the goal file changes only when the user explicitly and unambiguously instructs a durable mission amendment.
 - `AGENT_HARNESS.md` governs how to operate, unless `AGENT.md` says otherwise.

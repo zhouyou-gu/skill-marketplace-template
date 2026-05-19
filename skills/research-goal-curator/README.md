@@ -15,7 +15,7 @@ It curates an existing `AGENT_GOAL.md` from a research brief and optional chat c
 - the workspace does not yet have `AGENT_GOAL.md`
 - the user wants to scaffold the full AGENT-file contract
 
-Route to `agent-files` for generic workspaces or `manuscript-revision-agent-files` for LaTeX IEEE manuscript revision, then return to this skill to curate the goal file.
+Route to `agent-files` for generic workspaces or `manuscript-writing-agent-files` for LaTeX IEEE manuscript writing, then return to this skill to curate the goal file. This routing does not make the manuscript-writing skill a parent of this curator; `AGENT_GOAL.md` remains the base goal file this skill edits after scaffold.
 
 ## Inputs
 
@@ -36,4 +36,3 @@ Route to `agent-files` for generic workspaces or `manuscript-revision-agent-file
 ## Parents
 
 - `agent-files` — this skill refines the hardened `AGENT_GOAL.md` file that `agent-files` scaffolds for generic workspaces.
-- `manuscript-revision-agent-files` — this skill also refines the hardened `AGENT_GOAL.md` file that the manuscript-revision scaffolder produces for LaTeX IEEE workspaces.

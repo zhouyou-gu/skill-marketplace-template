@@ -1,0 +1,69 @@
+{
+  "name": "manuscript_writing_agent_files_init",
+  "title": "Manuscript Writing Agent Files",
+  "description": "Invoke the base agent-files scaffold for a LaTeX IEEE paper workspace and install a bounded manuscript-writing harness extension.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "target_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Directory where the parent agent-files scaffold will be created before manuscript-writing harness handling"
+      },
+      "mission": {
+        "type": "string",
+        "minLength": 1,
+        "description": "One- or two-sentence long-term manuscript-writing mission statement passed through to agent-files and written into AGENT_GOAL.md. Required so the scaffolded contract is internally consistent on first read; must not include workflow preferences, current state, next steps, external coordination tasks, or transient objectives"
+      },
+      "objective": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Concrete transient in-flight manuscript-writing objective written into AGENT_PROGRESS.md. Must not define permanent mission, manuscript scope, policy, or success criteria. If omitted, the scaffolded AGENT_PROGRESS.md omits the Current Objective section entirely"
+      },
+      "overwrite": {
+        "type": "boolean",
+        "default": false,
+        "description": "If true, existing parent scaffold files may be replaced by agent-files, and this skill refreshes only the child-owned manuscript-writing harness section. If false, parent files are skipped only after agent-files compatibility checks and the child harness extension is skipped only after compatibility inspection for durable reusable manuscript-writing rules with no mission, current-state, artifact-inventory, blocker, or sidecar content"
+      }
+    },
+    "required": [
+      "target_dir",
+      "mission"
+    ],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "target_dir": {
+        "type": "string"
+      },
+      "files_created": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "files_skipped": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "patches_applied": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Child-owned section patch names applied or verified, such as manuscript_writing_playbook. Section-only edits are not reported as files_created."
+      }
+    },
+    "required": [
+      "target_dir",
+      "files_created",
+      "files_skipped",
+      "patches_applied"
+    ],
+    "additionalProperties": false
+  }
+}

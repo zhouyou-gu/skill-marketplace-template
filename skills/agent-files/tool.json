@@ -23,7 +23,7 @@
       "overwrite": {
         "type": "boolean",
         "default": false,
-        "description": "If true, existing files in target_dir are replaced; if false, only compatible existing files are recorded as skipped after boundary-contract inspection"
+        "description": "If true, existing files in target_dir are replaced; if false, only compatible existing files are recorded as skipped after hardened boundary-contract inspection, including current precedence, boundary-audit, neutral-scaffold, and dispatcher semantics"
       }
     },
     "required": ["target_dir", "mission"],

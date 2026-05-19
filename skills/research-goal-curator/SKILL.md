@@ -9,7 +9,7 @@ description: Curate an existing AGENT_GOAL.md from a research brief and optional
 
 - Use when a workspace already contains `AGENT_GOAL.md` and the user wants to refine, clarify, or save a research goal.
 - Use when the user has a research brief, chat history, or tentative wording that should be turned into an internally consistent goal file.
-- Do not use this skill to scaffold AGENT files. If `AGENT_GOAL.md` does not exist, route to the appropriate scaffolder: `agent-files` for generic workspaces, or `manuscript-revision-agent-files` for LaTeX IEEE manuscript revision.
+- Do not use this skill to scaffold AGENT files. If `AGENT_GOAL.md` does not exist, route to the appropriate scaffolder: `agent-files` for generic workspaces or `manuscript-writing-agent-files` for LaTeX IEEE manuscript writing.
 - Do not use this skill to rewrite `AGENT.md`, `AGENT_HARNESS.md`, or `AGENT_PROGRESS.md`.
 
 ## Inputs
@@ -21,7 +21,7 @@ description: Curate an existing AGENT_GOAL.md from a research brief and optional
 
 ## Workflow
 
-1. Verify that `target_dir/AGENT_GOAL.md` exists. If it does not, stop and tell the caller to scaffold the workspace first with the appropriate scaffolder (`agent-files` for generic workspaces, `manuscript-revision-agent-files` for LaTeX IEEE manuscript revision).
+1. Verify that `target_dir/AGENT_GOAL.md` exists. If it does not, stop and tell the caller to scaffold the workspace first with the appropriate scaffolder (`agent-files` for generic workspaces or `manuscript-writing-agent-files` for LaTeX IEEE manuscript writing).
 2. Read the existing `AGENT_GOAL.md` and identify its current sections: statement, scope, non-goals, success criteria, and constraints.
 3. Read `research_brief` and any `chat_context`, then interact with the user until the research intention is explicit enough to save. Treat chat context as evidence for wording and intent; do not turn it into persistent scope, non-goals, success criteria, or constraints unless the user explicitly approves that content for `AGENT_GOAL.md`.
 4. When the user has already approved exact wording, preserve that wording unless the user explicitly asks for a revision.
@@ -39,7 +39,7 @@ description: Curate an existing AGENT_GOAL.md from a research brief and optional
 
 ## Failure / Escalation
 
-- If `AGENT_GOAL.md` is missing, fail cleanly and route to the appropriate scaffolder: `agent-files` for generic workspaces, `manuscript-revision-agent-files` for LaTeX IEEE manuscript revision.
+- If `AGENT_GOAL.md` is missing, fail cleanly and route to the appropriate scaffolder: `agent-files` for generic workspaces or `manuscript-writing-agent-files` for LaTeX IEEE manuscript writing.
 - If the user intention remains ambiguous after refinement, stop with `written=false` and put the remaining blockers in `open_questions`.
 - If the chat contains conflicting goal statements, ask the user which wording governs before writing.
 - If chat context suggests additional scope or constraints but the user has not approved them as durable goal-file content, leave the relevant neutral scaffold entries in place and report the ambiguity in `open_questions`.

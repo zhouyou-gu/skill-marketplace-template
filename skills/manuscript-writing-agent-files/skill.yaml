@@ -1,0 +1,20 @@
+id: manuscript-writing-agent-files
+name: Manuscript Writing Agent Files
+description: Extend agent-files for standalone LaTeX IEEE-style paper drafting with a bounded manuscript-writing harness extension
+category: devtools
+tags:
+  - agents
+  - scaffolding
+  - manuscript
+  - writing
+  - latex
+  - ieee
+difficulty: beginner
+repo: https://github.com/zhouyou-gu/skill-marketplace-template
+install:
+  pip: jinja2
+agent:
+  protocol: mcp
+  tool_schema: tool.json
+parents:
+  - agent-files

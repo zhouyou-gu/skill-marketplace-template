@@ -16,4 +16,3 @@ agent:
   tool_schema: tool.json
 parents:
   - agent-files
-  - manuscript-revision-agent-files

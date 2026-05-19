@@ -1,6 +1,6 @@
 # Agent Control
 
-**This file is the control contract for the workspace-local four-file agent system in `{{ parent_name }}/{{ child_relative_dir }}/`. It is the sole authority on local file roles, read order, precedence among these four local files, update routing, and boundary enforcement inside this nested workspace. It does not override the parent workspace, higher-precedence system, developer, user, repository, legal, security, or tool instructions. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
+**This file is the control contract for the workspace-local four-file agent system in `{{ parent_name }}/{{ child_relative_dir }}/`. It is the sole authority on local file roles, read order, precedence among these four local files, update routing, and boundary enforcement inside this nested workspace. It does not override the parent workspace, higher-precedence system, developer, user, repository, legal, security, venue, or tool instructions. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
 
 This folder is a nested workspace inside `{{ parent_name }}/`. Agents working in `{{ child_relative_dir }}/` use the parent workspace as the outer mission boundary and the local files as the inner operating contract.
 
@@ -46,7 +46,7 @@ Then read the local workspace:
 
 ## Precedence
 
-- Higher-precedence system, developer, user, repository, legal, security, and tool instructions govern before this local file contract. A normal task request may authorize current-turn work, but it does not silently amend durable parent or local mission, scope, non-goals, success criteria, or constraints.
+- Higher-precedence system, developer, user, repository, legal, security, venue, and tool instructions govern before this local file contract. A normal task request may authorize current-turn work, but it does not silently amend durable parent or local mission, scope, non-goals, success criteria, or constraints.
 - The parent `{{ parent_name }}/` agent files define the outer mission and constraints for this folder.
 - The local `{{ child_relative_dir }}/` agent files define how local work is organized and maintained inside that boundary.
 - When a local rule and a parent rule both apply, follow the parent rule for outer mission scope and the local rule for local structure and workflow.

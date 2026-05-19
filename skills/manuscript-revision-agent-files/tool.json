@@ -1,38 +1,29 @@
 {
   "name": "manuscript_revision_agent_files_init",
   "title": "Manuscript Revision Agent Files",
-  "description": "Scaffold manuscript-revision AGENT file templates into a target directory, with an optional REVISION_TASK.md sidecar for joint manuscript and response-letter drafting",
+  "description": "Invoke the manuscript-writing AGENT-file scaffold for a LaTeX IEEE paper workspace, install bounded revision-response extensions, and add REVISION_TASK.md for joint manuscript and response-letter drafting.",
   "inputSchema": {
     "type": "object",
     "properties": {
       "target_dir": {
         "type": "string",
         "minLength": 1,
-        "description": "Directory where the manuscript-revision agent files will be scaffolded"
+        "description": "Directory where the parent manuscript-writing agent files will be scaffolded before revision sidecar handling"
       },
       "mission": {
         "type": "string",
         "minLength": 1,
-        "description": "One- or two-sentence long-term manuscript-revision mission statement written into AGENT_GOAL.md. Required so the scaffolded contract is internally consistent on first read; must not include workflow preferences, current state, next steps, transient response-letter tasks, or transient objectives"
+        "description": "One- or two-sentence long-term manuscript-writing or revision mission statement passed through to manuscript-writing-agent-files and written into AGENT_GOAL.md. Required so the scaffolded contract is internally consistent on first read; must not include workflow preferences, current state, next steps, transient response-letter tasks, or transient objectives"
       },
       "objective": {
         "type": "string",
         "minLength": 1,
-        "description": "Concrete transient in-flight manuscript/revision objective written into AGENT_PROGRESS.md. Must not define permanent mission, manuscript scope, policy, or success criteria. If omitted, the scaffolded AGENT_PROGRESS.md omits the Current Objective section entirely"
-      },
-      "revision_mode": {
-        "type": "string",
-        "enum": [
-          "manuscript_only",
-          "manuscript_and_response_letter"
-        ],
-        "default": "manuscript_only",
-        "description": "Controls whether the scaffold includes only the four core AGENT files or also adds REVISION_TASK.md for joint manuscript and response-letter revision work"
+        "description": "Concrete transient in-flight manuscript-writing or revision objective written into AGENT_PROGRESS.md. Must not define permanent mission, manuscript scope, policy, or success criteria. If omitted, the scaffolded AGENT_PROGRESS.md omits the Current Objective section entirely"
       },
       "overwrite": {
         "type": "boolean",
         "default": false,
-        "description": "If true, existing scaffold files in target_dir are replaced; if false, only compatible existing files are recorded as skipped after boundary-contract inspection"
+        "description": "If true, existing parent scaffold files may be replaced by manuscript-writing-agent-files, and this skill refreshes only its own child-owned extension sections plus REVISION_TASK.md. If false, parent files are skipped only after manuscript-writing-agent-files compatibility checks, child extension patches are skipped only after compatibility checks, and REVISION_TASK.md is skipped only after sidecar compatibility inspection"
       }
     },
     "required": [
@@ -58,12 +49,20 @@
         "items": {
           "type": "string"
         }
+      },
+      "patches_applied": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Child-owned section patch names applied or verified, such as revision_sidecar_registration and revision_response_playbook. Section-only edits are not reported as files_created."
       }
     },
     "required": [
       "target_dir",
       "files_created",
-      "files_skipped"
+      "files_skipped",
+      "patches_applied"
     ],
     "additionalProperties": false
   }
