@@ -10,7 +10,7 @@ description: Curate an existing AGENT_GOAL.md from a research brief and optional
 - Use when a workspace already contains `AGENT_GOAL.md` and the user wants to refine, clarify, or save a research goal.
 - Use when the user has a research brief, chat history, or tentative wording that should be turned into an internally consistent goal file.
 - Do not use this skill to scaffold AGENT files. If `AGENT_GOAL.md` does not exist, route to the appropriate scaffolder: `agent-files` for generic workspaces or `manuscript-writing-agent-files` for LaTeX IEEE manuscript writing.
-- Do not use this skill to rewrite `AGENT.md`, `AGENT_HARNESS.md`, or `AGENT_PROGRESS.md`.
+- Do not use this skill to rewrite `AGENT.md`, `AGENT_HARNESS.md`, or `AGENT_PROGRESS.md`; its write surface is only `AGENT_GOAL.md`.
 
 ## Inputs
 

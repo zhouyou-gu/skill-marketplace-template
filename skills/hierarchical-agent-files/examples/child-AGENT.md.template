@@ -1,15 +1,16 @@
 # Agent Control
 
-**This file is the control contract for the workspace-local four-file agent system in `{{ parent_name }}/{{ child_relative_dir }}/`. It is the sole authority on local file roles, read order, precedence among these four local files, update routing, and boundary enforcement inside this nested workspace. It does not override the parent workspace, higher-precedence system, developer, user, repository, legal, security, venue, or tool instructions. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
+**This file is the agent-immutable control contract for the workspace-local four-file agent system in `{{ parent_name }}/{{ child_relative_dir }}/`. It is the local authority on local file roles, read order, precedence among these four local files, update routing, and boundary enforcement inside this nested workspace. It does not override the parent workspace, higher-precedence system, developer, user, repository, legal, security, venue, or tool instructions. After scaffold, the agent shall not modify, patch, append to, or rewrite this file unless the user explicitly and unambiguously requests a control-contract replacement, migration, or scaffold overwrite for this child workspace. Child skills, sidecars, routine task work, inferred preferences, and compatibility cleanup cannot amend it. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
 
 This folder is a nested workspace inside `{{ parent_name }}/`. Agents working in `{{ child_relative_dir }}/` use the parent workspace as the outer mission boundary and the local files as the inner operating contract.
 
 ## Functional Boundaries by File
 
-- `AGENT.md` holds only the local four-file control contract for `{{ child_relative_dir }}/`.
+- `AGENT.md` holds only the immutable local four-file control contract for `{{ child_relative_dir }}/`.
 - `AGENT_GOAL.md` holds the local mission and scope for `{{ child_relative_dir }}/`; it is agent-immutable absent explicit user instruction.
 - `AGENT_HARNESS.md` holds durable local workflow rules and structure guidance.
 - `AGENT_PROGRESS.md` holds the live state of this nested workspace.
+- `AGENT.md` is not an extension surface. Child skills, sidecars, and routine task work must not patch it; durable local behavior belongs in `AGENT_HARNESS.md`, and current local state belongs in `AGENT_PROGRESS.md`.
 
 Boundary test: if a local rule would still matter when no agent files existed, it is usually `AGENT_HARNESS.md` material rather than `AGENT.md` material.
 
@@ -20,6 +21,7 @@ Actual workspace state wins over stale local or parent progress notes. If a prog
 When handoff quality degrades or boundary drift is suspected, audit the parent and local files before continuing substantive work:
 
 - Local `AGENT.md` contains only nested four-file control-system rules, not task execution policy.
+- Local `AGENT.md` has not been modified, patched, or extended after scaffold except by explicit user-approved control-contract replacement, migration, or scaffold overwrite.
 - Local `AGENT_GOAL.md` contains only local mission, scope, non-goals, success criteria, and mission-level constraints within the parent boundary.
 - Local `AGENT_HARNESS.md` contains only durable local operating rules and preferences, not current state or mission amendments.
 - Local `AGENT_PROGRESS.md` contains only current nested workspace state, blockers, completed changes, and next resume point, not durable policy.
@@ -56,6 +58,8 @@ Then read the local workspace:
 - If a durable local rule appears only in local progress, move it to local harness and leave only the current-state residue in progress.
 
 ## Update Routing
+
+`AGENT.md` itself is not an update target. If the nested control contract appears outdated, incomplete, or incompatible with a requested workflow, stop and request explicit user direction for a control-contract replacement, migration, or scaffold overwrite rather than self-patching this file.
 
 - Update `{{ child_relative_dir }}/AGENT_PROGRESS.md` in the same turn whenever local workspace state changes.
 - Update `{{ child_relative_dir }}/AGENT_HARNESS.md` when a durable local rule becomes reusable beyond the current turn.

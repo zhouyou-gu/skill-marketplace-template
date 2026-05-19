@@ -1,7 +1,7 @@
 {
   "name": "agent_files_init",
   "title": "Agent File Scaffold",
-  "description": "Scaffold AGENT.md, AGENT_GOAL.md, AGENT_HARNESS.md, and AGENT_PROGRESS.md templates into a target directory under a strict four-file contract",
+  "description": "Scaffold AGENT.md, AGENT_GOAL.md, AGENT_HARNESS.md, and AGENT_PROGRESS.md templates into a target directory under a strict four-file contract with AGENT.md immutable after scaffold",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -23,7 +23,7 @@
       "overwrite": {
         "type": "boolean",
         "default": false,
-        "description": "If true, existing files in target_dir are replaced; if false, only compatible existing files are recorded as skipped after hardened boundary-contract inspection, including current precedence, boundary-audit, neutral-scaffold, and dispatcher semantics"
+        "description": "If true, existing files in target_dir are replaced as an explicit scaffold overwrite; if false, only compatible existing files are recorded as skipped after hardened boundary-contract inspection, including AGENT.md immutability, current precedence, boundary-audit, neutral-scaffold, and dispatcher semantics"
       }
     },
     "required": ["target_dir", "mission"],

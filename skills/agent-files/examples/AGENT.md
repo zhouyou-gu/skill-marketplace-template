@@ -1,25 +1,26 @@
 # Agent Control
 
-**This file is the control contract for the workspace-local four-file agent system. It is the sole authority on file roles, read order, precedence among these four files, update routing, and boundary enforcement. It does not override higher-precedence system, developer, user, repository, legal, security, venue, or tool instructions. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
+**This file is the agent-immutable control contract for the workspace-local four-file agent system. It is the local authority on file roles, read order, precedence among these four files, update routing, and boundary enforcement. It does not override higher-precedence system, developer, user, repository, legal, security, venue, or tool instructions. After scaffold, the agent shall not modify, patch, append to, or rewrite this file unless the user explicitly and unambiguously requests a control-contract replacement, migration, or scaffold overwrite. Child skills, sidecars, routine task work, inferred preferences, and compatibility cleanup cannot amend it. It shall not serve as a task log, store playbook material, record live progress, or restate the mission.**
 
 This workspace operates under a four-file control system. The files are non-overlapping, each holds exclusive jurisdiction over one function, and no file may encroach upon another's scope.
 
-- `AGENT.md` — the control file; sole authority on how this four-file control system operates.
+- `AGENT.md` — the immutable control file; local authority on how this four-file control system operates.
 - `AGENT_GOAL.md` — the long-term mission file; agent-immutable absent explicit user instruction.
 - `AGENT_HARNESS.md` — the reusable playbook; durable workflow and preference rules.
 - `AGENT_PROGRESS.md` — the live state file; factual record of current work.
 
 ## Agent-File Contract
 
-For the base contract, these files are intended to be sufficient for a later agent to recover how the workspace is governed, what the workspace is for, how to operate within it, and what is currently true. Child skills may register lower-precedence sidecars in this file; when present, those sidecars supplement the specific current-state facts assigned to them without changing the four core files' ownership boundaries. If the user instructs the agent to read the agent files, the agent shall read all four core files in the mandatory order below and treat them jointly as the workspace operating contract.
+For the base contract, these files are intended to be sufficient for a later agent to recover how the workspace is governed, what the workspace is for, how to operate within it, and what is currently true. Auxiliary sidecars are outside this immutable control contract: they may be consulted only when a higher-precedence instruction, the active skill workflow, or durable `AGENT_HARNESS.md` guidance calls for them, and they cannot change the mandatory core read order, core file roles, precedence, or update dispatcher by patching this file. If the user instructs the agent to read the agent files, the agent shall read all four core files in the mandatory order below and treat them jointly as the workspace operating contract.
 
 Design obligations:
 
-- A later agent shall be able to recover how to operate, what current-state records exist, and where any supplemental sidecar facts live by reading these core files and any sidecars registered in `AGENT.md`.
+- A later agent shall be able to recover the core operating contract by reading these four files in order. Supplemental sidecar facts, when used, remain lower-precedence auxiliary context discovered outside `AGENT.md`.
 - This contract governs only the local four-file system; it never overrides higher-precedence system, developer, user, repository, legal, security, venue, or tool instructions, nor the actual workspace state.
 - Durable reusable rules belong in `AGENT_HARNESS.md`.
 - Transient task state belongs in `AGENT_PROGRESS.md`.
 - The long-term mission belongs in `AGENT_GOAL.md` and may not be edited autonomously.
+- The control contract belongs in `AGENT.md` and may not be edited autonomously.
 - If information drifts into the wrong file, the agent shall restore the boundary rather than duplicate content across files.
 
 ## Functional Boundaries by File
@@ -30,6 +31,7 @@ Each file has exclusive jurisdiction over one class of information and is prohib
 
 - **Holds:** file roles, read order, precedence among the four agent files, update routing, boundary enforcement.
 - **Prohibited from:** serving as a task log; storing reusable playbook content; recording live progress; restating or modifying the mission; storing task-execution rules that would remain useful even without this four-file control system.
+- **Immutability:** the agent shall not modify this file autonomously. The agent may replace or migrate it only when the user explicitly and unambiguously instructs a control-contract replacement, migration, or scaffold overwrite. Child skills and sidecars shall not patch this file; if they need durable behavior, they must use bounded `AGENT_HARNESS.md` guidance. Sidecar files may hold only bounded lower-precedence auxiliary facts or assigned current-state slices without changing this control contract.
 
 ### `AGENT_GOAL.md` — Long-Term Mission
 
@@ -61,6 +63,7 @@ Boundary test: if a rule would still matter when no agent files existed, it is u
 When handoff quality degrades or boundary drift is suspected, audit the four files before continuing substantive work:
 
 - `AGENT.md` contains only four-file control-system rules, not task execution policy.
+- `AGENT.md` has not been modified, patched, or extended after scaffold except by explicit user-approved control-contract replacement, migration, or scaffold overwrite.
 - `AGENT_GOAL.md` contains only mission, scope, non-goals, success criteria, and mission-level constraints.
 - `AGENT_HARNESS.md` contains only durable operating rules and preferences, not current state or mission amendments.
 - `AGENT_PROGRESS.md` contains only current workspace state, blockers, completed changes, and next resume point, not durable policy.
@@ -96,6 +99,8 @@ While processing the workspace:
 ## Update Dispatcher
 
 `AGENT.md` is the local authority on whether the agent shall update `AGENT_HARNESS.md`, `AGENT_PROGRESS.md`, both, or neither. `AGENT_GOAL.md` lies outside the dispatcher's authority and is modified only upon explicit user instruction.
+
+`AGENT.md` itself is not a dispatcher target. If the control contract appears outdated, incomplete, or incompatible with a requested workflow, the agent shall stop and request explicit user direction for a control-contract replacement, migration, or scaffold overwrite rather than self-patching this file.
 
 ### Enforcement: updates are automatic and per-turn
 

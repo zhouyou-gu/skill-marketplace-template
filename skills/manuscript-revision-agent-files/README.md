@@ -1,13 +1,14 @@
 # Manuscript Revision Agent Files Skill
 
-Extend the standalone manuscript-writing scaffold with revision-response coordination by installing bounded child-owned patches and adding `REVISION_TASK.md` for joint manuscript and response-letter drafting.
+Extend the standalone manuscript-writing scaffold with revision-response coordination by installing a bounded child-owned harness patch and adding `REVISION_TASK.md` for joint manuscript and response-letter drafting.
 
 Use this skill when a LaTeX IEEE-style paper workspace already needs the manuscript-writing four-file contract plus revision-specific coordination. For ordinary drafting without response-letter coordination, use `manuscript-writing-agent-files`.
 
 ## Capabilities
 
 - Invoke `manuscript-writing-agent-files` to provision the four core AGENT files and preserve their mutually exclusive jurisdictions
-- Install bounded child-owned extensions into generated `AGENT.md` and `AGENT_HARNESS.md` so later agents discover the revision sidecar and reusable revision-response rules from the workspace files themselves
+- Keep generated `AGENT.md` immutable after scaffold; this skill does not patch it for sidecar registration
+- Install a bounded child-owned extension into generated `AGENT_HARNESS.md` so later agents discover the revision sidecar workflow and reusable revision-response rules from the harness
 - Add or verify `REVISION_TASK.md` when the workspace needs a task-specific brief for joint manuscript and response-letter drafting
 - Skip or overwrite existing files under caller control, with parent compatibility checks for core files, child-extension compatibility checks, and sidecar compatibility checks for `REVISION_TASK.md`
 
@@ -17,17 +18,16 @@ A later agent must read the four core AGENT files in order: `AGENT.md` -> `AGENT
 
 - `AGENT.md`, `AGENT_GOAL.md`, `AGENT_HARNESS.md`, and `AGENT_PROGRESS.md` templates are owned by `agent-files`. This skill reaches them by invoking `manuscript-writing-agent-files`, which composes `agent-files`.
 - `AGENT_HARNESS.md` already contains the manuscript-writing harness extension from `manuscript-writing-agent-files` before this skill adds revision-response rules.
-- `AGENT.md` receives a child-owned revision sidecar registration patch. The patch only adds lower-precedence `REVISION_TASK.md` discovery and update routing.
 - `AGENT_HARNESS.md` receives a child-owned revision-response playbook patch. The patch only adds durable reusable rules for coordinated manuscript and response-letter revision.
 - [`REVISION_TASK.md`](examples/REVISION_TASK.md) - an auxiliary sidecar brief for joint manuscript and response-letter drafting. **Not part of the core four-file control contract.** Read after `AGENT_PROGRESS.md` when present and relevant.
 
 ## Scaffolded Layout
 
-After a successful call, `target_dir` contains the four parent-owned AGENT files plus child-owned extensions inside `AGENT.md` and `AGENT_HARNESS.md`, and `REVISION_TASK.md`:
+After a successful call, `target_dir` contains the four parent-owned AGENT files, a child-owned extension inside `AGENT_HARNESS.md`, and `REVISION_TASK.md`:
 
 ```text
 target_dir/
-├─ AGENT.md                 # base from agent-files + revision sidecar registration
+├─ AGENT.md                 # immutable base from agent-files
 ├─ AGENT_GOAL.md            # base from agent-files
 ├─ AGENT_HARNESS.md         # base from agent-files + manuscript and revision extensions
 ├─ AGENT_PROGRESS.md        # base from agent-files
@@ -61,13 +61,12 @@ Only revision child templates live in [`examples/`](examples/). The core AGENT t
 - `manuscript-writing-agent-files` invokes `agent-files` to create or verify the four core AGENT files subject to the skip-or-overwrite rule, then adds its manuscript-writing harness extension.
 - The required `mission` input is passed through to the parent writing scaffold and replaces the `{{ mission }}` placeholder in the parent `AGENT_GOAL.md`.
 - The optional `objective` input is passed through to the parent writing scaffold and replaces the `{{ objective }}` placeholder in the parent `AGENT_PROGRESS.md`; if omitted, the parent omits the `Current Objective` section.
-- [`AGENT_REVISION_EXTENSION.md`](examples/AGENT_REVISION_EXTENSION.md) is patched into generated `AGENT.md` so the sidecar is discoverable from the workspace control contract.
 - [`AGENT_HARNESS_REVISION_EXTENSION.md`](examples/AGENT_HARNESS_REVISION_EXTENSION.md) is patched into generated `AGENT_HARNESS.md` so reusable revision-response rules live in the harness instead of the sidecar.
-- Child extensions are identified by the exact section headings `## Revision Sidecar Registration` and `## Revision-Response Playbook`; after the parent handles any `overwrite=true` replacement of its own files, this child refreshes only those child-owned sections inside the core files.
-- The two child extensions are applied or verified independently. Section-only edits are reported in `patches_applied`, not as created files.
+- The child extension is identified by the exact section heading `## Revision-Response Playbook`; after the parent handles any `overwrite=true` replacement of its own files, this child refreshes only that child-owned section inside `AGENT_HARNESS.md`.
+- Section-only edits are reported in `patches_applied`, not as created files.
 - `REVISION_TASK.md` is always copied or verified by this child skill and remains current-state only.
 
-The sidecar carries its own boundary clause so it remains lower-precedence than the core four-file control contract and cannot become a second mission, harness, or progress ledger. Durable reviewer-item routing, manuscript-response synchronization, highlighting policy, and response-letter drafting rules belong in the `AGENT_HARNESS.md` extension, not in `REVISION_TASK.md`. Existing sidecar text is never promoted into the harness automatically.
+The sidecar carries its own boundary clause so it remains lower-precedence than the core four-file control contract and cannot become a second mission, harness, progress ledger, or control file. Durable rules for when to consult the sidecar, which revision facts it owns, manuscript-response synchronization, highlighting policy, and response-letter drafting belong in the `AGENT_HARNESS.md` extension, not in `AGENT.md` or `REVISION_TASK.md`. That harness guidance must not alter core read order, precedence, core file roles, or update-dispatcher authority. Existing sidecar text is never promoted into the harness automatically.
 
 ## Parents
 

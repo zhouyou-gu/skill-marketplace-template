@@ -1,6 +1,6 @@
 id: manuscript-writing-agent-files
 name: Manuscript Writing Agent Files
-description: Extend agent-files for standalone LaTeX IEEE-style paper drafting with a bounded manuscript-writing harness extension
+description: Extend agent-files for standalone LaTeX IEEE-style paper drafting with immutable AGENT.md and a bounded manuscript-writing harness extension
 category: devtools
 tags:
   - agents

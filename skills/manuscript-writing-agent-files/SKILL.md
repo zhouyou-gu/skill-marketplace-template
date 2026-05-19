@@ -1,6 +1,6 @@
 ---
 name: manuscript-writing-agent-files
-description: Extend agent-files for standalone LaTeX IEEE-style manuscript writing by invoking the base four-file scaffold and installing a bounded manuscript-writing harness patch. Use when a paper workspace needs a disciplined, recoverable manuscript-writing agent-file contract.
+description: Extend agent-files for standalone LaTeX IEEE-style manuscript writing by invoking the base four-file scaffold with immutable AGENT.md and installing a bounded manuscript-writing harness patch. Use when a paper workspace needs a disciplined, recoverable manuscript-writing agent-file contract.
 ---
 
 # Manuscript Writing Agent Files Scaffold
@@ -22,7 +22,7 @@ description: Extend agent-files for standalone LaTeX IEEE-style manuscript writi
 
 ## Workflow
 
-1. Receive `target_dir` and `mission`. Confirm the directory exists or create it. `mission` is required so the scaffolded parent contract is internally consistent the moment a later agent reads it; `AGENT_GOAL.md` is agent-immutable after scaffold and cannot be filled in autonomously later.
+1. Receive `target_dir` and `mission`. Confirm the directory exists or create it. `mission` is required so the scaffolded parent contract is internally consistent the moment a later agent reads it; `AGENT.md` and `AGENT_GOAL.md` are agent-immutable after scaffold and cannot be filled in autonomously later.
 2. Classify the supplied `mission` and optional `objective` before writing:
    - durable manuscript-writing purpose belongs in `mission`
    - transient current drafting or writing work belongs in `objective`
@@ -63,4 +63,5 @@ description: Extend agent-files for standalone LaTeX IEEE-style manuscript writi
 - The four AGENT file templates are owned by `agent-files`; this child skill invokes that parent rather than duplicating its templates.
 - This child skill owns a bounded extension snippet for generated `AGENT_HARNESS.md`. That snippet adds the durable manuscript-writing playbook without changing the parent four-file contract.
 - No auxiliary sidecar file is created here.
+- `AGENT.md` remains agent-immutable after the parent scaffold. This skill must not patch it.
 - `AGENT_GOAL.md` remains agent-immutable after the parent scaffold. Subsequent modifications require explicit user instruction.

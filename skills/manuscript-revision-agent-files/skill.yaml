@@ -1,6 +1,6 @@
 id: manuscript-revision-agent-files
 name: Manuscript Revision Agent Files
-description: Extend manuscript-writing AGENT files for LaTeX IEEE-style revision with bounded revision-response patches and a REVISION_TASK.md sidecar
+description: Extend manuscript-writing AGENT files for LaTeX IEEE-style revision with an immutable AGENT.md, a bounded revision-response harness patch, and a REVISION_TASK.md sidecar
 category: devtools
 tags:
   - agents

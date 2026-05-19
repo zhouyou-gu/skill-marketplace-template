@@ -34,7 +34,7 @@
       "overwrite": {
         "type": "boolean",
         "default": false,
-        "description": "If true, replace existing scaffold files in the target review workspace; if false, rely on agent-files compatibility checks for AGENT files and skip review-doc collisions"
+        "description": "If true, replace existing scaffold files in the target review workspace; if false, rely on agent-files compatibility checks for AGENT files, including immutable AGENT.md, and skip review-doc collisions"
       },
       "dry_run": {
         "type": "boolean",

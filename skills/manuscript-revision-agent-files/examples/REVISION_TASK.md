@@ -1,6 +1,6 @@
 # Revision Task Brief
 
-**This file is an auxiliary current-state brief for the active joint manuscript and response-letter revision effort. It organizes the current revision package, artifact mapping, active review item, evidence state, and next coordination step. It does not replace `AGENT_GOAL.md` as mission authority, `AGENT_HARNESS.md` as the reusable playbook, or `AGENT_PROGRESS.md` as the canonical live-state ledger for execution blockers and resume state. If it conflicts with any core control file, the core file wins.**
+**This file is an auxiliary current-state brief for the active joint manuscript and response-letter revision effort. It organizes the current revision package, artifact mapping, active review item, evidence state, and review-item-local coordination step. It does not replace `AGENT_GOAL.md` as mission authority, `AGENT_HARNESS.md` as the reusable playbook, or `AGENT_PROGRESS.md` as the canonical live-state ledger for execution blockers, cross-item resume needs, and the resume point. If it conflicts with any core control file, the core file wins.**
 
 ## Current Revision Package
 
@@ -30,6 +30,6 @@
 
 - Not yet recorded.
 
-## Next Joint Drafting Step
+## Next Review-Item Coordination Step
 
 - Not yet recorded.

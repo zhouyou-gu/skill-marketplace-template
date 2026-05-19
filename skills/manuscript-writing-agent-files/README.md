@@ -7,6 +7,7 @@ Use this skill when a LaTeX IEEE-style paper workspace needs the recoverable fou
 ## Capabilities
 
 - Invoke `agent-files` to provision the four core AGENT files and preserve their mutually exclusive jurisdictions
+- Preserve `AGENT.md` as immutable control infrastructure after the parent scaffold; this skill only patches `AGENT_HARNESS.md`
 - Pass the required long-term manuscript-writing mission statement through to the parent `AGENT_GOAL.md`
 - Optionally pass a transient current objective through to the parent `AGENT_PROGRESS.md`; if omitted, the parent omits the `Current Objective` section
 - Install a bounded child-owned `AGENT_HARNESS.md` extension with durable manuscript-writing operating rules
@@ -16,7 +17,7 @@ Use this skill when a LaTeX IEEE-style paper workspace needs the recoverable fou
 
 A later agent must read the four core AGENT files in order: `AGENT.md` -> `AGENT_GOAL.md` -> `AGENT_HARNESS.md` -> `AGENT_PROGRESS.md`.
 
-- `AGENT.md`, `AGENT_GOAL.md`, `AGENT_HARNESS.md`, and `AGENT_PROGRESS.md` templates are owned by `agent-files`. This skill does not duplicate those templates.
+- `AGENT.md`, `AGENT_GOAL.md`, `AGENT_HARNESS.md`, and `AGENT_PROGRESS.md` templates are owned by `agent-files`. This skill does not duplicate those templates, and it does not patch immutable `AGENT.md`.
 - `AGENT_HARNESS.md` receives a child-owned manuscript-writing playbook patch. The patch only adds durable reusable rules for standalone LaTeX IEEE manuscript writing.
 
 ## Scaffolded Layout
@@ -25,7 +26,7 @@ After a successful call, `target_dir` contains the four parent-owned AGENT files
 
 ```text
 target_dir/
-├─ AGENT.md                 # from agent-files
+├─ AGENT.md                 # immutable from agent-files
 ├─ AGENT_GOAL.md            # from agent-files
 ├─ AGENT_HARNESS.md         # from agent-files + Manuscript-Writing Playbook
 └─ AGENT_PROGRESS.md        # from agent-files
@@ -55,7 +56,7 @@ The `mission` and `objective` strings below are illustrative. Keep `mission` dur
 
 Only the manuscript-writing child extension lives in [`examples/`](examples/). The core AGENT templates live in the parent `agent-files` skill.
 
-- `agent-files` creates or verifies the four core AGENT files subject to the skip-or-overwrite rule.
+- `agent-files` creates or verifies the four core AGENT files subject to the skip-or-overwrite rule; `AGENT.md` remains immutable after scaffold.
 - The required `mission` input is passed through to the parent scaffold and replaces the `{{ mission }}` placeholder in the parent `AGENT_GOAL.md`.
 - The optional `objective` input is passed through to the parent scaffold and replaces the `{{ objective }}` placeholder in the parent `AGENT_PROGRESS.md`; if omitted, the parent omits the `Current Objective` section.
 - [`AGENT_HARNESS_MANUSCRIPT_EXTENSION.md`](examples/AGENT_HARNESS_MANUSCRIPT_EXTENSION.md) is patched into generated `AGENT_HARNESS.md` so reusable manuscript-writing rules live in the harness.

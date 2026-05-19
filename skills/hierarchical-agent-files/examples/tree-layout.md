@@ -19,7 +19,7 @@ Result of running the skill with the inputs in `request.json`.
 │                                 #   - [Scaffold] Created `module-b/` as a nested workspace with its
 │                                 #     own four-file agent contract.
 ├─ module-a/
-│  ├─ AGENT.md                    # slim nesting-aware template (parent-first read order,
+│  ├─ AGENT.md                    # immutable nesting-aware template (parent-first read order,
 │  │                              # Precedence binding to `my-project/`, Update Routing back
 │  │                              # to ../AGENT_PROGRESS.md, Boundary)
 │  ├─ AGENT_GOAL.md               # mission: "Own the first area of work..."
@@ -30,7 +30,7 @@ Result of running the skill with the inputs in `request.json`.
 │  ├─ AGENT_HARNESS.md            # base agent-files template, unchanged
 │  └─ AGENT_PROGRESS.md           # base agent-files template, unchanged
 └─ module-b/
-   ├─ AGENT.md                    # same slim nesting-aware template, {{ child_relative_dir }} = module-b
+   ├─ AGENT.md                    # same immutable nesting-aware template, {{ child_relative_dir }} = module-b
    ├─ AGENT_GOAL.md               # mission + outer-boundary constraint
    ├─ AGENT_HARNESS.md            # base
    └─ AGENT_PROGRESS.md           # base
@@ -42,7 +42,7 @@ Result of running the skill with the inputs in `request.json`.
 - `{{ child_relative_dir }}` → `module-a` for the first child, `module-b` for the second
 - `{{ child_progress_paths_csv }}` → `` `module-a/AGENT_PROGRESS.md`, `module-b/AGENT_PROGRESS.md` ``
 
-## Patches applied map
+## Applied-or-verified changes map
 
 ```json
 {

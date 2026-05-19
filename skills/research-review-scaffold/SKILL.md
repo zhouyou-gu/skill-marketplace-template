@@ -29,7 +29,7 @@ description: Create a low-entropy `review/` workspace from a user's research int
 2. Derive a low-entropy starting theme map from the user's intention. Default to about 3 themes when no `theme_count_hint` is provided, but do not hard-code a maximum.
 3. Resolve the target review folder as `project_dir/<review_dir>`.
 4. Create a self-contained review workspace even when no parent agent workspace exists.
-5. Scaffold the four base agent files by invoking the `agent-files` skill (tool `agent_files_init`) with `target_dir = project_dir/<review_dir>`, a purpose-only `mission` derived from the stabilized `research_intention`, and the same `overwrite` flag. The derived mission must not include reusable workflow rules, current repository state, source-collection next steps, or transient objectives. This is the mechanism by which the parent relationship to `agent-files` is realized — do not re-implement the four base templates locally. On completion the target folder holds:
+5. Scaffold the four base agent files by invoking the `agent-files` skill (tool `agent_files_init`) with `target_dir = project_dir/<review_dir>`, a purpose-only `mission` derived from the stabilized `research_intention`, and the same `overwrite` flag. The derived mission must not include reusable workflow rules, current repository state, source-collection next steps, or transient objectives. This is the mechanism by which the parent relationship to `agent-files` is realized — do not re-implement the four base templates locally or patch immutable `AGENT.md`. On completion the target folder holds:
    - `AGENT.md`
    - `AGENT_GOAL.md`
    - `AGENT_HARNESS.md`
@@ -49,7 +49,7 @@ description: Create a low-entropy `review/` workspace from a user's research int
    - `references.bib` is empty or stubbed
    - no literature notes, source rows, or bibliography entries are created in v1
 9. If the topic crosses domains, mark transfer into the target domain as inference in the scaffold text unless the user clearly scopes the review as cross-domain by design.
-10. If `overwrite` is false, rely on the upstream `agent-files` compatibility checks for the four AGENT files. For review-specific root docs, skip existing files cleanly and return them in `files_skipped`.
+10. If `overwrite` is false, rely on the upstream `agent-files` compatibility checks for the four AGENT files, including immutable `AGENT.md`. For review-specific root docs, skip existing files cleanly and return them in `files_skipped`.
 11. If `dry_run` is true, perform steps 1–3 and 7 (derive the theme map) without writing. Return `written=false`, the planned `review_path`, the planned `theme_folders`, and the list of files that would be created in `files_created` as intent only; leave `files_skipped` empty; do not invoke `agent_files_init`.
 
 ## Outputs

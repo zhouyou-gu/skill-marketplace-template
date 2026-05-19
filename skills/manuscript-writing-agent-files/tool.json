@@ -1,7 +1,7 @@
 {
   "name": "manuscript_writing_agent_files_init",
   "title": "Manuscript Writing Agent Files",
-  "description": "Invoke the base agent-files scaffold for a LaTeX IEEE paper workspace and install a bounded manuscript-writing harness extension.",
+  "description": "Invoke the base agent-files scaffold for a LaTeX IEEE paper workspace, keep AGENT.md immutable, and install a bounded manuscript-writing harness extension.",
   "inputSchema": {
     "type": "object",
     "properties": {

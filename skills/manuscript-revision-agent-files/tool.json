@@ -1,7 +1,7 @@
 {
   "name": "manuscript_revision_agent_files_init",
   "title": "Manuscript Revision Agent Files",
-  "description": "Invoke the manuscript-writing AGENT-file scaffold for a LaTeX IEEE paper workspace, install bounded revision-response extensions, and add REVISION_TASK.md for joint manuscript and response-letter drafting.",
+  "description": "Invoke the manuscript-writing AGENT-file scaffold for a LaTeX IEEE paper workspace, keep AGENT.md immutable, install a bounded revision-response harness extension, and add REVISION_TASK.md for joint manuscript and response-letter drafting.",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -23,7 +23,7 @@
       "overwrite": {
         "type": "boolean",
         "default": false,
-        "description": "If true, existing parent scaffold files may be replaced by manuscript-writing-agent-files, and this skill refreshes only its own child-owned extension sections plus REVISION_TASK.md. If false, parent files are skipped only after manuscript-writing-agent-files compatibility checks, child extension patches are skipped only after compatibility checks, and REVISION_TASK.md is skipped only after sidecar compatibility inspection"
+        "description": "If true, existing parent scaffold files may be replaced by manuscript-writing-agent-files, and this skill refreshes only its own child-owned AGENT_HARNESS.md extension plus REVISION_TASK.md. If false, parent files are skipped only after manuscript-writing-agent-files compatibility checks, AGENT.md must remain immutable, the child harness patch is skipped only after compatibility checks, and REVISION_TASK.md is skipped only after sidecar compatibility inspection"
       }
     },
     "required": [
@@ -55,7 +55,7 @@
         "items": {
           "type": "string"
         },
-        "description": "Child-owned section patch names applied or verified, such as revision_sidecar_registration and revision_response_playbook. Section-only edits are not reported as files_created."
+        "description": "Child-owned section patch names applied or verified, such as revision_response_playbook. Section-only edits are not reported as files_created."
       }
     },
     "required": [
