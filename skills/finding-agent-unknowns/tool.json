@@ -1,0 +1,116 @@
+{
+  "name": "discover_agent_unknowns",
+  "title": "Discover Agent Unknowns",
+  "description": "Identify hidden assumptions and choose the next lightweight discovery artifact for an agent-assisted task",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "task_brief": {
+        "type": "string",
+        "minLength": 1,
+        "description": "User request or task summary to analyze for hidden assumptions and unknowns"
+      },
+      "phase": {
+        "type": "string",
+        "enum": [
+          "before",
+          "during",
+          "after",
+          "review"
+        ],
+        "default": "before",
+        "description": "Current task phase. Defaults to before when omitted"
+      },
+      "context": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Relevant repo, product, design, domain, or conversation context already available"
+      },
+      "user_expertise": {
+        "type": "string",
+        "minLength": 1,
+        "description": "What the user likely knows or does not know about the task area"
+      },
+      "constraints": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Known time, scope, technical, policy, safety, compatibility, or acceptance constraints"
+      }
+    },
+    "required": [
+      "task_brief"
+    ],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "discovered_facts": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Sourced facts already verified from files, commands, docs, observed behavior, or user-provided context"
+      },
+      "unknowns_summary": {
+        "type": "string",
+        "description": "Concise summary grouping known knowns, known unknowns, unknown knowns, and likely unknown unknowns"
+      },
+      "recommended_next_artifact": {
+        "type": "string",
+        "enum": [
+          "none",
+          "blindspot_pass",
+          "interview",
+          "prototype",
+          "implementation_notes",
+          "post_work_explainer"
+        ],
+        "description": "The next lowest-cost artifact that will reduce rework risk"
+      },
+      "questions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Only high-impact questions whose answers could change architecture, scope, acceptance, or review outcome"
+      },
+      "assumptions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Assumptions safe to proceed with unless contradicted later"
+      },
+      "blocked_by": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Unknowns that currently prevent safe progress"
+      },
+      "stop_conditions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Future discoveries or threshold conditions that require pausing for user input"
+      },
+      "next_prompt": {
+        "type": "string",
+        "description": "Ready-to-use instruction for the next agent step"
+      }
+    },
+    "required": [
+      "discovered_facts",
+      "unknowns_summary",
+      "recommended_next_artifact",
+      "questions",
+      "assumptions",
+      "blocked_by",
+      "stop_conditions",
+      "next_prompt"
+    ],
+    "additionalProperties": false
+  }
+}

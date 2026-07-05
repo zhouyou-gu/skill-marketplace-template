@@ -200,7 +200,7 @@ On `pull_request` and `push` to `main`:
 
 1. Install Python dependencies (`pyyaml`, `jsonschema`)
 2. Run validation script
-3. Verify `install.pip` and `install.npm` targets resolve in real registries
+3. Verify declared `install.pip` and `install.npm` targets resolve in real registries
 4. Build `registry/index.json`
 5. Build `registry/search.json`
 6. Fail if validation or generation fails
@@ -248,7 +248,7 @@ If something looks wrong in UI, first check skill metadata and regenerate regist
 1. Keep PRs small and focused (prefer one skill per PR).
 2. Include `SKILL.md` for each skill; add `README.md` as recommended human-facing docs.
 3. Run validation/build scripts locally before pushing.
-4. Do not add arbitrary install command fields; use `pip` and/or `npm` only.
+4. Do not add arbitrary install command fields; use `pip` and/or `npm` only for real runtime dependencies. Documentation-only skills should use an empty `install` object.
 
 ## CLI Compatibility (Planned)
 

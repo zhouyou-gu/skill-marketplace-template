@@ -1,0 +1,16 @@
+id: finding-agent-unknowns
+name: Finding Agent Unknowns
+description: Unknowns-first operating protocol for agent-assisted work that reduces hidden assumptions before, during, and after substantial tasks
+category: devtools
+tags:
+  - agents
+  - planning
+  - prompting
+  - review
+  - unknowns
+difficulty: intermediate
+repo: https://github.com/zhouyou-gu/skill-marketplace-template
+install: {}
+agent:
+  protocol: mcp
+  tool_schema: tool.json

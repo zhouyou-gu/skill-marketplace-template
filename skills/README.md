@@ -92,7 +92,7 @@ Rules:
 2. `category` must exist in `config/marketplace.json.categories`.
 3. `tags` must be unique, lowercase, and non-empty.
 4. `difficulty` must be `beginner|intermediate|advanced`.
-5. `install` must include at least one of `pip` or `npm`.
+5. `install` must be an object. Documentation-only skills may use `{}`; skills with runtime dependencies should include only real `pip` or `npm` package targets.
 6. `agent.protocol` must be `mcp`.
 7. `agent.tool_schema` usually points to `tool.json`.
 8. Every entry in `parents` must be the `id` of another skill in `skills/`; a skill must not list itself.
@@ -243,6 +243,9 @@ Example:
 5. **Validation/build script failure**
    - Error: scripts fail due to invalid metadata, schema, or install target.
    - Fix: run validation/build commands locally and fix reported errors before pushing.
-6. **Invalid parent reference**
+6. **Fake install dependency**
+   - Error: a documentation-only skill declares `pyyaml`, `jinja2`, or another package it never uses.
+   - Fix: use `install: {}` for documentation-only skills; declare `pip` or `npm` only when the skill runtime actually needs that package.
+7. **Invalid parent reference**
    - Error: `parents[i]: parent skill 'X' does not exist`, or `parents[i]: skill cannot list itself as a parent`.
    - Fix: ensure every `parents` entry matches an existing `skills/<id>/` folder and remove any self-reference.
