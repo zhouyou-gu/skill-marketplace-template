@@ -13,7 +13,7 @@ Reusable preferences:
 
 - Preserve existing wording when it already works; prefer the smallest edit that fixes the prose, logic, notation, or evidence problem.
 - Read the relevant manuscript, bibliography, figure, table, appendix, or derived-artifact context directly before editing it.
-- Scope edits to the artifact explicitly requested; do not silently bundle unrelated manuscript changes.
+- Scope edits to the artifact and locations explicitly requested; do not silently adjust abstract, conclusion, adjacent sections, or summary-level wording for consistency unless the user asks.
 - When the user makes manual manuscript edits, inspect the current diff before continuing, treat the edits as intentional unless the surrounding text contradicts them, and propagate only the remaining consistency updates needed.
 - During user-guided paragraph-by-paragraph revision, apply each proposed rewrite only after explicit sign-off and do not auto-advance to the next paragraph without user direction.
 - Do not commit or push unless the user explicitly instructs it.
@@ -21,6 +21,8 @@ Reusable preferences:
 - Keep claims evidence-backed and bounded to what has been checked; distinguish established facts, design choices, inference, and open questions.
 - Use sources as evidence and explain why the evidence matters; separate what a cited source directly shows from the broader interpretation drawn from it.
 - Add supporting citations inline where non-trivial claims are made, and prefer primary sources when they are available.
+- Expand abbreviations at first use in manuscript and response-letter prose, and avoid chained abbreviations when the expanded technical terms are clearer.
+- Maintain a canonical terminology set in manuscript writing. When a term is revised, update nearby prose, captions, tables, notation descriptions, and summary-level statements that describe the same concept. Avoid near-synonyms for the same concept unless the local text explicitly defines a distinction.
 - State whether gap, novelty, and comparison claims are field-wide or bounded to the reviewed sources.
 - When a manuscript claim depends on implementation or experimental behavior, support it with source-file, version, date, or runtime evidence instead of tool availability or parser acceptance alone.
 - When presenting formal definitions, objectives, proofs, or evaluation criteria, make the statement precise and self-contained enough to read in isolation.
@@ -28,16 +30,22 @@ Reusable preferences:
 - Keep manuscript writing consistent, concise, coherent, formal, and natural in technical English.
 - Write for informed technical readers who may be new to the specific subfield; define important terms and abstractions before relying on them heavily.
 - Build technical narrative in a clear progression from problem context to limitation, method rationale, contribution, and evidence.
+- Before inserting manuscript text, inspect what the reader has already been introduced to at that exact location. Do not use symbols, mechanisms, conclusions, or future-work concepts that appear only later unless the edit also introduces them locally.
+- When revising a contribution list for concision, preserve the original contribution identities, order, and evidentiary roles unless the user explicitly asks for reframing.
+- When revising abstract, contribution, or summary-level numerical claims, cross-check detailed result sections and state the scoped setting for each number.
 - When an argument feels weak, refine the reasoning before polishing sentence-level wording.
 - When introducing a method, motivate the design choices before naming implementation details.
 - Explain why domain-specific assumptions, operating conditions, or system settings matter instead of naming them without context.
 - Use terminology that matches the method's actual granularity; avoid labels that imply more precision, generality, or capability than the method provides.
 - Use venue- and community-standard vocabulary when naming methods, assumptions, controls, metrics, and artifacts.
+- When using umbrella terms from standards, systems, or application domains, distinguish broad motivation from the modeled subsystem and evaluated evidence.
 - Keep manuscript body text concise; shorten the body first, and move extension material elsewhere only when it is still needed.
-- Keep section and subsection titles short, structurally parallel with peer titles, and tied to the section's organizing phrase when one exists.
+- Keep section and subsection titles short, structurally parallel with peer titles, and tied to the section's organizing phrase when one exists. Use plain LaTeX heading commands without decorative wrappers or color commands unless the user explicitly asks for heading highlighting.
 - Use title case for formal problem or method names only when they function as headings, definition labels, or exact name introductions; prefer lowercase phrasing in ordinary prose.
 - Keep one spelling convention across the manuscript and synchronized supporting artifacts; align derived artifacts to the manuscript rather than letting wording diverge.
 - Avoid conversational or self-defensive framing in manuscript prose; state scope limits as formal paper claims.
+- When a clarification should not sound forward-looking, avoid modal extension wording such as "can be" and state the current formulation or evaluated setup in present tense.
+- For local manuscript clarifications, avoid references to later equations, constraints, or sections when the user asks to stay within the current context.
 - Avoid awkward literal phrasing and colon-heavy prose. When leading into a displayed equation definition, prefer connective phrasing such as "as" or "given by" over a colon.
 - Avoid dash-heavy manuscript prose; do not use en dashes or em dashes, including LaTeX `--` or `---`, unless the user explicitly asks for a venue style that requires them.
 - Introduce notation only when it is reused and improves clarity; avoid undefined symbols, symbol-role collisions, and symbols referenced before definition.
@@ -59,4 +67,5 @@ Reusable preferences:
 - Do not use standalone supporting-reference blocks in manuscript prose; cite sources inline where the claim is made.
 - Run whitespace or diff checks on touched source files when available.
 - When manuscript changes affect LaTeX structure, citations, figures, equations, tables, or other build-sensitive content, compile or render when the toolchain is available.
+- When validating multiple LaTeX artifacts with dependency or shared-output relationships, build them sequentially rather than in parallel.
 - When diagnosing layout issues, render the PDF and inspect the build log for Overfull `\hbox` warnings, including displayed-equation overflow, table overflow, and awkward appendix or paragraph endings.
