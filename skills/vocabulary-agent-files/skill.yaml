@@ -1,0 +1,17 @@
+id: vocabulary-agent-files
+name: Vocabulary Agent Files
+description: Scaffold AGENT_VOCABULARY.md next to an agent-files contract as the single wording authority for a workspace, with plain self-contained word lists, a synonym merge rule, a recursive word check, and a temporary-memory section for unmerged words
+category: devtools
+tags:
+  - agents
+  - vocabulary
+  - terminology
+  - documentation
+difficulty: intermediate
+repo: https://github.com/example/skill-marketplace-template
+install: {}
+agent:
+  protocol: mcp
+  tool_schema: tool.json
+parents:
+  - agent-files

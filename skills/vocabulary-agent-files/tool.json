@@ -1,0 +1,63 @@
+{
+  "name": "vocabulary_agent_files_init",
+  "title": "Vocabulary Agent Files",
+  "description": "Scaffold AGENT_VOCABULARY.md into a directory governed by the agent-files contract, load established words from the workspace's documents and code, merge synonyms onto the most proper words, and append one bounded wording-authority preference to AGENT_HARNESS.md",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "target_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Directory holding the agent-files contract where AGENT_VOCABULARY.md will be created"
+      },
+      "sources": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": "Files or directories (documents, code) to scan for the workspace's established words; omit to scaffold the empty template only"
+      },
+      "overwrite": {
+        "type": "boolean",
+        "default": false,
+        "description": "If true, an existing AGENT_VOCABULARY.md is replaced; if false, it is kept, recorded as skipped, and the load-and-merge steps run against the existing file"
+      }
+    },
+    "required": ["target_dir"],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "target_dir": {
+        "type": "string"
+      },
+      "files_created": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "files_skipped": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "unmerged_count": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "Number of lines remaining in the Unmerged Words section after the run"
+      },
+      "warnings": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": ["target_dir", "files_created", "files_skipped", "unmerged_count", "warnings"],
+    "additionalProperties": false
+  }
+}
