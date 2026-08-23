@@ -1,0 +1,16 @@
+id: ieee-comsoc-related-work
+name: IEEE ComSoc Related Work
+description: Write and audit mechanism-focused IEEE ComSoc Related Work sections that connect primary literature to contribution-specific communications gaps
+category: devtools
+tags:
+  - manuscript
+  - related-work
+  - ieee
+  - communications
+  - literature-review
+difficulty: advanced
+repo: https://github.com/example/skill-marketplace-template
+install: {}
+agent:
+  protocol: mcp
+  tool_schema: tool.json

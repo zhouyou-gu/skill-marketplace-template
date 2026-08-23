@@ -1,0 +1,130 @@
+{
+  "name": "write_ieee_comsoc_related_work",
+  "title": "IEEE ComSoc Related Work Writer",
+  "description": "Plan, audit, or revise an IEEE ComSoc Related Work section around primary-source mechanisms and contribution-specific communications gaps",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "project_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Project root containing the manuscript and any local literature notes"
+      },
+      "manuscript_path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Path to the manuscript source containing the Introduction and Related Work section"
+      },
+      "mode": {
+        "type": "string",
+        "enum": [
+          "plan",
+          "review",
+          "rewrite"
+        ],
+        "default": "rewrite",
+        "description": "Whether to propose a structure, audit existing prose, or revise the manuscript"
+      },
+      "request": {
+        "type": "string",
+        "minLength": 1,
+        "description": "User instructions, scope boundaries, and venue-specific constraints"
+      },
+      "source_note_paths": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueItems": true,
+        "description": "Optional literature indexes or notes that lead to primary sources"
+      },
+      "subsection_titles": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true,
+        "description": "Optional fixed subsection titles that must be preserved"
+      },
+      "word_budget_per_subsection": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Optional exact text-word limit for each subsection"
+      },
+      "preserve_citation_set": {
+        "type": "boolean",
+        "default": true,
+        "description": "Whether the rewrite must retain the existing citation keys"
+      },
+      "build_command": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Optional repository-approved manuscript build command"
+      }
+    },
+    "required": [
+      "project_dir",
+      "manuscript_path",
+      "request"
+    ],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "section_path": {
+        "type": "string"
+      },
+      "subsection_axes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "files_modified": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "word_counts": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "validation": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "warnings": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "open_questions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "section_path",
+      "subsection_axes",
+      "files_modified",
+      "word_counts",
+      "validation",
+      "warnings",
+      "open_questions"
+    ],
+    "additionalProperties": false
+  }
+}
