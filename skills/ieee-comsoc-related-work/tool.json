@@ -1,7 +1,7 @@
 {
   "name": "write_ieee_comsoc_related_work",
   "title": "IEEE ComSoc Related Work Writer",
-  "description": "Plan, review, or revise an IEEE ComSoc Related Work section from manuscript-defined comparisons, primary sources, and an iterative literature ledger",
+  "description": "Plan, review, or revise an IEEE ComSoc Related Work section from manuscript-defined comparisons, primary sources, and an optional literature ledger",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -13,7 +13,7 @@
       "manuscript_path": {
         "type": "string",
         "minLength": 1,
-        "description": "Path to the manuscript source containing the Introduction and Related Work section"
+        "description": "Path to the manuscript source containing its framing and, when already written, its Related Work section"
       },
       "mode": {
         "type": "string",
@@ -22,7 +22,7 @@
           "review",
           "rewrite"
         ],
-        "default": "rewrite",
+        "default": "review",
         "description": "Whether to propose a structure, audit existing prose, or revise the manuscript"
       },
       "request": {
@@ -56,8 +56,7 @@
       },
       "preserve_citation_set": {
         "type": "boolean",
-        "default": true,
-        "description": "Whether the rewrite must retain the existing citation keys"
+        "description": "Set to true only when the user requires the existing citation keys to remain fixed"
       },
       "build_command": {
         "type": "string",
@@ -82,7 +81,8 @@
         "type": "array",
         "items": {
           "type": "string"
-        }
+        },
+        "description": "Manuscript-derived comparison dimensions; subsection_axes is retained as a compatibility field name"
       },
       "files_modified": {
         "type": "array",

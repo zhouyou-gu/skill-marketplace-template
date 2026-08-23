@@ -6,7 +6,7 @@
 
 - a Related Work section lists papers without positioning the manuscript
 - comparisons need to be recovered from the Introduction and contributions
-- literature notes need to be reconciled with primary papers
+- literature notes need to be reconciled with primary sources
 - a methodological discussion must end at a communications or networking gap
 - subsection length and IEEE two-column layout must be controlled
 
@@ -18,15 +18,15 @@ Include a detail only when it compares prior work along a dimension established 
 
 1. Recover literature-facing claims from the Introduction and contributions.
 2. Derive the comparisons needed for the current manuscript without imposing a fixed taxonomy.
-3. Confirm the subsection length. When no constraint exists, propose approximately 170 words—about 40% of one IEEE two-column template column—and let the user confirm or adjust it.
+3. Confirm the subsection length once per task. When no constraint exists, propose approximately 170 words—about 40% of one IEEE two-column template column—and let the user confirm or adjust it.
 4. Read `REFERENCES.md`, `REFERENCE.md`, or an equivalent literature ledger for prior verification, inclusion decisions, exclusions, and uncertainties.
-5. Verify material claims against primary papers; the ledger is working memory, not factual authority.
-6. Group works only when the same comparison applies, and retain only details that lead toward the subsection gap.
+5. Verify material claims against primary sources; the ledger is working memory, not factual authority.
+6. Group works only when the same comparison applies, and calibrate every gap to the sources actually reviewed.
 7. Report word counts and inspect the rendered layout when manuscript edits are made.
 
 ## Literature Ledger
 
-The ledger makes research reusable across revisions. Its descriptions and historical groupings may be corrected when the manuscript changes or a primary paper is reread. Preserve excluded sources and their reasons to avoid repeating searches. Update the ledger only when the task authorizes research-record edits; otherwise report the correction.
+The ledger makes research reusable across revisions. Its descriptions and historical groupings may be corrected when the manuscript changes or a primary source is reread. Preserve excluded sources and their reasons to avoid repeating searches. Update the ledger only when the task authorizes research-record edits; otherwise report the correction.
 
 ## Inputs
 
@@ -34,7 +34,7 @@ The ledger makes research reusable across revisions. Its descriptions and histor
 - plan, review, or rewrite mode
 - user scope and venue constraints
 - optional literature-ledger paths through `source_note_paths`
-- optional fixed subsection titles and confirmed word budget
+- optional fixed subsection titles, confirmed word budget, and citation-set constraint
 - optional repository-approved build command
 
 ## Outputs
