@@ -1,14 +1,14 @@
 {
   "name": "write_ieee_comsoc_related_work",
   "title": "IEEE ComSoc Related Work Writer",
-  "description": "Plan, audit, or revise an IEEE ComSoc Related Work section around primary-source mechanisms and contribution-specific communications gaps",
+  "description": "Plan, review, or revise an IEEE ComSoc Related Work section from manuscript-defined comparisons, primary sources, and an iterative literature ledger",
   "inputSchema": {
     "type": "object",
     "properties": {
       "project_dir": {
         "type": "string",
         "minLength": 1,
-        "description": "Project root containing the manuscript and any local literature notes"
+        "description": "Project root containing the manuscript and any local literature ledger"
       },
       "manuscript_path": {
         "type": "string",
@@ -37,7 +37,7 @@
           "minLength": 1
         },
         "uniqueItems": true,
-        "description": "Optional literature indexes or notes that lead to primary sources"
+        "description": "Optional literature ledgers or source notes, including REFERENCES.md, REFERENCE.md, or equivalent files; these preserve research history but do not replace primary-source verification"
       },
       "subsection_titles": {
         "type": "array",
@@ -52,7 +52,7 @@
       "word_budget_per_subsection": {
         "type": "integer",
         "minimum": 1,
-        "description": "Optional exact text-word limit for each subsection"
+        "description": "Confirmed text-word budget for each subsection; omit when no limit has been established so the skill can open its length-confirmation gate"
       },
       "preserve_citation_set": {
         "type": "boolean",

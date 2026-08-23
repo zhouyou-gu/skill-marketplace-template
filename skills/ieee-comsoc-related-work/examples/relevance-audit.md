@@ -1,27 +1,27 @@
-# Example: Relevance Audit
+# Example: Correcting a Stale Literature-Ledger Note
 
-## Manuscript Framing
+## Manuscript Frame
 
-The Introduction establishes three dimensions for an edge-network controller:
+A communications manuscript motivates adaptation under changing deployment conditions. Its Introduction makes two dimensions relevant: when adaptation occurs and what deployment-time supervision it requires.
 
-- which artifact is transferred from offline orchestration into constrained execution
-- where reasoning or adaptation occurs
-- which traces, labels, feedback, or expert knowledge construction requires
+## Existing Ledger Note
 
-## Sentence Under Review
+> The method adapts online from labeled deployment samples.
 
-> The model reports a sub-millisecond encoder forward pass on the evaluation server.
+This note would support a comparison about runtime supervision, but it is provisional. It must not be copied into Related Work without checking the paper.
 
-The timing statement may be accurate, but it does not identify the transferred artifact, locate reasoning, or explain a construction requirement. It also does not establish complete controller latency. Remove it unless the manuscript's contribution or subsection gap depends on end-to-end timing.
+## Primary-Source Check
+
+The paper states that labeled simulated samples are used during offline training. At deployment, the learned parameters remain fixed and the method consumes ordinary observations without labels.
+
+The old note confuses training input with runtime input. Correct the ledger when research-record edits are authorized; otherwise report the discrepancy.
 
 ## Relevant Reframe
 
-> The controller learns action-conditioned dynamics from offline state and action traces, then selects actions through numerical rollouts.
+> Prior learning-based methods encode adaptation during offline training on labeled simulated conditions, then apply fixed parameters to unlabeled deployment observations~\\cite{example}.
 
-This version identifies where control knowledge resides and which construction data it requires. Those dimensions lead directly to a gap about a controller that must adapt without traces or retraining.
+The sentence now compares the work on dimensions established by the manuscript and says no more than the paper supports.
 
-## Compact Gap
+## Gap Test
 
-> Prior systems transfer policies or trained models into execution rather than a frozen structure that guides the constrained controller's intermediate decisions.
-
-The gap names one missing capability and returns the methodological comparison to the communications setting.
+A gap about label-free *training* could follow from this evidence. A gap about label-free *deployment* could not, because the cited method already has that property. This distinction illustrates why the Introduction defines relevance, the primary paper defines factual accuracy, and the ledger preserves—but does not control—the evolving interpretation.
