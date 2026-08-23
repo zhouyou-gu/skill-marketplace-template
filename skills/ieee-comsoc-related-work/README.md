@@ -12,17 +12,18 @@
 
 ## Core Rule
 
-Include a detail only when it compares prior work along a dimension established by the paper and advances the subsection toward its research gap. Remove or reframe details that do neither.
+Every nontrivial clause must map both to a comparison dimension established by the Introduction or contributions and to a necessary move toward the subsection gap. If either mapping is missing, remove the clause. Reframe it only with primary-source support and explicit mappings. Accuracy, source prominence, recency, citation count, convenience, or word-budget pressure cannot rescue an irrelevant detail.
 
 ## Workflow
 
 1. Recover literature-facing claims from the Introduction and contributions.
 2. Derive the comparisons needed for the current manuscript without imposing a fixed taxonomy.
-3. Confirm the subsection length once per task. When no constraint exists, propose approximately 170 words—about 40% of one IEEE two-column template column—and let the user confirm or adjust it.
-4. Read `REFERENCES.md`, `REFERENCE.md`, or an equivalent literature ledger for prior verification, inclusion decisions, exclusions, and uncertainties.
-5. Verify material claims against primary sources; the ledger is working memory, not factual authority.
-6. Group works only when the same comparison applies, and calibrate every gap to the sources actually reviewed.
-7. Report word counts and inspect the rendered layout when manuscript edits are made.
+3. Build a compact relevance map from each comparison dimension through admissible source evidence to the subsection gap.
+4. Confirm the subsection length once per task. When no constraint exists, propose approximately 170 words—about 40% of one IEEE two-column template column—and let the user confirm or adjust it.
+5. Read `REFERENCES.md`, `REFERENCE.md`, or an equivalent literature ledger for prior verification, inclusion decisions, exclusions, and uncertainties.
+6. Verify material claims against primary sources; the ledger is working memory, not factual authority.
+7. Group works only when the same comparison applies, audit every nontrivial clause against the relevance map, and calibrate every gap to the sources actually reviewed.
+8. Report word counts and inspect the rendered layout when manuscript edits are made.
 
 ## Literature Ledger
 
