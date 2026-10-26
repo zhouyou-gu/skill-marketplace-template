@@ -1,0 +1,4 @@
+interface:
+  display_name: "PowerPoint Standards"
+  short_description: "Coherent slides and verified presentation delivery"
+  default_prompt: "Use $ppt-standards to revise this deck for clear narrative, consistent diagrams, and verified delivery in the requested formats."

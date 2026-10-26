@@ -1,0 +1,9 @@
+{
+  "request": "Correct the typo in the Summary title. This deck is maintained and delivered as a PPTX/PDF pair; continue that established workflow.",
+  "mode": "revise",
+  "deck_path": "/tmp/presentation-example/project-update.pptx",
+  "slide_scope": [
+    "Summary"
+  ],
+  "interaction": "batch"
+}

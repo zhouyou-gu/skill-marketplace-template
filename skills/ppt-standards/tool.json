@@ -1,0 +1,196 @@
+{
+  "name": "apply_ppt_standards",
+  "title": "PowerPoint Standards",
+  "description": "Agent workflow contract for creating, revising, or reviewing PowerPoint decks; requires a separate authoring and rendering environment",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "request": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Creation brief, edits, or review objective, including explicit output and scope preferences"
+      },
+      "mode": {
+        "type": "string",
+        "enum": [
+          "create",
+          "revise",
+          "review"
+        ],
+        "description": "Choose the operation before any edit or export: create/revise may change the authorized deck; review inspects existing artifacts and reports findings without saving over, repairing, or regenerating deliverables. Temporary inspection previews belong in scratch storage."
+      },
+      "deck_path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Existing editable deck; required for revise and review"
+      },
+      "output_path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Requested PPTX destination for create or revise; resolve from context if omitted. Not used in review mode."
+      },
+      "template_path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Optional user-selected presentation template"
+      },
+      "source_paths": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Read-only source material supporting the slides"
+      },
+      "audience": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Audience context if not already in the brief"
+      },
+      "slide_scope": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Stable slide identifiers, current titles, or page references; interpret against the latest deck"
+      },
+      "interaction": {
+        "type": "string",
+        "enum": [
+          "batch",
+          "page_by_page"
+        ],
+        "default": "batch",
+        "description": "Use the requested collaboration pace; do not ask again for an already authorized edit"
+      },
+      "sync_pdf": {
+        "type": "boolean",
+        "description": "For create/revise: true requests PDF delivery; false disables it. If omitted, infer from the requested formats or an established PPTX/PDF delivery workflow; otherwise deliver PPTX only. An existing PDF alone does not establish that workflow. Ignored in review mode, which produces findings rather than deliverable artifacts."
+      }
+    },
+    "required": [
+      "request",
+      "mode"
+    ],
+    "additionalProperties": false,
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "mode": {
+              "enum": [
+                "revise",
+                "review"
+              ]
+            }
+          },
+          "required": [
+            "mode"
+          ]
+        },
+        "then": {
+          "required": [
+            "deck_path"
+          ]
+        }
+      }
+    ]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "status": {
+        "type": "string",
+        "enum": [
+          "completed",
+          "awaiting_review",
+          "partial"
+        ],
+        "description": "Completed only for the requested scope and deliverables; awaiting_review for a requested proposal checkpoint; partial for unresolved required work"
+      },
+      "pptx_path": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Delivered editable artifact, or null for review-only/proposal-only work"
+      },
+      "pdf_path": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "description": "Current delivered PDF, or null for review/proposal-only work, when PDF delivery does not apply, or when export failed; never a stale file."
+      },
+      "summary": {
+        "type": "string"
+      },
+      "changes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Completed edits; empty for review-only or proposal-only work."
+      },
+      "findings": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "checks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "check": {
+              "type": "string",
+              "minLength": 1
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed",
+                "not_run",
+                "not_applicable"
+              ]
+            },
+            "details": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "check",
+            "status",
+            "details"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "warnings": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "open_questions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "status",
+      "pptx_path",
+      "pdf_path",
+      "summary",
+      "changes",
+      "findings",
+      "checks",
+      "warnings",
+      "open_questions"
+    ],
+    "additionalProperties": false
+  }
+}

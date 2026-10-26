@@ -1,0 +1,17 @@
+id: ppt-standards
+name: PowerPoint Standards
+description: Create, revise, and review coherent PowerPoint decks with consistent visual semantics, source-faithful content, and verified PPTX/PDF delivery
+category: automation
+tags:
+  - presentations
+  - powerpoint
+  - diagrams
+  - visual-consistency
+  - pdf
+difficulty: intermediate
+repo: https://github.com/example/skill-marketplace
+install: {}
+agent:
+  protocol: mcp
+  tool_schema: tool.json
+parents: []
