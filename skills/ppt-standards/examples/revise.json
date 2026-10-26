@@ -1,0 +1,11 @@
+{
+  "request": "Revise these slides with me one at a time; propose changes first. Make the component-detail figure visibly match the block in the overview, clarify the colors, and define the equation symbols.",
+  "mode": "revise",
+  "deck_path": "/tmp/presentation-example/design-review.pptx",
+  "slide_scope": [
+    "Component detail",
+    "System overview"
+  ],
+  "interaction": "page_by_page",
+  "sync_pdf": true
+}

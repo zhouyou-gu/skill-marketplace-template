@@ -1,0 +1,13 @@
+{
+  "request": "Create a 10-minute project update covering the problem, approach, measured results, limitations, and next steps. Use only the supplied evidence.",
+  "mode": "create",
+  "output_path": "/tmp/presentation-example/project-update.pptx",
+  "template_path": "/tmp/presentation-example/template.pptx",
+  "source_paths": [
+    "/tmp/presentation-example/project-brief.md",
+    "/tmp/presentation-example/results.csv"
+  ],
+  "audience": "An engineering team unfamiliar with the project",
+  "interaction": "batch",
+  "sync_pdf": true
+}

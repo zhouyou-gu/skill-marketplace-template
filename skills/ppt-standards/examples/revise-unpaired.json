@@ -1,0 +1,9 @@
+{
+  "request": "Correct the typo in the Summary title. This is a standalone PowerPoint deck with no established paired-output workflow.",
+  "mode": "revise",
+  "deck_path": "/tmp/presentation-example/project-update.pptx",
+  "slide_scope": [
+    "Summary"
+  ],
+  "interaction": "batch"
+}

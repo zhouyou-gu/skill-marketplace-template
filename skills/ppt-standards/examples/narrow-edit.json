@@ -1,0 +1,10 @@
+{
+  "request": "On the Summary slide, replace \"worker\" with \"processing thread\". Preserve the rest of the deck and return PPTX only.",
+  "mode": "revise",
+  "deck_path": "/tmp/presentation-example/project-update.pptx",
+  "slide_scope": [
+    "Summary"
+  ],
+  "interaction": "batch",
+  "sync_pdf": false
+}

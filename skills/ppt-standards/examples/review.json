@@ -1,0 +1,11 @@
+{
+  "request": "Review whether the diagrams and configuration examples match the source. Check the claimed complete connectivity and the distinction between shared operations and per-instance parameters. Report findings without edits.",
+  "mode": "review",
+  "deck_path": "/tmp/presentation-example/design-review.pptx",
+  "source_paths": [
+    "/tmp/presentation-example/src/model.py",
+    "/tmp/presentation-example/config/example.yaml"
+  ],
+  "interaction": "batch",
+  "sync_pdf": true
+}
