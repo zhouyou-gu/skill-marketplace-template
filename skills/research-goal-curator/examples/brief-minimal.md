@@ -2,10 +2,11 @@
 
 Research brief:
 
-Formulate a research problem for a lab workspace that studies how reusable agent steps can improve reproducibility in experimental systems research.
+Develop a durable research goal for an interpretable adaptive collaboration approach that decides when a primary component needs assistance and which candidate collaborator offers complementary capability.
 
 Constraints:
 
-- keep the top-level goal high level
-- avoid committing to solution details too early
-- make the statement suitable for later user refinement
+- preserve strong task quality while reducing resource use
+- keep decisions understandable and reusable as components evolve
+- avoid committing the mission to named mechanisms, component versions, datasets, thresholds, infrastructure, or implementation plans
+- make positive and negative research conclusions scientifically useful

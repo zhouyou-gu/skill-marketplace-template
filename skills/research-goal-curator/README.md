@@ -31,7 +31,10 @@ Route to `agent-files` for generic workspaces or `manuscript-writing-agent-files
 3. Interact with the user until the goal wording is explicit.
 4. Preserve approved wording where the user has clearly chosen it.
 5. Preserve neutral scaffold entries such as "Not yet specified by user" when the user has not approved durable content for that section.
-6. Update the full goal file, or preview the update when `dry_run=true`.
+6. Audit the boundary: keep mission content in the goal, reusable operating rules in `AGENT_HARNESS.md`, and current state or next steps in `AGENT_PROGRESS.md`.
+7. Update the full goal file, or preview the update when `dry_run=true`.
+
+See [`examples/goal-after.md`](examples/goal-after.md) for a complete durable example. It keeps the outcome, research hypothesis, evidence standard, mission-level constraints, immutability rule, and amendment procedure while excluding named mechanisms, versions, datasets, thresholds, infrastructure, current results, and next steps.
 
 ## Parents
 
