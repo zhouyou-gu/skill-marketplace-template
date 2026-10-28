@@ -21,6 +21,10 @@ Produce slides whose message, visual structure, terminology, and supporting evid
 - In structured inputs, `sync_pdf: true` requests PDF delivery and `sync_pdf: false` disables it. Omission means infer from the request and established workflow, otherwise deliver PPTX only. Review mode produces findings regardless of `sync_pdf`.
 - Use the available presentation authoring and rendering tools. Read applicable tool instructions. Do not assume a particular library, operating system, cloud service, font, or sibling skill is installed.
 
+## Optional template example
+
+For a technical conference talk using the supplied deck's style, read [examples/technical-conference-template.md](examples/technical-conference-template.md) and reuse [assets/technical-conference-template.pptx](assets/technical-conference-template.pptx). The 23-slide editable template preserves the design with generic text, image placeholders, and clearly labeled demo chart data; replace the demo data before presenting. The companion example distills measured typography, colors, layout guides, narrative roles, and reusable slide compositions. Use these when selected by the user or when they fit a brief without a prescribed theme; they do not replace a different user template or make example-specific choices universal standards.
+
 ## Read the story before changing the slides
 
 For a new deck or substantial revision, map the narrative first: each slide's role, its main point, and its connection to the next slide. A narrow correction only needs the affected slide and enough surrounding context to preserve consistency.

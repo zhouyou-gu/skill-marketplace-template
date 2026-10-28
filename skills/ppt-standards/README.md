@@ -12,6 +12,8 @@ Start with [SKILL.md](SKILL.md). Read [technical-content.md](references/technica
 
 [Examples](examples/scenarios.md) include normalized inputs and expected decisions. [tool.json](tool.json) is required in the marketplace package, although conversational use need not invoke the structured contract. It is not an executable MCP server. The skill itself has no package dependency; the chosen presentation authoring/rendering environment supplies its own tooling.
 
+[Technical conference example](examples/technical-conference-template.md) distills the supplied presentation into reusable design tokens, layout recipes, and a narrative example. The companion [editable PowerPoint template](assets/technical-conference-template.pptx) includes all 23 slide layouts with generic placeholders and native diagrams, charts, and a comparison table. Project-specific names, links, artwork, results, citations, and speaker notes have been replaced. Charts contain labeled illustrative data and editable embedded workbooks; replace every demo value before presenting. These are optional references, not the skill's default theme. The original deck and artwork are not bundled.
+
 ## Parents
 
 None. This skill does not require a marketplace scaffold or another marketplace skill at runtime. The publisher used to create a skill is not automatically its parent.

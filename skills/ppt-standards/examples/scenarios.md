@@ -2,6 +2,8 @@
 
 The JSON files are normalized requests matching the tool input schema, not real source artifacts. The expected behavior below describes decisions to check; it is not a claim that a deck has already been generated or rendered.
 
+For a worked design reference distilled from an inspected presentation, see [technical-conference-template.md](technical-conference-template.md) and its [editable PPTX](../assets/technical-conference-template.pptx). Its measured styles and slide recipes are optional examples rather than additional requirements for every deck. When reusing the PPTX, replace all bracketed content and illustrative chart data, and insert the user's own assets.
+
 ## Create a new deck
 
 Input: [create.json](create.json).
