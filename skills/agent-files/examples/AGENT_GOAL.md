@@ -25,7 +25,3 @@
 - No additional mission-level constraints have been specified by user.
 - A constraint belongs here only if removing it would change the mission. Workflow preferences, style rules, formatting conventions, validation habits, and operating routines are not mission constraints; they belong in `AGENT_HARNESS.md`.
 - Mission constraints outrank harness preferences by virtue of `AGENT.md`'s precedence rules; this section shall not restate that precedence or reach into harness jurisdiction.
-
----
-
-**Amendment procedure.** A change to any section of this file requires an explicit user instruction naming the section and the new content. The agent shall record no amendment in `AGENT_PROGRESS.md` beyond a single bullet noting that the user amended the mission. The agent shall not treat a new task, a new workstream, or a shift in emphasis as implicit amendment authority.

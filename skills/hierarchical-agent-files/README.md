@@ -31,7 +31,7 @@ Key invariants the scaffold enforces on first read:
 - Each child's immutable `AGENT.md` is not an extension surface: child skills, sidecars, routine task work, inferred preferences, and compatibility cleanup must not patch it after scaffold.
 - Each child's `AGENT_GOAL.md § Constraints` declares the parent mission as the outer boundary.
 - The parent's `AGENT_HARNESS.md § Reusable Preferences` carries the progress-scope rule verbatim, so children never mirror parent-scope changes, the parent never mirrors child-internal changes, and cross-child coordination has a parent-owned place to live.
-- The parent's `AGENT_PROGRESS.md § Completed Changes` replaces the upstream neutral "No completed changes recorded yet" bullet only after every child contract succeeds, using a header sentence naming the nested progress files and one `[Scaffold]` bullet per node.
+- The parent's `AGENT_PROGRESS.md § Completed Changes` replaces the upstream neutral "No completed changes recorded yet" bullet only after every child contract succeeds, using one summary bullet recording parent creation and the number of completed child contracts.
 - Child missions and objectives inherit the hardened `agent-files` boundary rules: mission text is durable and purpose-only; objective text is transient current work.
 - With `overwrite=false`, existing parent and child contracts must pass both upstream `agent-files` compatibility and hierarchy compatibility; immutable `AGENT.md` files are verified for the full immutability clause, not patched, and incompatible nodes stop the run instead of being silently mixed with new hierarchy rules.
 
@@ -64,5 +64,5 @@ See `examples/tree-layout.md` for the full expected layout and `examples/request
 
 - Two levels only. Grandchildren are out of scope; a child's own children would need a separate nested invocation and extra read-order glue.
 - Children share the same parent. Cross-child references (for example, one child citing another child's artifacts) are hand-added after scaffolding; the skill has no schema for sibling dependencies. Parent progress/harness files own cross-child coordination, while sibling-internal facts stay in the owning child.
-- The `[Scaffold]` ledger bullets use a generic phrase ("as a nested workspace with its own four-file agent contract"). Domain-specific wording is a post-scaffold hand-edit.
+- The `[Scaffold]` summary describes contract creation generically. Domain-specific wording is a post-scaffold hand-edit.
 - With `overwrite=false`, existing parent and child files must pass upstream and hierarchy compatibility checks before non-`AGENT.md` hierarchy patches are applied or verified. Existing `AGENT.md` files are verified only; missing hierarchy or immutability clauses are fatal. This allows a partial failed run to be retried without requiring a clean target directory.

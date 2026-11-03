@@ -53,6 +53,12 @@ The `mission` and `objective` strings below are illustrative. Keep `mission` dur
 }
 ```
 
+## Examples
+
+Two durable goal examples distilled from existing project goals: [paper writing](examples/goals/AGENT_GOAL.paper-writing.md) and [code development](examples/goals/AGENT_GOAL.code-development.md).
+
+All filled examples are illustrative; unprovided mission details remain unspecified when scaffolding.
+
 ## Templates
 
 The four template files live in [`examples/`](examples/) and are copied into `target_dir` with the following substitutions:

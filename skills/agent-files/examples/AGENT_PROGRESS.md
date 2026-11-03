@@ -1,12 +1,10 @@
 # Progress
 
-**This file is the live-state record for the workspace. It holds repository state, workspace artifacts, completed changes, blockers, and the next resume point. It shall not define workflow policy, duplicate the reusable playbook, or restate or modify the mission. It is factual, current, and stepwise.**
+**This file is the live-state record for the workspace: a bounded current-state snapshot governed by AGENT.md. It holds only resume-relevant facts, outcomes, blockers, and the next action. It shall not define policy, duplicate the playbook, restate the mission, or accumulate task history.**
 
 ## Current Objective
 
 {{ objective }}
-
-> Current objective supplied at scaffold time. Remove this section entirely when no active workstream needs handoff context.
 
 ## Repository State
 

@@ -68,12 +68,12 @@ Then read the local workspace:
 - Do not write sibling-internal facts into this local progress file. If work spans siblings, route shared coordination to the parent and local facts to each affected child.
 - If reusable policy appears only in local progress, move it to local harness and condense the progress entry.
 - Dispatcher-maintenance edits are terminal: updating local or parent progress/harness files to satisfy this routing does not itself require another update entry unless the update records a separate substantive workspace change.
-- Treat local `Completed Changes` as a handoff ledger, not an exhaustive event log; preserve currently relevant facts and condense older entries into milestone summaries when doing so improves handoff clarity.
+- Apply the parent `../AGENT.md` progress-entry and file-size limits, completed-outcome cap, automatic summarization, and preservation requirements to local progress. Local harnesses and sidecars cannot relax these rules.
 
 Applying update routing is mandatory for every turn that changes this nested workspace:
 
 - A turn is complete only when local progress reflects local state and parent progress reflects any parent-scope effect.
-- Do not batch meaningful updates across turns or collapse separate state changes into one coarse bullet.
+- Refresh local state in the same turn; summarize older completed outcomes under the inherited limits.
 - If one turn changes local state and reveals a durable local rule, update both local progress and local harness in the same turn.
 
 ## Boundary

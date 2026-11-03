@@ -109,7 +109,7 @@ Applying the dispatcher is a mandatory step of every turn that touches workspace
 - Any turn that changes workspace state shall apply the dispatcher in the same turn, before reporting the task complete.
 - The agent shall not wait to be asked. If the user must request the update, the contract has already been broken.
 - A turn is complete only when the underlying edit has been applied, `AGENT_PROGRESS.md` reflects the new state, and any durable rule revealed during the turn has been moved into `AGENT_HARNESS.md`.
-- The agent shall not batch updates across turns or collapse multiple meaningful edits into one coarse summary bullet.
+- Update current state in the same turn. This does not require a permanent entry for each edit; summarize older outcomes as needed to keep progress bounded.
 - Dispatcher-maintenance edits are terminal: updating `AGENT_PROGRESS.md` or `AGENT_HARNESS.md` to satisfy this dispatcher does not itself require another update entry unless the update records a separate substantive workspace change.
 
 ### Update `AGENT_PROGRESS.md` when concrete workspace state changes
@@ -125,8 +125,11 @@ How to update:
 
 - add or revise a current objective only when a concrete active workstream needs handoff context
 - refresh repository state and workspace artifacts
-- append or revise `Completed Changes` with one factual bullet per meaningful completed change
-- treat `Completed Changes` as a handoff ledger, not an exhaustive event log; preserve currently relevant facts and condense older entries into milestone summaries when doing so improves handoff clarity
+- Replace superseded facts in place; keep at most 8 completed-outcome bullets rather than a chronological edit log.
+- Limit each entry, including continuations, to 400 characters. Keep the entire progress file within 8,000 characters and 100 lines.
+- Automatically summarize older outcomes into milestones in the same turn if progress exceeds 6,000 characters or 75 lines, or an entry/count limit would be exceeded.
+- Preserve unresolved blockers, failed checks, material validation limits, applicable user decisions, evidence references, and the next authorized action while summarizing.
+- Keep policy in this control file, reusable operating rules in the harness, and detailed evidence in project artifacts; do not create overflow progress logs or move history into other agent files.
 - revise the next resume point to reflect any blocking condition
 - keep entries factual and current, and do not migrate workflow policy into this file
 
@@ -149,6 +152,8 @@ How to update:
 ### Update `AGENT_GOAL.md` only on explicit user instruction
 
 The agent shall not modify `AGENT_GOAL.md` as part of the dispatcher. The file is modified only when the user explicitly and unambiguously instructs a change to the mission, scope, non-goals, success criteria, or constraints. Implicit signals, inferred preferences, and routine task updates do not satisfy this condition. If a turn reveals that the mission as stated is wrong, the agent shall flag the conflict and stop rather than self-edit the goal file.
+
+An amendment requires explicit user instruction identifying the section and new content. Record it in progress as one brief bullet noting that the user amended the mission; do not copy the mission into progress.
 
 ### Update `AGENT_PROGRESS.md` and `AGENT_HARNESS.md` together when a single turn changes workspace state and reveals a durable rule
 
