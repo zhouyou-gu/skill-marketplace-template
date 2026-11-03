@@ -1,0 +1,77 @@
+{
+  "name": "update_reference_note",
+  "title": "Reference Note",
+  "description": "Create, review, or update a narrative paper reference note while preserving source provenance, verification limits, and the requested edit scope",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "note_path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Requested reference-note path; preserve an existing filename rather than creating a competing note"
+      },
+      "request": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Task instructions, requested source coverage, research framing, and any explicit scope beyond the note"
+      },
+      "manuscript_path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Optional manuscript source used to identify the paper's argument, citation roles, and cited works"
+      },
+      "bibliography_path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Optional canonical bibliography used to map keys and aliases to works; read-only unless bibliography edits are explicitly requested"
+      },
+      "sources": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "uniqueItems": true,
+        "description": "Optional source URLs or local source paths; a supplied location is not itself evidence that the source has been inspected"
+      },
+      "dry_run": {
+        "type": "boolean",
+        "default": false,
+        "description": "Preview proposed note changes without modifying project files; review-only instructions also require read-only behavior"
+      }
+    },
+    "required": ["note_path", "request"],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "note_path": {
+        "type": "string"
+      },
+      "written": {
+        "type": "boolean"
+      },
+      "summary": {
+        "type": "string"
+      },
+      "sources_checked": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Source material actually inspected during this task, excluding links merely copied from existing notes"
+      },
+      "unresolved": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Unverified source details, unclear manuscript connections, or other remaining reference-specific questions"
+      }
+    },
+    "required": ["note_path", "written", "summary", "sources_checked", "unresolved"],
+    "additionalProperties": false
+  }
+}

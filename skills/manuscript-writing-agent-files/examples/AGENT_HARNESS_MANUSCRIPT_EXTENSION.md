@@ -12,27 +12,32 @@ Stable operating context:
 Reusable preferences:
 
 - Preserve existing wording when it already works; prefer the smallest edit that fixes the prose, logic, notation, or evidence problem.
+- During prose-only edits, preserve existing displayed-equation structure and mathematical meaning; obtain explicit user approval before a mathematical reformulation.
 - Read the relevant manuscript, bibliography, figure, table, appendix, or derived-artifact context directly before editing it.
 - Scope edits to the artifact and locations explicitly requested; do not silently adjust abstract, conclusion, adjacent sections, or summary-level wording for consistency unless the user asks.
-- When the user makes manual manuscript edits, inspect the current diff before continuing, treat the edits as intentional unless the surrounding text contradicts them, and propagate only the remaining consistency updates needed.
+- When the user makes manual manuscript edits, inspect the current diff before continuing, treat the edits as intentional unless the surrounding text contradicts them, and propagate only the remaining consistency updates needed. Preserve explicit deletions and rejected wording during later synchronization; do not restore them from earlier plans, drafts, or quotations.
+- For a clean-slate draft, use agreed source material and current requirements; do not reuse rejected or superseded drafts.
 - During user-guided paragraph-by-paragraph revision, apply each proposed rewrite only after explicit sign-off and do not auto-advance to the next paragraph without user direction.
 - Do not commit or push unless the user explicitly instructs it.
 - Keep the manuscript voice standalone; do not let authoring scaffolds, revision history, planning notes, or conversational explanations leak into final paper prose unless the user explicitly promotes that content.
 - Keep claims evidence-backed and bounded to what has been checked; distinguish established facts, design choices, inference, and open questions.
 - Use sources as evidence and explain why the evidence matters; separate what a cited source directly shows from the broader interpretation drawn from it.
 - Add supporting citations inline where non-trivial claims are made, and prefer primary sources when they are available.
-- Expand abbreviations at first use in manuscript and response-letter prose, and avoid chained abbreviations when the expanded technical terms are clearer.
+- In related-work prose, describe cited work by its relevant technical idea rather than by author or system names.
+- Expand abbreviations at first use, and avoid chained abbreviations when the expanded technical terms are clearer.
 - Maintain a canonical terminology set in manuscript writing. When a term is revised, update nearby prose, captions, tables, notation descriptions, and summary-level statements that describe the same concept. Avoid near-synonyms for the same concept unless the local text explicitly defines a distinction.
 - State whether gap, novelty, and comparison claims are field-wide or bounded to the reviewed sources.
 - When a manuscript claim depends on implementation or experimental behavior, support it with source-file, version, date, or runtime evidence instead of tool availability or parser acceptance alone.
-- When presenting formal definitions, objectives, proofs, or evaluation criteria, make the statement precise and self-contained enough to read in isolation.
+- When presenting formal definitions, objectives, proofs, or evaluation criteria, make the statement precise and self-contained enough to read in isolation. Explain what each count or index represents, give dimensions where needed, and distinguish averaging axes.
 - When defining validation or test cases in manuscript text, state the condition under test, expected behavior, and pass/fail criterion directly.
+- Keep experimental setup focused on assumptions, models, data, budgets, baselines, and test protocol. Put low-level implementation details in supporting material unless they affect interpretation of the results.
 - Keep manuscript writing consistent, concise, coherent, formal, and natural in technical English.
 - Write for informed technical readers who may be new to the specific subfield; define important terms and abstractions before relying on them heavily.
 - Build technical narrative in a clear progression from problem context to limitation, method rationale, contribution, and evidence.
+- Frame Introduction gaps at the research-area level; reserve detailed paper-by-paper comparisons for Related Work unless explicitly requested in the Introduction.
 - Before inserting manuscript text, inspect what the reader has already been introduced to at that exact location. Do not use symbols, mechanisms, conclusions, or future-work concepts that appear only later unless the edit also introduces them locally.
 - When revising a contribution list for concision, preserve the original contribution identities, order, and evidentiary roles unless the user explicitly asks for reframing.
-- When revising abstract, contribution, or summary-level numerical claims, cross-check detailed result sections and state the scoped setting for each number.
+- When revising abstract, contribution, or summary-level numerical claims, cross-check detailed result sections and state the scoped setting for each number. State findings through named quantities, variables, and comparisons rather than vague descriptions such as "range" or "dependence."
 - When an argument feels weak, refine the reasoning before polishing sentence-level wording.
 - When introducing a method, motivate the design choices before naming implementation details.
 - Explain why domain-specific assumptions, operating conditions, or system settings matter instead of naming them without context.
@@ -40,7 +45,7 @@ Reusable preferences:
 - Use venue- and community-standard vocabulary when naming methods, assumptions, controls, metrics, and artifacts.
 - When using umbrella terms from standards, systems, or application domains, distinguish broad motivation from the modeled subsystem and evaluated evidence.
 - Keep manuscript body text concise; shorten the body first, and move extension material elsewhere only when it is still needed.
-- Keep section and subsection titles short, structurally parallel with peer titles, and tied to the section's organizing phrase when one exists. Use plain LaTeX heading commands without decorative wrappers or color commands unless the user explicitly asks for heading highlighting.
+- Keep section and subsection titles short, structurally parallel with peer titles, and tied to the section's organizing phrase when one exists. Use plain LaTeX heading commands without decorative wrappers or color commands unless the user explicitly asks for heading highlighting. When a section opens directly with a subsection, add a concise orientation sentence; avoid redundant openings where prose already provides the transition.
 - Use title case for formal problem or method names only when they function as headings, definition labels, or exact name introductions; prefer lowercase phrasing in ordinary prose.
 - Keep one spelling convention across the manuscript and synchronized supporting artifacts; align derived artifacts to the manuscript rather than letting wording diverge.
 - Avoid conversational or self-defensive framing in manuscript prose; state scope limits as formal paper claims.
@@ -56,13 +61,14 @@ Reusable preferences:
 - In prose, use the English name of a concept before relying on its math symbol alone.
 - Use `\top` for transpose notation and `\dagger` for Hermitian-transpose notation; define `(\cdot)^\dagger` at first use when helpful.
 - Do not place a blank line between a display-math closer and a continuation clause, such as a following "where" clause, when they belong to the same sentence.
+- Use normal LaTeX line breaking for prose; do not add manual fitting commands such as `\looseness` unless requested.
 - When a displayed equation overflows a two-column layout, preserve content by rewriting, introducing shorthand, dropping redundant arguments, or splitting across lines rather than shrinking the equation.
 - Revise secondary artifacts only after the manuscript logic is settled.
 - Treat existing manuscript `\todo{...}` notes as intentional annotations unless the user explicitly asks to remove or rewrite them.
-- Prefer concise one-line figure captions that name the plotted quantity and its swept variable, with terminology aligned to the metric defined in the body text.
-- Keep figure files, labels, captions, and in-text references synchronized; refer to figures by explicit number or label rather than relative placement words such as "above" or "below."
+- Keep figure captions concise, naming the plotted quantity and swept variable when applicable, and the scientific comparison, key conditions, and averaging where relevant. Align terminology with the body; omit redundant legend inventories and training-run details.
+- Keep figure files, labels, captions, and in-text references synchronized. Use LaTeX labels for figure, table, and equation references in manuscript source; use equation names or symbols in supporting artifacts rather than hardcoded manuscript equation numbers. Avoid relative placement words such as "above" or "below."
 - Keep table text concise enough for the target layout, especially two-column IEEE formats.
-- Manage references through `references.bib` with `\bibliographystyle{IEEEtran}` and `\bibliography{references}`, and use `\cite{...}` rather than literal bracketed numbers.
+- Manage references through the workspace’s canonical BibTeX database and existing bibliography commands, preserving the IEEE citation style. Use `\cite{...}` rather than literal bracketed citation numbers.
 - Do not enable bibliography commands against an empty BibTeX database if the toolchain would generate an invalid empty bibliography.
 - Do not use standalone supporting-reference blocks in manuscript prose; cite sources inline where the claim is made.
 - Run whitespace or diff checks on touched source files when available.

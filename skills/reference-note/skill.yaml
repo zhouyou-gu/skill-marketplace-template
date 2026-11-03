@@ -1,0 +1,15 @@
+id: reference-note
+name: Reference Note
+description: Create and maintain narrative paper reference notes with manuscript relevance, source links, and explicit verification limits
+category: devtools
+tags:
+  - references
+  - research
+  - literature-notes
+  - manuscript
+difficulty: intermediate
+repo: https://github.com/zhouyou-gu/skill-marketplace-template/tree/main/skills/reference-note
+install: {}
+agent:
+  protocol: mcp
+  tool_schema: tool.json
