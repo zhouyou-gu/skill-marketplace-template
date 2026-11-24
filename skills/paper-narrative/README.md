@@ -1,6 +1,6 @@
 # Paper Narrative
 
-Use `$paper-narrative` to draft or revise a paragraph-by-paragraph writing outline. Each numbered prompt identifies the paragraph’s place and purpose. Optional bullets specify what the writer should develop in that paragraph.
+Use `$paper-narrative` to draft or revise a paragraph-by-paragraph writing outline. The default outline uses the paper’s numbered section headings, such as `## II. Analysis`. Paragraph entries run consecutively across those headings, with optional bullets under each entry.
 
 Use an accepted outline as the Markdown model, or follow the [default NARRATIVE.md](examples/NARRATIVE.md). The source material informs the instructions. Detailed evidence stays with its source unless the detail itself matters to the argument.
 
