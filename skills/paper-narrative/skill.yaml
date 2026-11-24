@@ -1,0 +1,16 @@
+id: paper-narrative
+name: Paper Narrative
+description: Draft and revise a paper’s NARRATIVE.md using one entry per paragraph with optional supporting points, or the author’s requested form
+category: devtools
+tags:
+  - manuscript
+  - research
+  - writing
+  - outline
+  - narrative
+difficulty: intermediate
+repo: https://github.com/zhouyou-gu/skill-marketplace-template/tree/main/skills/paper-narrative
+install: {}
+agent:
+  protocol: mcp
+  tool_schema: tool.json

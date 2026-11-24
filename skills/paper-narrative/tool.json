@@ -1,0 +1,56 @@
+{
+  "name": "update_paper_narrative",
+  "title": "Paper Narrative",
+  "description": "Draft or revise a paper’s narrative within the requested scope. A new paragraph outline uses numbered entries with optional supporting bullets.",
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "request": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Requested narrative or revision, including audience, coverage, and any brief for a paper still being drafted."
+      },
+      "paper_dir": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Paper workspace for resolving relative paths. Defaults to the current working directory."
+      },
+      "manuscript_path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Manuscript source when supplied, especially when a directory contains several versions."
+      },
+      "narrative_path": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Requested destination. By default reuse the existing narrative or create NARRATIVE.md beside the manuscript."
+      },
+      "dry_run": {
+        "type": "boolean",
+        "default": false,
+        "description": "Return proposed narrative text or edits without writing files."
+      }
+    },
+    "required": ["request"],
+    "additionalProperties": false
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "narrative_path": { "type": "string" },
+      "written": { "type": "boolean" },
+      "summary": { "type": "string" },
+      "open_points": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Missing evidence or unresolved decisions affecting the requested narrative."
+      },
+      "preview": {
+        "type": "string",
+        "description": "Proposed narrative text or edits for a dry run or review-only request."
+      }
+    },
+    "required": ["narrative_path", "written", "summary", "open_points"],
+    "additionalProperties": false
+  }
+}
