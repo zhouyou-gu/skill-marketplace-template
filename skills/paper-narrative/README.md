@@ -1,16 +1,17 @@
 # Paper Narrative
 
-Use `$paper-narrative` to draft or revise a paper’s `NARRATIVE.md` from the manuscript or the author’s brief. Each numbered entry states one paragraph’s main point. Optional bullets give the supporting details that belong in that paragraph.
+Use `$paper-narrative` to draft or revise a paragraph-by-paragraph writing outline. Each numbered prompt identifies the paragraph’s place and purpose. Optional bullets specify what the writer should develop in that paragraph.
 
-The [drafting standard](SKILL.md) sets out the rules for scope, form, support, and revision. The [example NARRATIVE.md](examples/NARRATIVE.md) uses placeholders so it can be adapted to the paper’s subject and section order.
+Use an accepted outline as the Markdown model, or follow the [default NARRATIVE.md](examples/NARRATIVE.md). The source material informs the instructions. Detailed evidence stays with its source unless the detail itself matters to the argument.
 
-For example, this request previews a limited revision.
+The following request previews a limited revision using an earlier outline as the format model.
 
 ```json
 {
-  "request": "Revise the entry for the opening paragraph to reflect the author’s narrower question. Flag later entries that still use the broader wording.",
+  "request": "Revise the opening paragraph prompt to reflect the narrower question. Flag later entries that still use the broader wording.",
+  "format_reference": "previous-paper/NARRATIVE.md",
   "dry_run": true
 }
 ```
 
-[Revision examples](examples/narrative-excerpts.md) · [Tool contract](tool.json)
+[Drafting rules](SKILL.md) · [Revision example](examples/narrative-excerpts.md) · [Tool contract](tool.json)

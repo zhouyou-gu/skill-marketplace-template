@@ -1,6 +1,6 @@
 id: paper-narrative
 name: Paper Narrative
-description: Draft and revise a paper’s NARRATIVE.md using one entry per paragraph with optional supporting points, or the author’s requested form
+description: Draft and revise a paper’s NARRATIVE.md as numbered paragraph prompts with optional supporting bullets in the author’s established Markdown format
 category: devtools
 tags:
   - manuscript

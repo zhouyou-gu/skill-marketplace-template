@@ -1,7 +1,7 @@
 {
   "name": "update_paper_narrative",
   "title": "Paper Narrative",
-  "description": "Draft or revise a paper’s narrative within the requested scope. A new paragraph outline uses numbered entries with optional supporting bullets.",
+  "description": "Draft or revise a paper’s paragraph prompts in the author’s established Markdown format or the bundled outline format.",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -19,6 +19,11 @@
         "type": "string",
         "minLength": 1,
         "description": "Manuscript source when supplied, especially when a directory contains several versions."
+      },
+      "format_reference": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Path to an accepted narrative to use as the Markdown format model. Only its presentation conventions carry over to the current paper."
       },
       "narrative_path": {
         "type": "string",

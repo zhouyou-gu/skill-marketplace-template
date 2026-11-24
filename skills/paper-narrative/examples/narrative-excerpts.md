@@ -1,20 +1,11 @@
-# Applying the narrative rules
+# Revising a paragraph prompt
 
-## Revising a single paragraph
+The author asks to revise only entry 7 after narrowing the analysis from several settings to one. A source note gives the underlying observations, their storage location, and a planned follow-up. Only the change in the scope of the inference affects how this paragraph should be written.
 
-An author asks to revise only the analysis entry. The manuscript now limits its conclusion to the cases examined. The existing narrative says the conclusion applies to all cases. The revised entry could read as follows.
+```markdown
+7. **Analysis paragraph 2, interpretation:** Explain which part of the proposed explanation the observation supports in the setting examined.
 
-1. **Analysis.** Explain why the cases examined support the conclusion.
+   - Leave open whether the same reasoning holds in the other settings.
+```
 
-   - Identify the feature those cases share.
-   - Leave application to other cases open.
-
-If the conclusion entry still makes the broader claim, identify that entry in the response so the author can decide whether to extend the edit.
-
-## Planning a section move
-
-An author proposes moving a definition to the section where the term first appears. In the plan, identify the proposed location and the later passage that will rely on the definition. Describe the move as proposed until the manuscript reflects it.
-
-## Writing for a new reader
-
-An author requests a plain-language account of a qualified conclusion. Explain the question the paper addresses, the reason it gives for its answer, and the circumstances in which the answer holds. Use the paper’s own example if it helps the reader understand the qualification.
+Keep the existing entry number and label. If the conclusion still generalizes to other settings, flag that passage in the response to the author.

@@ -1,18 +1,23 @@
-# Paper narrative
+# Paper Narrative
 
-1. **Introduction, paragraph 1.** Explain why [question] matters to [reader or affected party].
+1. **Title:** Identify the question of whether an explanation established in one setting carries over to another.
 
-   - Use [example from the paper] to show what turns on the answer.
+2. **Abstract:** Introduce the reason to expect the explanation to carry over, then state how the paper tests that expectation.
 
-2. **Introduction, paragraph 2.** State the paper’s proposed answer to [question].
+   - Close with the answer supported by the comparison.
 
-3. **Analysis, paragraph 1.** Explain how [source, observation, or premise] supports [specific part of the answer].
+3. **Keywords:** Use the paper’s established terms for the phenomenon and the approach used to study it.
 
-   - Define [term] as the paper uses it.
-   - State the reasoning that connects the source to the claim.
+4. **Introduction paragraph 1, motivation:** Explain why the original explanation is useful and why readers might rely on it in a second setting.
 
-4. **Analysis, paragraph 2.** Explain how [exception or competing explanation] limits that claim.
+5. **Introduction paragraph 2, open question:** Identify the condition that changes between the two settings and explain why that change puts the original reasoning in doubt.
 
-   - Identify the circumstances in which the qualification matters.
+   - End with the question the comparison must resolve.
 
-5. **Conclusion.** Answer the opening question within the limits established in the analysis.
+6. **Analysis paragraph 1, basis for comparison:** Explain what the two settings have in common before introducing the difference on which the argument depends.
+
+7. **Analysis paragraph 2, interpretation:** Explain what the comparison establishes about the proposed explanation.
+
+   - Distinguish the part of the explanation tested by this comparison from the part that remains open.
+
+8. **Conclusion:** Return to the opening question and state how far the reader can carry the explanation beyond its original setting.
