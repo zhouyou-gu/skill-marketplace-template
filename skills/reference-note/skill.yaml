@@ -1,6 +1,6 @@
 id: reference-note
 name: Reference Note
-description: Create and maintain narrative paper reference notes with manuscript relevance, source links, and explicit verification limits
+description: Create and maintain annotated paper references with numbered entry rules, manuscript relevance, and source verification
 category: devtools
 tags:
   - references

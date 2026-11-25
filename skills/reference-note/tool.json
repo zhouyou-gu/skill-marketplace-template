@@ -1,7 +1,7 @@
 {
   "name": "update_reference_note",
   "title": "Reference Note",
-  "description": "Create, review, or update a narrative paper reference note while preserving source provenance, verification limits, and the requested edit scope",
+  "description": "Create, review, or update an annotated reference note with numbered entry rules, paper-specific topics, and verification of the sources used.",
   "inputSchema": {
     "type": "object",
     "properties": {

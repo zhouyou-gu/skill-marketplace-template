@@ -1,29 +1,37 @@
-# References of {{ paper_title }}, with narrative
+# References
 
-{{ note_purpose_and_requested_coverage }}
+**Entry rules**
 
-Verification scope: {{ material_actually_inspected_and_remaining_limits }}.
+1. Group works under short topic headings drawn from the paper. Order the groups by the paper’s argument.
+2. Give each distinct work one entry. Before adding one, match the title, version, and available identifiers against existing entries. Update a match in place and retain its citation keys.
+3. Begin with a bullet containing a bold citation. Give the author or issuing body, date, exact title, and publication or version details where known. Include existing citation keys and a primary-source link or an identifiable local source.
+4. Follow the citation with one indented paragraph. Explain what the source contributes and which claim, comparison, or decision it informs in the paper.
+5. Limit claims to the material inspected. State a shared reading basis once for the entries it covers. Identify exceptions and distinguish earlier checks from current ones.
+6. Distinguish works cited in the manuscript from planned citations and additional reading. Limit any conclusion about a gap to the works reviewed.
 
-## {{ paper_specific_theme_or_research_question }}
+{{ Briefly identify the works covered and the material inspected. }}
 
-- **{{ authors }} ({{ year }}). “{{ exact_title }}.” {{ venue_and_version_status }}.** BibTeX: {{ existing_keys_and_aliases_if_any }}.
+## {{ Topic }}
 
-  {{ source_aim_and_relevant_mechanism_or_finding }} {{ connection_to_the_current_paper_marked_as_our_interpretation }} {{ limits_on_what_the_source_supports }} Source: {{ primary_source_link_or_identifiable_local_source }}. Verification: {{ inspected_material_and_known_check_date }}.
+{{ Explain why the paper needs the following works together. }}
 
-## {{ next_theme_or_research_question_in_the_papers_argument }}
+- **{{ Author or issuing body }} ({{ year }}). “[{{ Exact title }}]({{primary_source_url}}).” {{ Publication or version }}. `{{existing_key}}`.**
+  {{ State the premise the work establishes and where the paper relies on it. }}
 
-- **{{ next_work_authors }} ({{ next_work_year }}). “{{ next_work_exact_title }}.” {{ next_work_venue_and_version_status }}.** BibTeX: {{ next_work_existing_keys_and_aliases_if_any }}.
+## {{ Another topic }}
 
-  {{ next_work_aim_and_relevant_mechanism_or_finding }} {{ next_work_connection_to_the_paper_and_support_limits }} Source: {{ next_work_primary_source_link_or_local_source }}. Verification: {{ next_work_inspected_material_and_known_check_date }}.
+{{ Name the capability or assumption on which these methods will be compared. }}
 
-## Additional reading, not currently cited
+### {{ Subtopic }}
 
-### {{ optional_theme_for_additional_reading }}
+- **{{ Authors }} ({{ year }}). “[{{ Exact title }}]({{primary_source_url}}).” {{ Publication or version }}. `{{existing_key}}`.**
+  {{ Describe what the authors use, what their method establishes, and why that matters for the comparison. }}
 
-- **{{ authors }} ({{ year }}). “{{ exact_title }}.” {{ venue_and_version_status }}.** BibTeX: {{ existing_key_if_any }}.
+### {{ Another subtopic }}
 
-  {{ relevant_source_summary }} {{ possible_role_or_reason_for_non_inclusion }} Source: {{ primary_source_link_or_identifiable_local_source }}. Verification: {{ inspected_material_and_remaining_uncertainty }}.
+- **{{ Authors }} ({{ year }}). “[{{ Exact title }}]({{primary_source_url}}).” {{ Publication or version }}.**
+  {{ Explain how this work approaches the same question and which condition changes the interpretation of its finding. }}
 
-## Reference questions
+### {{ Synthesis }}
 
-- {{ unresolved_reference_specific_question_if_any }}
+{{ State what these works establish together and where their evidence ends. }}
